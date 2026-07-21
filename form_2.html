@@ -1,0 +1,627 @@
+<html lang="ko" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">오래된 서랍 - 북 큐레이션 신청</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
+    
+    <script vid="10">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7',
+                        forest: '#1B4332',
+                        terra: '#A36A00',
+                        charcoal: '#2D2D2D',
+                        paper: '#F5F2EB', 
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif KR"', 'serif'],
+                        sans: ['"Noto Serif KR"', 'serif'], 
+                    },
+                    boxShadow: {
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.1)',
+                        'float': '0 20px 40px -10px rgba(0,0,0,0.2)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style vid="11">
+        body {
+            font-family: 'Noto Serif KR', serif;
+            
+            background-image: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2128&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-color: rgba(27, 67, 50, 0.6); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: -1;
+        }
+
+        
+        #app-canvas {
+            width: 100%;
+            height: 100vh;
+            background-color: #FDFBF7; 
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-col;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (min-width: 640px) {
+            #app-canvas {
+                width: 390px;
+                height: 844px;
+                border-radius: 40px;
+                border: 8px solid rgba(255,255,255,0.1);
+            }
+        }
+
+        
+        .step-card {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: #FDFBF7;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+            will-change: transform, opacity;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        
+        .step-card::-webkit-scrollbar { display: none; }
+        .step-card { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .step-hidden-right { transform: translateX(100%); opacity: 0; pointer-events: none; }
+        .step-hidden-left { transform: translateX(-100%); opacity: 0; pointer-events: none; }
+        .step-active { transform: translateX(0); opacity: 1; pointer-events: auto; }
+
+        
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #A36A00;
+            border-color: transparent;
+        }
+
+        
+        .custom-checkbox input:checked + div {
+            background-color: #1B4332;
+            border-color: #1B4332;
+        }
+        .custom-checkbox input:checked + div svg {
+            opacity: 1;
+        }
+
+        
+        .radio-card.selected {
+            border-color: #A36A00;
+            background-color: rgba(163, 106, 0, 0.05);
+            font-weight: 700;
+        }
+
+        
+        #progress-header {
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-terra selection:text-cream text-charcoal" vid="12">
+
+    <div id="app-canvas" vid="13">
+        
+        
+        <header id="progress-header" class="header-hidden absolute top-0 left-0 w-full z-50 bg-cream/90 backdrop-blur-md border-b border-forest/10 px-6 py-4 flex flex-col gap-3" vid="14">
+            <div class="flex justify-between items-center text-sm font-medium text-forest" vid="15">
+                <button onclick="prevStep()" class="p-1 hover:text-terra transition-colors flex items-center gap-1" id="back-btn" vid="16">
+                    <i class="ph ph-caret-left" vid="17"></i> 이전
+                </button>
+                <span class="tracking-widest" vid="18"><span id="current-step-text" vid="19">1</span> <span class="text-forest/40" vid="20">/ 9</span></span>
+            </div>
+            <div class="w-full bg-paper rounded-full h-1.5 overflow-hidden" vid="21">
+                <div id="progress-bar-fill" class="bg-terra h-full rounded-full transition-all duration-500 ease-out" style="width: 11%;" vid="22"></div>
+            </div>
+        </header>
+
+        
+        <main class="relative w-full h-full" vid="23">
+
+            
+            <section id="step-1" class="step-card step-active" vid="24">
+                <div class="flex-1 flex flex-col" vid="25">
+                    <div class="relative w-full h-[55%]" vid="26">
+                        <img src="https://images.unsplash.com/photo-1455390582262-044cdead27d8?q=80&amp;w=1973&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Cover" vid="27">
+                        <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/40 to-transparent" vid="28"></div>
+                        <div class="absolute top-8 left-6 text-cream opacity-80 border border-cream/50 p-2 rounded-full backdrop-blur-sm" vid="29">
+                            <i class="ph ph-books text-2xl" vid="30"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="px-8 -mt-12 relative z-10 flex-1 flex flex-col" vid="31">
+                        <p class="text-terra font-semibold text-sm mb-2 tracking-wider" vid="32">오래된 서랍</p>
+                        <h1 class="text-3xl font-bold text-forest leading-[1.3] mb-4" vid="33">당신만을 위한<br vid="34">북 큐레이션</h1>
+                        <p class="text-charcoal/70 mb-8 font-light" vid="35">지금 나만의 인생책을 찾는 여정을 시작해 보세요.</p>
+                        
+                        <div class="bg-paper p-5 rounded-2xl mb-8 border border-forest/5 relative mt-auto" vid="36">
+                            <i class="ph-fill ph-quotes text-terra/20 text-3xl absolute top-3 right-4" vid="37"></i>
+                            <div class="flex text-terra mb-2 text-sm" vid="38">
+                                <i class="ph-fill ph-star" vid="39"></i><i class="ph-fill ph-star" vid="40"></i><i class="ph-fill ph-star" vid="41"></i><i class="ph-fill ph-star" vid="42"></i><i class="ph-fill ph-star" vid="43"></i>
+                            </div>
+                            <p class="text-sm text-forest leading-relaxed font-medium" vid="44">"이 큐레이션을 통해 제 삶의 방향을 바꾸는 책을 만났습니다."</p>
+                            <p class="text-xs text-charcoal/50 mt-2" vid="45">- 독자 김**</p>
+                        </div>
+                    </div>
+                    
+                    <div class="px-6 pb-10 pt-4" vid="46">
+                        <button onclick="nextStep()" class="w-full bg-forest text-cream py-4 rounded-2xl font-bold text-lg shadow-float hover:bg-[#133023] transition-colors flex items-center justify-center gap-2" vid="47">
+                            시작하기 <i class="ph ph-arrow-right" vid="48"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="step-2" class="step-card step-hidden-right pt-24 px-6 pb-10" vid="49">
+                <div class="flex-1 flex flex-col" vid="50">
+                    <h2 class="text-2xl font-bold text-forest mb-8" vid="51">안내 및 주의사항</h2>
+                    
+                    <div class="flex flex-col gap-4 mb-auto" vid="52">
+                        
+                        <div class="bg-paper p-5 rounded-2xl border border-forest/10 flex items-start gap-4" vid="53">
+                            <div class="w-10 h-10 rounded-full bg-forest/10 flex items-center justify-center text-forest shrink-0" vid="54">
+                                <i class="ph ph-calendar-check text-xl" vid="55"></i>
+                            </div>
+                            <div vid="56">
+                                <h3 class="font-bold text-forest mb-1" vid="57">모집 인원 &amp; 발표</h3>
+                                <p class="text-sm text-charcoal/80 leading-relaxed font-light" vid="58">모집 기간 중 당첨자 개별 연락 예정</p>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="bg-paper p-5 rounded-2xl border border-forest/10 flex items-start gap-4" vid="59">
+                            <div class="w-10 h-10 rounded-full bg-terra/10 flex items-center justify-center text-terra shrink-0" vid="60">
+                                <i class="ph ph-gift text-xl" vid="61"></i>
+                            </div>
+                            <div vid="62">
+                                <h3 class="font-bold text-forest mb-1" vid="63">체험 혜택</h3>
+                                <p class="text-sm text-charcoal/80 leading-relaxed font-light" vid="64">전 프로그램 100% 무료 제공</p>
+                            </div>
+                        </div>
+
+                        
+                        <div class="bg-paper p-5 rounded-2xl border border-forest/10 flex items-start gap-4" vid="65">
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0" vid="66">
+                                <i class="ph ph-warning-circle text-xl" vid="67"></i>
+                            </div>
+                            <div vid="68">
+                                <h3 class="font-bold text-forest mb-1" vid="69">주의사항</h3>
+                                <p class="text-sm text-charcoal/80 leading-relaxed font-light" vid="70">1인 1회 신청 가능 / 이벤트 당첨 시 정성 어린 후기 작성을 요청드립니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="nextStep()" class="w-full bg-forest text-cream py-4 rounded-2xl font-bold text-lg hover:bg-[#133023] transition-colors mt-8" vid="71">
+                        신청 시작하기
+                    </button>
+                </div>
+            </section>
+
+            
+            <section id="step-3" class="step-card step-hidden-right pt-24 px-6 pb-10" vid="72">
+                <div class="flex-1 flex flex-col" vid="73">
+                    <h2 class="text-2xl font-bold text-forest mb-6" vid="74">개인정보 수집 및 동의</h2>
+                    
+                    <div class="flex-1 bg-paper border border-forest/10 rounded-2xl p-5 overflow-y-auto mb-6 text-sm text-charcoal/70 font-light leading-relaxed h-[40vh]" vid="75">
+                        <h4 class="font-bold text-forest mb-3" vid="76">이벤트 안내 및 배송 정보 활용 등 이용약관</h4>
+                        <p class="mb-4" vid="77">1. 수집하는 개인정보 항목<br vid="78">이름, 연락처(휴대전화번호), 연령대, 주소</p>
+                        <p class="mb-4" vid="79">2. 개인정보의 수집 및 이용 목적<br vid="80">- 이벤트 당첨자 확인 및 안내<br vid="81">- 경품(큐레이션 도서) 발송<br vid="82">- 맞춤형 도서 큐레이션 제공</p>
+                        <p class="mb-4" vid="83">3. 개인정보의 보유 및 이용 기간<br vid="84">이벤트 종료 및 경품 발송 완료 후 1개월 이내 파기 (단, 관계 법령에 의하여 보존할 필요가 있는 경우 해당 법령에서 정한 기간 동안 보관)</p>
+                        <p vid="85">4. 동의 거부 권리 및 불이익<br vid="86">귀하는 개인정보 수집 및 이용에 대한 동의를 거부할 수 있습니다. 단, 동의를 거부할 경우 이벤트 참여 및 경품 수령이 제한될 수 있습니다.</p>
+                    </div>
+
+                    <label class="custom-checkbox flex items-center gap-3 cursor-pointer p-4 border border-charcoal/10 rounded-xl bg-white mb-8" vid="87">
+                        <input type="checkbox" id="consent-check" class="hidden" onchange="toggleConsentBtn()" vid="88">
+                        <div class="w-6 h-6 rounded border border-charcoal/30 flex items-center justify-center transition-colors" vid="89">
+                            <svg class="w-4 h-4 text-cream opacity-0 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" vid="90">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" vid="91"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium text-forest select-none" vid="92">위 이용약관 및 개인정보 수집에 동의합니다. <span class="text-terra" vid="93">(필수)</span></span>
+                    </label>
+                    
+                    <div class="flex gap-3 mt-auto" vid="94">
+                        <button onclick="nextStep()" id="consent-btn" disabled="" class="flex-1 bg-forest text-cream py-4 rounded-2xl font-bold text-lg opacity-50 cursor-not-allowed transition-all" vid="95">
+                            동의합니다
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="step-4" class="step-card step-hidden-right pt-24 px-6 pb-10" vid="96">
+                <div class="flex-1 flex flex-col" vid="97">
+                    <h2 class="text-2xl font-bold text-forest mb-8 leading-tight" vid="98">저희 이벤트를<br vid="99">어떻게 알게 되셨나요?</h2>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-4" vid="100">
+                        <button class="radio-card text-left p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'referral')" vid="101">인스타 DM</button>
+                        <button class="radio-card text-left p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'referral')" vid="102">인스타 광고</button>
+                        <button class="radio-card text-left p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'referral')" vid="103">유튜브 광고</button>
+                        <button class="radio-card text-left p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'referral')" vid="104">구글 광고</button>
+                        <button class="radio-card text-left p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'referral')" vid="105">홍보 포스터</button>
+                        <button class="radio-card text-left p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'referral')" vid="106">지인 추천</button>
+                        <button class="radio-card col-span-2 text-left p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'referral', true)" vid="107">기타 (직접 입력)</button>
+                    </div>
+                    
+                    <div id="referral-custom" class="hidden h-14 w-full mb-auto transition-all" vid="108">
+                        <input type="text" placeholder="어디서 보셨는지 적어주세요." class="w-full h-full bg-paper border border-forest/20 rounded-xl px-4 text-forest placeholder:text-charcoal/40" vid="109">
+                    </div>
+
+                    <div class="flex gap-3 mt-auto pt-6" vid="110">
+                        <button onclick="nextStep()" class="flex-1 bg-forest text-cream py-4 rounded-2xl font-bold text-lg hover:bg-[#133023] transition-colors" vid="111">
+                            다음으로
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="step-5" class="step-card step-hidden-right pt-24 px-6 pb-10" vid="112">
+                <div class="flex-1 flex flex-col" vid="113">
+                    <h2 class="text-2xl font-bold text-forest mb-8 leading-tight" vid="114">지금 나에게 필요한 책은<br vid="115">어떤 느낌이면 좋겠나요?</h2>
+                    
+                    <div class="flex flex-col gap-3 mb-auto" vid="116">
+                        <button class="radio-card flex items-center justify-between p-5 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors group" onclick="selectRadio(this, 'preference')" vid="117">
+                            <span class="font-medium text-forest" vid="118">위로가 되는 책</span>
+                            <i class="ph ph-heart text-terra/50 group-[.selected]:text-terra text-xl" vid="119"></i>
+                        </button>
+                        <button class="radio-card flex items-center justify-between p-5 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors group" onclick="selectRadio(this, 'preference')" vid="120">
+                            <span class="font-medium text-forest" vid="121">나를 돌아보게 하는 책</span>
+                            <i class="ph ph-mirror text-terra/50 group-[.selected]:text-terra text-xl" vid="122"></i>
+                        </button>
+                        <button class="radio-card flex items-center justify-between p-5 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors group" onclick="selectRadio(this, 'preference')" vid="123">
+                            <span class="font-medium text-forest" vid="124">현실적인 조언을 주는 책</span>
+                            <i class="ph ph-compass text-terra/50 group-[.selected]:text-terra text-xl" vid="125"></i>
+                        </button>
+                        <button class="radio-card flex items-center justify-between p-5 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors group" onclick="selectRadio(this, 'preference')" vid="126">
+                            <span class="font-medium text-forest" vid="127">의욕을 다시 찾게 해주는 책</span>
+                            <i class="ph ph-fire text-terra/50 group-[.selected]:text-terra text-xl" vid="128"></i>
+                        </button>
+                        <button class="radio-card flex items-center justify-between p-5 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors group" onclick="selectRadio(this, 'preference')" vid="129">
+                            <span class="font-medium text-forest" vid="130">가볍게 읽기 좋은 책</span>
+                            <i class="ph ph-coffee text-terra/50 group-[.selected]:text-terra text-xl" vid="131"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex gap-3 mt-auto pt-6" vid="132">
+                        <button onclick="nextStep()" class="flex-1 bg-forest text-cream py-4 rounded-2xl font-bold text-lg hover:bg-[#133023] transition-colors" vid="133">
+                            다음으로
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="step-6" class="step-card step-hidden-right pt-24 px-6 pb-10" vid="134">
+                <div class="flex-1 flex flex-col" vid="135">
+                    <h2 class="text-2xl font-bold text-forest mb-8 leading-tight" vid="136">나는 어떤 분위기에서<br vid="137">주로 독서하나요?</h2>
+                    
+                    <div class="mb-4" vid="138">
+                        <textarea id="env-input" rows="4" placeholder="예: 조용한 새벽 방 안에서 따뜻한 차 한 잔과 함께 읽어요. / 출퇴근 지하철 안에서 음악을 들으며 읽습니다." class="w-full bg-paper border border-forest/20 rounded-xl p-5 text-forest placeholder:text-charcoal/40 resize-none font-light leading-relaxed" vid="139"></textarea>
+                    </div>
+                    
+                    <p class="text-xs text-charcoal/50 mb-auto" vid="140">큐레이터가 책을 고르는 데 큰 도움이 됩니다.</p>
+
+                    <div class="flex gap-3 mt-auto pt-6" vid="141">
+                        <button onclick="nextStep()" class="flex-1 bg-forest text-cream py-4 rounded-2xl font-bold text-lg hover:bg-[#133023] transition-colors" vid="142">
+                            다음으로
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="step-7" class="step-card step-hidden-right pt-24 px-6 pb-10" vid="143">
+                <div class="flex-1 flex flex-col" vid="144">
+                    <h2 class="text-2xl font-bold text-forest mb-2 leading-tight" vid="145">신청하시는 분<br vid="146">성함을 부탁드려요!</h2>
+                    <p class="text-sm text-charcoal/60 mb-10" vid="147">(이벤트 안내와 정확한 연락을 위해 사용됩니다.)</p>
+                    
+                    <div class="w-full h-16 mb-auto relative" vid="148">
+                        <input type="text" id="name-input" placeholder="이름 입력" class="w-full h-full bg-white border border-charcoal/20 rounded-xl px-5 text-xl font-bold text-forest placeholder:text-charcoal/30 placeholder:font-normal focus:border-terra focus:ring-1 focus:ring-terra transition-all" vid="149">
+                        <div class="absolute right-5 top-1/2 -translate-y-1/2 text-charcoal/20" vid="150">
+                            <i class="ph ph-user text-2xl" vid="151"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 mt-auto pt-6" vid="152">
+                        <button onclick="nextStep()" class="flex-1 bg-forest text-cream py-4 rounded-2xl font-bold text-lg hover:bg-[#133023] transition-colors" vid="153">
+                            다음으로
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="step-8" class="step-card step-hidden-right pt-24 px-6 pb-10" vid="154">
+                <div class="flex-1 flex flex-col" vid="155">
+                    <h2 class="text-2xl font-bold text-forest mb-8 leading-tight" vid="156">연령대가<br vid="157">어떻게 되실까요?</h2>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-4" vid="158">
+                        <button class="radio-card text-center p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'age')" vid="159">만 19-20세</button>
+                        <button class="radio-card text-center p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'age')" vid="160">만 21-22세</button>
+                        <button class="radio-card text-center p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'age')" vid="161">만 23-24세</button>
+                        <button class="radio-card text-center p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'age')" vid="162">만 25-26세</button>
+                        <button class="radio-card text-center p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'age')" vid="163">만 27-28세</button>
+                        <button class="radio-card text-center p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'age')" vid="164">만 28-29세</button>
+                        <button class="radio-card col-span-2 text-center p-4 rounded-xl border border-charcoal/10 bg-white hover:border-terra transition-colors" onclick="selectRadio(this, 'age', true)" vid="165">기타 (직접 입력)</button>
+                    </div>
+                    
+                    <div id="age-custom" class="hidden h-14 w-full mb-auto transition-all" vid="166">
+                        <input type="number" placeholder="나이(숫자)를 입력해주세요" class="w-full h-full bg-paper border border-forest/20 rounded-xl px-4 text-forest placeholder:text-charcoal/40 text-center font-bold text-lg" vid="167">
+                    </div>
+
+                    <div class="flex gap-3 mt-auto pt-6" vid="168">
+                        <button onclick="nextStep()" class="flex-1 bg-forest text-cream py-4 rounded-2xl font-bold text-lg hover:bg-[#133023] transition-colors" vid="169">
+                            다음으로
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="step-9" class="step-card step-hidden-right pt-24 px-6 pb-10" vid="170">
+                <div class="flex-1 flex flex-col" vid="171">
+                    <h2 class="text-2xl font-bold text-forest mb-4 leading-tight" vid="172">이벤트 참여 시 블라인드 패키징 된 책을 선물해 드리고 있어요!</h2>
+                    <p class="text-sm text-charcoal/70 mb-10 leading-relaxed" vid="173">원활한 배송을 위해 실 거주지 작성을 부탁드립니다.<br vid="174">(예: 서울 관악구)</p>
+                    
+                    <div class="w-full h-16 mb-auto relative" vid="175">
+                        <input type="text" id="address-input" placeholder="실 거주지 주소 입력" class="w-full h-full bg-white border border-charcoal/20 rounded-xl px-5 text-lg font-bold text-forest placeholder:text-charcoal/30 placeholder:font-normal focus:border-terra focus:ring-1 focus:ring-terra transition-all" vid="176">
+                        <div class="absolute right-5 top-1/2 -translate-y-1/2 text-charcoal/20" vid="177">
+                            <i class="ph ph-map-pin text-2xl" vid="178"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 mt-auto pt-6" vid="179">
+                        <button onclick="nextStep()" class="flex-1 bg-forest text-cream py-4 rounded-2xl font-bold text-lg hover:bg-[#133023] transition-colors" vid="180">
+                            다음으로
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="step-10" class="step-card step-hidden-right pt-24 px-6 pb-10" vid="181">
+                <div class="flex-1 flex flex-col" vid="182">
+                    <h2 class="text-2xl font-bold text-forest mb-4 leading-tight" vid="183">이벤트 선정 상세 안내를 드릴 수 있는 연락처를 남겨주세요.</h2>
+                    <p class="text-sm text-charcoal/70 mb-10" vid="184">(이벤트 안내 목적 외에는 절대로 사용하지 않습니다.)</p>
+                    
+                    <div class="w-full h-16 mb-auto relative" vid="185">
+                        <input type="tel" id="phone-input" placeholder="010-0000-0000" class="w-full h-full bg-white border border-charcoal/20 rounded-xl px-5 text-xl font-bold text-forest tracking-wider placeholder:text-charcoal/30 placeholder:font-normal focus:border-terra focus:ring-1 focus:ring-terra transition-all" vid="186">
+                        <div class="absolute right-5 top-1/2 -translate-y-1/2 text-charcoal/20" vid="187">
+                            <i class="ph ph-device-mobile text-2xl" vid="188"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 mt-auto pt-6" vid="189">
+                        <button onclick="submitForm()" class="flex-1 bg-terra text-cream py-4 rounded-2xl font-bold text-lg hover:bg-[#8A5A00] transition-colors shadow-float" vid="190">
+                            완료
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="step-11" class="step-card step-hidden-right justify-center items-center px-8 pb-10 pt-10 text-center bg-forest" vid="191">
+                
+                <div class="absolute inset-0 overflow-hidden pointer-events-none" vid="192">
+                    <div class="absolute -top-20 -right-20 w-64 h-64 bg-terra rounded-full blur-[100px] opacity-40" vid="193"></div>
+                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-cream rounded-full blur-[120px] opacity-10" vid="194"></div>
+                </div>
+                
+                <div class="relative z-10 flex flex-col items-center w-full" vid="195">
+                    <div class="w-24 h-24 bg-cream rounded-full flex items-center justify-center mb-8 shadow-card mx-auto" vid="196">
+                        <i class="ph-bold ph-check text-5xl text-terra" vid="197"></i>
+                    </div>
+                    
+                    <h2 class="text-3xl font-bold text-cream mb-4 leading-tight" vid="198">감사합니다.<br vid="199">신청이 정상적으로<br vid="200">완료되었습니다!</h2>
+                    <p class="text-cream/70 mb-16 font-light" vid="201">당첨자 분들께는 입력해주신 연락처로<br vid="202">개별 연락을 드릴 예정입니다.</p>
+                    
+                    <div class="w-full flex flex-col gap-4" vid="203">
+                        <button class="w-full bg-cream text-forest py-4 rounded-2xl font-bold text-lg hover:bg-paper transition-colors shadow-card flex items-center justify-center gap-2" vid="204">
+                            이벤트 안내 바로가기 <i class="ph-bold ph-arrow-up-right" vid="205"></i>
+                        </button>
+                        <button onclick="resetForm()" class="w-full border border-cream/30 text-cream py-4 rounded-2xl font-bold text-lg hover:bg-cream/10 transition-colors" vid="206">
+                            수정하기
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    
+    <script vid="207">
+        let currentStep = 1;
+        const totalQuestions = 9; 
+
+        
+        const header = document.getElementById('progress-header');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const currentStepText = document.getElementById('current-step-text');
+        
+        
+        function updateHeaderUI() {
+            if (currentStep === 1 || currentStep === 11) {
+                header.classList.add('header-hidden');
+            } else {
+                header.classList.remove('header-hidden');
+                let qStep = currentStep - 1; 
+                currentStepText.innerText = qStep;
+                progressBarFill.style.width = `${(qStep / totalQuestions) * 100}%`;
+                
+                const backBtn = document.getElementById('back-btn');
+                if(qStep === 1) {
+                    backBtn.classList.add('opacity-0', 'pointer-events-none');
+                } else {
+                    backBtn.classList.remove('opacity-0', 'pointer-events-none');
+                }
+            }
+        }
+
+        function validateStep(step) {
+            
+            if(step === 3) {
+                if(!document.getElementById('consent-check').checked) {
+                    alert("이용약관 및 개인정보 수집에 동의해주세요.");
+                    return false;
+                }
+            }
+            if(step === 7) {
+                if(document.getElementById('name-input').value.trim() === '') {
+                    alert("성함을 입력해주세요.");
+                    return false;
+                }
+            }
+            if(step === 9) {
+                if(document.getElementById('address-input').value.trim() === '') {
+                    alert("주소를 입력해주세요.");
+                    return false;
+                }
+            }
+            if(step === 10) {
+                if(document.getElementById('phone-input').value.trim() === '') {
+                    alert("연락처를 입력해주세요.");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function goToStep(newStep, direction) {
+            const currentEl = document.getElementById(`step-${currentStep}`);
+            const newEl = document.getElementById(`step-${newStep}`);
+
+            
+            currentEl.classList.remove('step-active');
+            currentEl.classList.add(direction === 'next' ? 'step-hidden-left' : 'step-hidden-right');
+
+            
+            newEl.classList.remove('step-hidden-left', 'step-hidden-right');
+            
+            setTimeout(() => {
+                newEl.classList.add('step-active');
+            }, 50);
+
+            currentStep = newStep;
+            updateHeaderUI();
+        }
+
+        function nextStep() {
+            if (!validateStep(currentStep)) return;
+            if (currentStep < 11) {
+                goToStep(currentStep + 1, 'next');
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 2) { 
+                goToStep(currentStep - 1, 'prev');
+            }
+        }
+
+        function submitForm() {
+            if (!validateStep(10)) return;
+            
+            const btn = document.querySelector('#step-10 button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-2xl"></i>';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                goToStep(11, 'next');
+            }, 800);
+        }
+
+        function resetForm() {
+            
+            goToStep(1, 'prev');
+            
+            
+            
+            
+            
+        }
+
+        
+        function toggleConsentBtn() {
+            const isChecked = document.getElementById('consent-check').checked;
+            const btn = document.getElementById('consent-btn');
+            if(isChecked) {
+                btn.removeAttribute('disabled');
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.classList.add('hover:bg-[#133023]');
+            } else {
+                btn.setAttribute('disabled', 'true');
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.classList.remove('hover:bg-[#133023]');
+            }
+        }
+
+        function selectRadio(btn, groupName, showCustom = false) {
+            
+            const container = btn.parentElement;
+            const siblings = container.querySelectorAll('.radio-card');
+            
+            siblings.forEach(sibling => {
+                sibling.classList.remove('selected');
+            });
+            btn.classList.add('selected');
+
+            
+            const customInput = document.getElementById(`${groupName}-custom`);
+            if(customInput) {
+                if(showCustom) {
+                    customInput.classList.remove('hidden');
+                    customInput.querySelector('input').focus();
+                } else {
+                    customInput.classList.add('hidden');
+                }
+            }
+        }
+
+        
+        updateHeaderUI();
+    </script>
+
+</body></html>

@@ -1,0 +1,759 @@
+<html lang="ko" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Cozy &amp; Warm Archive - 커뮤니티</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
+    
+    <script vid="10">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7',
+                        forest: '#1B4332',
+                        terra: '#A36A00',
+                        charcoal: '#2D2D2D',
+                        paper: '#F5F2EB', 
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif KR"', 'serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'post-it': '2px 4px 10px rgba(0,0,0,0.1), inset 0 0 20px rgba(163, 106, 0, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style vid="11">
+        body {
+            font-family: 'Noto Serif KR', serif;
+            background-color: #FDFBF7;
+            color: #2D2D2D;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+            overflow-x: hidden;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        html { scroll-behavior: smooth; }
+
+        #navbar {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+        }
+
+        .stamp-logo {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #A36A00;
+            border-radius: 50%;
+            padding: 8px;
+            color: #A36A00;
+            transform: rotate(-10deg);
+        }
+
+        .tab-container {
+            display: grid;
+            min-height: 500px;
+        }
+
+        .tab-content {
+            grid-area: 1 / 1;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            visibility: hidden;
+        }
+
+        .tab-content.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .notice-item {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .notice-item.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.open .faq-icon {
+            transform: rotate(90deg);
+        }
+
+        input[type="text"], input[type="password"], select, textarea {
+            font-family: 'Noto Serif KR', serif;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-forest selection:text-cream" vid="12">
+
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-cream/95 backdrop-blur-md border-b border-forest/10 py-4 px-4 md:px-8" vid="13">
+        <div class="max-w-7xl mx-auto flex justify-between items-center" vid="14">
+            <a href="#" class="flex items-center gap-2 group" vid="15">
+                <div class="stamp-logo w-10 h-10 transition-transform group-hover:rotate-0 duration-300" vid="16">
+                    <i class="ph ph-books text-xl" vid="17"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-forest" vid="18">오래된 서랍</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium" vid="19">
+                <a href="#" class="hover:text-terra transition-colors" vid="20">홈</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="21">About</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="22">Event</a>
+                <a href="#" class="text-terra transition-colors font-bold" vid="23">커뮤니티</a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-6 text-sm" vid="24">
+                <a href="#" class="hover:text-forest transition-colors" vid="25">로그인</a>
+                <a href="#" class="px-4 py-2 bg-forest text-cream rounded-full hover:bg-forest/90 transition-colors" vid="26">회원가입</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="27"><i class="ph ph-user text-lg" vid="28"></i></a>
+            </div>
+
+            <button class="md:hidden text-charcoal p-2" vid="29">
+                <i class="ph ph-list text-2xl" vid="30"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main class="pt-[73px] min-h-screen pb-24" vid="31">
+        
+        <header class="py-16 md:py-24 px-4 text-center bg-paper/30 border-b border-forest/5" vid="32">
+            <p class="text-terra font-medium mb-3 tracking-wider text-sm" vid="33">COMMUNITY</p>
+            <h1 class="text-3xl md:text-5xl font-bold text-forest mb-4" vid="34">도란도란 커뮤니티</h1>
+            <p class="text-charcoal/70 max-w-lg mx-auto font-light leading-relaxed" vid="35">책방의 새로운 소식부터 궁금한 점까지,<br class="hidden md:block" vid="36">오래된 서랍을 사랑하는 분들을 위한 열린 공간입니다.</p>
+        </header>
+
+        <section class="max-w-4xl mx-auto px-4 md:px-8 mt-12" vid="37">
+            
+            <div class="flex justify-center md:justify-start gap-2 p-1.5 bg-paper border border-charcoal/5 rounded-full w-max mx-auto md:mx-0 mb-12 shadow-sm relative z-10 overflow-x-auto hide-scrollbar max-w-full" vid="38">
+                <button onclick="switchTab('notice')" id="btn-notice" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-forest text-cream shadow-md whitespace-nowrap" vid="39">공지사항</button>
+                <button onclick="switchTab('faq')" id="btn-faq" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all text-charcoal/60 hover:text-forest hover:bg-cream/50 whitespace-nowrap" vid="40">FAQ</button>
+                <button onclick="switchTab('qna')" id="btn-qna" class="tab-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all text-charcoal/60 hover:text-forest hover:bg-cream/50 whitespace-nowrap" vid="41">1:1 문의</button>
+            </div>
+
+            
+            <div class="tab-container relative w-full" vid="42">
+                
+                
+                <div id="tab-notice" class="tab-content active w-full" vid="43">
+                    <ul class="space-y-4" id="notice-list" vid="44">
+                        <li class="notice-item bg-cream border border-forest/10 rounded-2xl p-5 md:p-6 hover:shadow-soft hover:border-terra/40 transition-all cursor-pointer" onclick="openNoticeModal('안내', '4월 정기 북토크 취소 및 환불 안내', '2024.04.02', '죄송합니다. 4월 정기 북토크 강연자님의 건강상의 이유로 부득이하게 행사가 취소되었습니다.<br><br>예매하신 모든 분들께는 전액 환불 처리가 진행될 예정이며, 환불까지는 카드사에 따라 2~3 영업일이 소요될 수 있습니다.<br><br>기대해주신 많은 분들께 진심으로 사과의 말씀 드립니다.')" vid="45">
+                            <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-6" vid="46">
+                                <span class="px-3 py-1 bg-forest text-cream text-xs font-bold rounded-full w-max shrink-0" vid="47">[안내]</span>
+                                <h4 class="text-base md:text-lg font-medium text-forest flex-1" vid="48">4월 정기 북토크 취소 및 환불 안내</h4>
+                                <span class="text-sm text-charcoal/40 font-light tracking-wide shrink-0" vid="49">2024.04.02</span>
+                            </div>
+                        </li>
+
+                        <li class="notice-item bg-cream border border-forest/10 rounded-2xl p-5 md:p-6 hover:shadow-soft hover:border-terra/40 transition-all cursor-pointer" onclick="openNoticeModal('이벤트', '봄맞이 시집 큐레이션 도서 10% 할인', '2024.03.28', '따뜻한 봄바람과 함께 시를 읽기 좋은 계절입니다.<br><br>오래된 서랍에서 엄선한 \'봄맞이 시집 큐레이션\' 도서들을 온/오프라인에서 10% 할인된 가격으로 만나보세요.<br><br>기간: 2024년 4월 1일 ~ 4월 30일')" vid="50">
+                            <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-6" vid="51">
+                                <span class="px-3 py-1 bg-terra text-cream text-xs font-bold rounded-full w-max shrink-0" vid="52">[이벤트]</span>
+                                <h4 class="text-base md:text-lg font-medium text-charcoal flex-1" vid="53">봄맞이 시집 큐레이션 도서 10% 할인</h4>
+                                <span class="text-sm text-charcoal/40 font-light tracking-wide shrink-0" vid="54">2024.03.28</span>
+                            </div>
+                        </li>
+
+                        <li class="notice-item bg-cream border border-forest/10 rounded-2xl p-5 md:p-6 hover:shadow-soft hover:border-terra/40 transition-all cursor-pointer" onclick="openNoticeModal('배송', '설 연휴 배송 마감 및 휴무 안내', '2024.01.20', '즐거운 설 연휴를 맞아 배송 일정 및 책방 휴무를 안내해 드립니다.<br><br>택배 마감: 2월 5일(월) 오후 1시 결제완료 건까지<br>택배 재개: 2월 13일(화)부터 순차 발송<br><br>오프라인 책방은 2월 9일(금)부터 12일(월)까지 쉬어갑니다.')" vid="55">
+                            <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-6" vid="56">
+                                <span class="px-3 py-1 bg-paper border border-charcoal/20 text-charcoal text-xs font-bold rounded-full w-max shrink-0" vid="57">[배송]</span>
+                                <h4 class="text-base md:text-lg font-medium text-charcoal flex-1" vid="58">설 연휴 배송 마감 및 휴무 안내</h4>
+                                <span class="text-sm text-charcoal/40 font-light tracking-wide shrink-0" vid="59">2024.01.20</span>
+                            </div>
+                        </li>
+
+                        <li class="notice-item bg-cream border border-forest/10 rounded-2xl p-5 md:p-6 hover:shadow-soft hover:border-terra/40 transition-all cursor-pointer" onclick="openNoticeModal('안내', '오프라인 책방 운영시간 변경 안내', '2023.12.15', '안녕하세요. 오래된 서랍입니다.<br><br>동절기를 맞이하여 오프라인 책방의 운영 시간이 아래와 같이 변경됩니다.<br><br>변경 전: 11:00 - 21:00<br>변경 후: 12:00 - 20:00<br><br>방문 시 참고 부탁드립니다. 감사합니다.')" vid="60">
+                            <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-6" vid="61">
+                                <span class="px-3 py-1 bg-forest text-cream text-xs font-bold rounded-full w-max shrink-0" vid="62">[안내]</span>
+                                <h4 class="text-base md:text-lg font-medium text-charcoal flex-1" vid="63">오프라인 책방 운영시간 변경 안내</h4>
+                                <span class="text-sm text-charcoal/40 font-light tracking-wide shrink-0" vid="64">2023.12.15</span>
+                            </div>
+                        </li>
+
+                        <li class="notice-item bg-cream border border-forest/10 rounded-2xl p-5 md:p-6 hover:shadow-soft hover:border-terra/40 transition-all cursor-pointer" onclick="openNoticeModal('이벤트', '독서 모임 \'심야의 서재\' 5기 모집', '2023.11.01', '한 달에 한 번, 밤 10시에 모여 함께 책을 읽고 이야기 나누는 \'심야의 서재\' 5기를 모집합니다.<br><br>이번 기수의 테마는 \'나를 돌아보는 에세이\'입니다.<br>선착순 8명 모집이오니 많은 관심 부탁드립니다.<br><br>자세한 신청 방법은 인스타그램 프로필 링크를 확인해주세요.')" vid="65">
+                            <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-6" vid="66">
+                                <span class="px-3 py-1 bg-terra text-cream text-xs font-bold rounded-full w-max shrink-0" vid="67">[이벤트]</span>
+                                <h4 class="text-base md:text-lg font-medium text-charcoal flex-1" vid="68">독서 모임 '심야의 서재' 5기 모집</h4>
+                                <span class="text-sm text-charcoal/40 font-light tracking-wide shrink-0" vid="69">2023.11.01</span>
+                            </div>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-8 flex justify-center" vid="70">
+                        <button class="px-6 py-2 border border-charcoal/20 rounded-full text-sm text-charcoal/60 hover:bg-paper hover:text-charcoal transition-colors" vid="71">더보기</button>
+                    </div>
+                </div>
+
+                
+                <div id="tab-faq" class="tab-content w-full" vid="72">
+                    
+                    <div class="flex overflow-x-auto hide-scrollbar gap-2 mb-8 pb-2 -mx-4 px-4 md:mx-0 md:px-0" vid="73">
+                        <button onclick="filterFaq('전체', this)" class="faq-filter active px-4 py-1.5 rounded-full border border-forest bg-forest text-cream text-sm whitespace-nowrap transition-colors shadow-sm" vid="74">전체</button>
+                        <button onclick="filterFaq('배송', this)" class="faq-filter px-4 py-1.5 rounded-full border border-charcoal/10 bg-cream text-charcoal/70 hover:border-charcoal/30 text-sm whitespace-nowrap transition-colors" vid="75">배송</button>
+                        <button onclick="filterFaq('반품', this)" class="faq-filter px-4 py-1.5 rounded-full border border-charcoal/10 bg-cream text-charcoal/70 hover:border-charcoal/30 text-sm whitespace-nowrap transition-colors" vid="76">반품</button>
+                        <button onclick="filterFaq('운영', this)" class="faq-filter px-4 py-1.5 rounded-full border border-charcoal/10 bg-cream text-charcoal/70 hover:border-charcoal/30 text-sm whitespace-nowrap transition-colors" vid="77">운영</button>
+                        <button onclick="filterFaq('기타', this)" class="faq-filter px-4 py-1.5 rounded-full border border-charcoal/10 bg-cream text-charcoal/70 hover:border-charcoal/30 text-sm whitespace-nowrap transition-colors" vid="78">기타</button>
+                    </div>
+
+                    
+                    <div class="space-y-3" id="faq-container" vid="79">
+                        
+                        <div class="faq-item bg-cream border border-forest/10 rounded-2xl overflow-hidden shadow-sm" data-category="배송" vid="80">
+                            <button class="faq-trigger w-full flex items-start gap-4 p-5 text-left bg-transparent hover:bg-paper/50 transition-colors" onclick="toggleFaq(this)" vid="81">
+                                <span class="text-terra font-bold font-serif text-lg leading-none mt-0.5" vid="82">Q.</span>
+                                <div class="flex-1 flex flex-col md:flex-row md:items-center gap-2 md:gap-3" vid="83">
+                                    <span class="px-2 py-0.5 bg-paper text-charcoal/60 text-[11px] rounded border border-charcoal/5 font-medium w-max" vid="84">[배송]</span>
+                                    <span class="font-medium text-charcoal leading-snug" vid="85">주문한 도서는 언제 배송되나요?</span>
+                                </div>
+                                <i class="faq-icon ph ph-caret-right text-charcoal/50 text-xl mt-0.5" vid="86"></i>
+                            </button>
+                            <div class="faq-answer bg-paper/30" vid="87">
+                                <div class="p-5 pt-2 flex gap-4 text-charcoal/80 text-sm leading-relaxed border-t border-forest/5 mx-5 mt-1" vid="88">
+                                    <span class="text-forest font-bold font-serif text-lg leading-none mt-0.5" vid="89">A.</span>
+                                    <div vid="90">
+                                        결제 완료 후 영업일 기준 1~3일 내에 출고됩니다.<br vid="91">
+                                        출고 후 택배사 사정에 따라 1~2일 정도 추가 소요될 수 있습니다.<br vid="92">
+                                        (주말 및 공휴일은 출고 업무를 진행하지 않습니다.)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="faq-item bg-cream border border-forest/10 rounded-2xl overflow-hidden shadow-sm" data-category="배송" vid="93">
+                            <button class="faq-trigger w-full flex items-start gap-4 p-5 text-left bg-transparent hover:bg-paper/50 transition-colors" onclick="toggleFaq(this)" vid="94">
+                                <span class="text-terra font-bold font-serif text-lg leading-none mt-0.5" vid="95">Q.</span>
+                                <div class="flex-1 flex flex-col md:flex-row md:items-center gap-2 md:gap-3" vid="96">
+                                    <span class="px-2 py-0.5 bg-paper text-charcoal/60 text-[11px] rounded border border-charcoal/5 font-medium w-max" vid="97">[배송]</span>
+                                    <span class="font-medium text-charcoal leading-snug" vid="98">배송비는 얼마인가요?</span>
+                                </div>
+                                <i class="faq-icon ph ph-caret-right text-charcoal/50 text-xl mt-0.5" vid="99"></i>
+                            </button>
+                            <div class="faq-answer bg-paper/30" vid="100">
+                                <div class="p-5 pt-2 flex gap-4 text-charcoal/80 text-sm leading-relaxed border-t border-forest/5 mx-5 mt-1" vid="101">
+                                    <span class="text-forest font-bold font-serif text-lg leading-none mt-0.5" vid="102">A.</span>
+                                    <div vid="103">
+                                        기본 배송비는 3,000원이며, 30,000원 이상 구매 시 무료배송입니다.<br vid="104">
+                                        도서 산간 지역은 추가 운임 3,000원이 발생합니다.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="faq-item bg-cream border border-forest/10 rounded-2xl overflow-hidden shadow-sm" data-category="반품" vid="105">
+                            <button class="faq-trigger w-full flex items-start gap-4 p-5 text-left bg-transparent hover:bg-paper/50 transition-colors" onclick="toggleFaq(this)" vid="106">
+                                <span class="text-terra font-bold font-serif text-lg leading-none mt-0.5" vid="107">Q.</span>
+                                <div class="flex-1 flex flex-col md:flex-row md:items-center gap-2 md:gap-3" vid="108">
+                                    <span class="px-2 py-0.5 bg-paper text-charcoal/60 text-[11px] rounded border border-charcoal/5 font-medium w-max" vid="109">[반품]</span>
+                                    <span class="font-medium text-charcoal leading-snug" vid="110">파본을 받았어요. 교환/환불이 가능한가요?</span>
+                                </div>
+                                <i class="faq-icon ph ph-caret-right text-charcoal/50 text-xl mt-0.5" vid="111"></i>
+                            </button>
+                            <div class="faq-answer bg-paper/30" vid="112">
+                                <div class="p-5 pt-2 flex gap-4 text-charcoal/80 text-sm leading-relaxed border-t border-forest/5 mx-5 mt-1" vid="113">
+                                    <span class="text-forest font-bold font-serif text-lg leading-none mt-0.5" vid="114">A.</span>
+                                    <div vid="115">
+                                        상품 수령 후 7일 이내에 [1:1 문의] 게시판에 사진과 함께 남겨주시면 무상 교환 또는 환불 처리를 도와드립니다.<br vid="116">
+                                        단순 변심에 의한 반품은 왕복 배송비(6,000원)를 고객님께서 부담하셔야 합니다.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="faq-item bg-cream border border-forest/10 rounded-2xl overflow-hidden shadow-sm" data-category="운영" vid="117">
+                            <button class="faq-trigger w-full flex items-start gap-4 p-5 text-left bg-transparent hover:bg-paper/50 transition-colors" onclick="toggleFaq(this)" vid="118">
+                                <span class="text-terra font-bold font-serif text-lg leading-none mt-0.5" vid="119">Q.</span>
+                                <div class="flex-1 flex flex-col md:flex-row md:items-center gap-2 md:gap-3" vid="120">
+                                    <span class="px-2 py-0.5 bg-paper text-charcoal/60 text-[11px] rounded border border-charcoal/5 font-medium w-max" vid="121">[운영]</span>
+                                    <span class="font-medium text-charcoal leading-snug" vid="122">오프라인 매장에서도 온라인과 동일하게 할인되나요?</span>
+                                </div>
+                                <i class="faq-icon ph ph-caret-right text-charcoal/50 text-xl mt-0.5" vid="123"></i>
+                            </button>
+                            <div class="faq-answer bg-paper/30" vid="124">
+                                <div class="p-5 pt-2 flex gap-4 text-charcoal/80 text-sm leading-relaxed border-t border-forest/5 mx-5 mt-1" vid="125">
+                                    <span class="text-forest font-bold font-serif text-lg leading-none mt-0.5" vid="126">A.</span>
+                                    <div vid="127">
+                                        네, 기본적으로 온/오프라인의 도서 판매가는 동일하게 적용됩니다.<br vid="128">
+                                        단, 각 채널별로 진행되는 특별 이벤트에 따라 일부 혜택이 다를 수 있습니다.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="faq-item bg-cream border border-forest/10 rounded-2xl overflow-hidden shadow-sm" data-category="기타" vid="129">
+                            <button class="faq-trigger w-full flex items-start gap-4 p-5 text-left bg-transparent hover:bg-paper/50 transition-colors" onclick="toggleFaq(this)" vid="130">
+                                <span class="text-terra font-bold font-serif text-lg leading-none mt-0.5" vid="131">Q.</span>
+                                <div class="flex-1 flex flex-col md:flex-row md:items-center gap-2 md:gap-3" vid="132">
+                                    <span class="px-2 py-0.5 bg-paper text-charcoal/60 text-[11px] rounded border border-charcoal/5 font-medium w-max" vid="133">[기타]</span>
+                                    <span class="font-medium text-charcoal leading-snug" vid="134">입고 문의는 어디로 하나요?</span>
+                                </div>
+                                <i class="faq-icon ph ph-caret-right text-charcoal/50 text-xl mt-0.5" vid="135"></i>
+                            </button>
+                            <div class="faq-answer bg-paper/30" vid="136">
+                                <div class="p-5 pt-2 flex gap-4 text-charcoal/80 text-sm leading-relaxed border-t border-forest/5 mx-5 mt-1" vid="137">
+                                    <span class="text-forest font-bold font-serif text-lg leading-none mt-0.5" vid="138">A.</span>
+                                    <div vid="139">
+                                        독립 출판물 입고 문의는 이메일(olddrawer@bookstore.com)로 접수받고 있습니다.<br vid="140">
+                                        도서 소개서와 실물 도서 사진을 첨부하여 보내주시면 검토 후 회신 드리겠습니다.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div id="faq-empty" class="hidden text-center py-12 text-charcoal/50" vid="141">
+                        해당 카테고리의 질문이 없습니다.
+                    </div>
+                </div>
+
+                
+                <div id="tab-qna" class="tab-content w-full" vid="142">
+                    
+                    <div class="mb-8 md:mb-10 text-right" vid="143">
+                        <button onclick="openQnaModal()" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-forest text-cream px-8 py-3.5 rounded-full font-bold hover:bg-forest/90 transition-all shadow-md active:scale-95" vid="144">
+                            <i class="ph ph-pencil-simple text-lg" vid="145"></i> 1:1 문의 작성하기
+                        </button>
+                    </div>
+
+                    
+                    <div class="bg-cream border border-forest/10 rounded-2xl overflow-hidden shadow-sm" vid="146">
+                        <ul class="divide-y divide-forest/5" vid="147">
+                            
+                            <li class="p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-paper/30 transition-colors cursor-pointer group" vid="148">
+                                <div class="flex items-center gap-3" vid="149">
+                                    <i class="ph-fill ph-lock-key text-charcoal/30 text-lg group-hover:text-terra transition-colors" vid="150"></i>
+                                    <span class="font-medium text-charcoal/60" vid="151">비밀글입니다.</span>
+                                </div>
+                                <div class="flex items-center gap-4 text-sm font-light text-charcoal/50 ml-7 md:ml-0" vid="152">
+                                    <span class="px-2 py-0.5 bg-paper rounded border border-charcoal/5 text-[11px] font-medium text-charcoal/60" vid="153">[주문/결제]</span>
+                                    <span vid="154">book_***82</span>
+                                    <span vid="155">2024.04.10</span>
+                                </div>
+                            </li>
+
+                            <li class="p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-paper/30 transition-colors cursor-pointer group" vid="156">
+                                <div class="flex items-center gap-3" vid="157">
+                                    <i class="ph-fill ph-lock-key text-charcoal/30 text-lg group-hover:text-terra transition-colors" vid="158"></i>
+                                    <span class="font-medium text-charcoal/60" vid="159">비밀글입니다.</span>
+                                </div>
+                                <div class="flex items-center gap-4 text-sm font-light text-charcoal/50 ml-7 md:ml-0" vid="160">
+                                    <span class="px-2 py-0.5 bg-paper rounded border border-charcoal/5 text-[11px] font-medium text-charcoal/60" vid="161">[도서문의]</span>
+                                    <span vid="162">user_***99</span>
+                                    <span vid="163">2024.04.09</span>
+                                </div>
+                            </li>
+                            
+                            <li class="p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-paper/30 transition-colors cursor-pointer group" vid="164">
+                                <div class="flex items-center gap-3" vid="165">
+                                    <i class="ph-fill ph-lock-key text-charcoal/30 text-lg group-hover:text-terra transition-colors" vid="166"></i>
+                                    <span class="font-medium text-charcoal/60" vid="167">비밀글입니다.</span>
+                                </div>
+                                <div class="flex items-center gap-4 text-sm font-light text-charcoal/50 ml-7 md:ml-0" vid="168">
+                                    <span class="px-2 py-0.5 bg-paper rounded border border-charcoal/5 text-[11px] font-medium text-charcoal/60" vid="169">[배송문의]</span>
+                                    <span vid="170">read_***ing</span>
+                                    <span vid="171">2024.04.08</span>
+                                </div>
+                            </li>
+
+                            <li class="p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-paper/30 transition-colors cursor-pointer group" vid="172">
+                                <div class="flex items-center gap-3" vid="173">
+                                    <i class="ph-fill ph-lock-key text-charcoal/30 text-lg group-hover:text-terra transition-colors" vid="174"></i>
+                                    <span class="font-medium text-charcoal/60" vid="175">비밀글입니다.</span>
+                                </div>
+                                <div class="flex items-center gap-4 text-sm font-light text-charcoal/50 ml-7 md:ml-0" vid="176">
+                                    <span class="px-2 py-0.5 bg-paper rounded border border-charcoal/5 text-[11px] font-medium text-charcoal/60" vid="177">[이벤트]</span>
+                                    <span vid="178">jimi***n01</span>
+                                    <span vid="179">2024.04.05</span>
+                                </div>
+                            </li>
+
+                            <li class="p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-paper/30 transition-colors cursor-pointer group" vid="180">
+                                <div class="flex items-center gap-3" vid="181">
+                                    <i class="ph-fill ph-lock-key text-charcoal/30 text-lg group-hover:text-terra transition-colors" vid="182"></i>
+                                    <span class="font-medium text-charcoal/60" vid="183">비밀글입니다.</span>
+                                </div>
+                                <div class="flex items-center gap-4 text-sm font-light text-charcoal/50 ml-7 md:ml-0" vid="184">
+                                    <span class="px-2 py-0.5 bg-paper rounded border border-charcoal/5 text-[11px] font-medium text-charcoal/60" vid="185">[기타]</span>
+                                    <span vid="186">star_***</span>
+                                    <span vid="187">2024.04.02</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    
+                    <div class="mt-8 flex justify-center gap-2" vid="188">
+                        <button class="w-8 h-8 rounded-full border border-forest/20 text-forest/50 flex items-center justify-center hover:bg-paper cursor-not-allowed" vid="189">
+                            <i class="ph ph-caret-left" vid="190"></i>
+                        </button>
+                        <button class="w-8 h-8 rounded-full bg-forest text-cream font-medium flex items-center justify-center" vid="191">1</button>
+                        <button class="w-8 h-8 rounded-full border border-forest/20 text-forest hover:bg-paper flex items-center justify-center transition-colors" vid="192">2</button>
+                        <button class="w-8 h-8 rounded-full border border-forest/20 text-forest hover:bg-paper flex items-center justify-center transition-colors" vid="193">3</button>
+                        <button class="w-8 h-8 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-paper transition-colors" vid="194">
+                            <i class="ph ph-caret-right" vid="195"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    
+    <div id="notice-modal" class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4" vid="196">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeNoticeModal()" vid="197"></div>
+        <div class="bg-cream rounded-3xl w-full max-w-lg max-h-[85vh] overflow-y-auto relative z-10 shadow-2xl border border-terra/20 transform scale-95 opacity-0 transition-all duration-300" id="notice-modal-content" vid="198">
+            <div class="sticky top-0 bg-cream/95 backdrop-blur px-6 py-4 flex justify-between items-center border-b border-forest/10" vid="199">
+                <span id="modal-category" class="px-3 py-1 bg-forest text-cream text-xs font-bold rounded-full w-max" vid="200"></span>
+                <button onclick="closeNoticeModal()" class="text-charcoal/50 hover:text-terra transition-colors w-8 h-8 flex items-center justify-center bg-paper rounded-full" vid="201">
+                    <i class="ph ph-x text-lg" vid="202"></i>
+                </button>
+            </div>
+            <div class="p-6 md:p-8" vid="203">
+                <h3 id="modal-title" class="text-xl md:text-2xl font-bold text-forest mb-3 leading-snug" vid="204"></h3>
+                <p id="modal-date" class="text-sm text-charcoal/40 font-light mb-8 pb-4 border-b border-dashed border-charcoal/10" vid="205"></p>
+                <div id="modal-body" class="text-charcoal/80 leading-loose font-light" vid="206">
+                    
+                </div>
+            </div>
+            <div class="px-6 py-5 bg-paper/50 border-t border-forest/5 flex justify-center" vid="207">
+                <button onclick="closeNoticeModal()" class="px-8 py-2.5 bg-charcoal text-cream rounded-full text-sm font-medium hover:bg-charcoal/80 transition-colors" vid="208">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="qna-modal" class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4" vid="209">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeQnaModal()" vid="210"></div>
+        <div class="bg-cream rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto relative z-10 shadow-2xl border border-terra/20 transform scale-95 opacity-0 transition-all duration-300" id="qna-modal-content" vid="211">
+            <div class="sticky top-0 bg-cream/95 backdrop-blur px-6 md:px-8 py-5 flex justify-between items-center border-b border-forest/10 z-20" vid="212">
+                <h3 class="font-bold text-forest text-lg flex items-center gap-2" vid="213">
+                    <i class="ph-fill ph-envelope-simple text-terra" vid="214"></i> 1:1 문의 작성
+                </h3>
+                <button onclick="closeQnaModal()" class="text-charcoal/50 hover:text-terra transition-colors w-8 h-8 flex items-center justify-center bg-paper rounded-full" vid="215">
+                    <i class="ph ph-x text-lg" vid="216"></i>
+                </button>
+            </div>
+            <div class="p-6 md:p-8 space-y-6" vid="217">
+                
+                <div vid="218">
+                    <label class="block text-sm font-bold text-forest mb-2" vid="219">카테고리</label>
+                    <div class="relative" vid="220">
+                        <select class="w-full bg-paper border border-forest/10 rounded-xl px-4 py-3 appearance-none outline-none focus:border-terra text-sm text-charcoal" vid="221">
+                            <option value="" vid="222">분류를 선택해주세요</option>
+                            <option value="order" vid="223">주문/결제</option>
+                            <option value="delivery" vid="224">배송문의</option>
+                            <option value="return" vid="225">교환/반품</option>
+                            <option value="book" vid="226">도서문의</option>
+                            <option value="event" vid="227">이벤트</option>
+                            <option value="etc" vid="228">기타</option>
+                        </select>
+                        <i class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-charcoal/40 pointer-events-none" vid="229"></i>
+                    </div>
+                </div>
+
+                
+                <div vid="230">
+                    <label class="block text-sm font-bold text-forest mb-2" vid="231">제목</label>
+                    <input type="text" placeholder="문의 제목을 입력해주세요" class="w-full bg-paper border border-forest/10 rounded-xl px-4 py-3 outline-none focus:border-terra text-sm text-charcoal placeholder:text-charcoal/30" vid="232">
+                </div>
+
+                
+                <div vid="233">
+                    <label class="block text-sm font-bold text-forest mb-2 flex justify-between items-end" vid="234">
+                        내용
+                        <span class="text-[11px] font-normal text-charcoal/40" vid="235">* 개인정보가 포함되지 않도록 주의해주세요.</span>
+                    </label>
+                    <textarea placeholder="문의 내용을 상세히 적어주시면 빠르고 정확한 답변이 가능합니다." rows="6" class="w-full bg-paper border border-forest/10 rounded-xl px-4 py-3 outline-none focus:border-terra text-sm text-charcoal placeholder:text-charcoal/30 resize-none" vid="236"></textarea>
+                </div>
+
+                
+                <div vid="237">
+                    <label class="block text-sm font-bold text-forest mb-2" vid="238">비밀번호 설정</label>
+                    <div class="relative" vid="239">
+                        <i class="ph ph-lock-key absolute left-4 top-1/2 -translate-y-1/2 text-charcoal/40" vid="240"></i>
+                        <input type="password" placeholder="숫자 4자리" maxlength="4" class="w-full bg-paper border border-forest/10 rounded-xl pl-10 pr-4 py-3 outline-none focus:border-terra text-sm text-charcoal placeholder:text-charcoal/30 tracking-widest" vid="241">
+                    </div>
+                    <p class="text-xs text-terra mt-2 flex items-center gap-1" vid="242">
+                        <i class="ph-fill ph-info" vid="243"></i> 모든 게시글은 비밀글로 보호되며, 작성 시 설정한 비밀번호가 필요합니다.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="p-6 md:p-8 pt-0 flex gap-3" vid="244">
+                <button onclick="closeQnaModal()" class="flex-1 py-3.5 bg-paper text-charcoal font-bold rounded-full hover:bg-charcoal/5 transition-colors" vid="245">취소</button>
+                <button onclick="submitQna()" class="flex-[2] py-3.5 bg-forest text-cream font-bold rounded-full hover:bg-forest/90 transition-colors shadow-md" vid="246">등록하기</button>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="bg-forest text-cream pt-20 pb-12 border-t-[8px] border-terra" vid="247">
+        <div class="max-w-7xl mx-auto px-4 md:px-8" vid="248">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16" vid="249">
+                
+                <div class="md:col-span-5 flex flex-col items-start" vid="250">
+                    <div class="stamp-logo w-16 h-16 mb-6 text-cream border-cream" vid="251">
+                        <i class="ph ph-books text-3xl" vid="252"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4" vid="253">오래된 서랍</h2>
+                    <p class="text-cream/70 text-sm leading-relaxed mb-8 font-light" vid="254">
+                        바쁜 일상 속, 잠시 멈추어 페이지를 넘기는 소리에 귀 기울여보세요.<br vid="255">
+                        당신의 마음을 다독일 문장들이 서랍 속에서 기다리고 있습니다.
+                    </p>
+                    
+                    <div class="w-full max-w-sm relative" vid="256">
+                        <p class="text-sm font-medium text-terra mb-2" vid="257">월간 뉴스레터 구독</p>
+                        <div class="flex h-12 border border-cream/30 rounded-full overflow-hidden focus-within:border-terra transition-colors bg-cream/5 backdrop-blur-sm" vid="258">
+                            <input type="email" placeholder="이메일 주소" class="bg-transparent w-full px-4 text-sm outline-none text-cream placeholder:text-cream/30" vid="259">
+                            <button class="bg-terra px-6 text-sm font-bold hover:bg-[#8A5A00] transition-colors" vid="260">구독</button>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8 text-sm pt-4 md:pt-0" vid="261">
+                    <div vid="262">
+                        <h3 class="font-bold mb-4 text-terra" vid="263">책방 안내</h3>
+                        <ul class="space-y-3 text-cream/70 font-light" vid="264">
+                            <li vid="265"><a href="#" class="hover:text-cream transition-colors" vid="266">소개 및 오시는 길</a></li>
+                            <li vid="267"><a href="#" class="hover:text-cream transition-colors" vid="268">영업시간 및 휴무일</a></li>
+                            <li vid="269"><a href="#" class="hover:text-cream transition-colors" vid="270">공간 대관 안내</a></li>
+                            <li vid="271"><a href="#" class="hover:text-cream transition-colors" vid="272">입고 문의</a></li>
+                        </ul>
+                    </div>
+                    <div vid="273">
+                        <h3 class="font-bold mb-4 text-terra" vid="274">고객 센터</h3>
+                        <ul class="space-y-3 text-cream/70 font-light" vid="275">
+                            <li vid="276"><a href="#" class="hover:text-cream transition-colors" vid="277">공지사항</a></li>
+                            <li vid="278"><a href="#" class="hover:text-cream transition-colors" vid="279">자주 묻는 질문</a></li>
+                            <li vid="280"><a href="#" class="hover:text-cream transition-colors" vid="281">1:1 문의</a></li>
+                            <li vid="282"><a href="#" class="hover:text-cream transition-colors" vid="283">이용약관</a></li>
+                            <li vid="284"><a href="#" class="hover:text-cream transition-colors font-medium text-cream" vid="285">개인정보처리방침</a></li>
+                        </ul>
+                    </div>
+                    <div vid="286">
+                        <h3 class="font-bold mb-4 text-terra" vid="287">소셜 미디어</h3>
+                        <ul class="space-y-4 text-cream/70" vid="288">
+                            <li vid="289"><a href="#" class="flex items-center gap-2 hover:text-cream transition-colors" vid="290"><i class="ph ph-instagram-logo text-lg" vid="291"></i> Instagram</a></li>
+                            <li vid="292"><a href="#" class="flex items-center gap-2 hover:text-cream transition-colors" vid="293"><i class="ph ph-twitter-logo text-lg" vid="294"></i> Twitter</a></li>
+                            <li vid="295"><a href="#" class="flex items-center gap-2 hover:text-cream transition-colors" vid="296"><i class="ph ph-youtube-logo text-lg" vid="297"></i> YouTube</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-cream/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-cream/50 font-light" vid="298">
+                <p vid="299">상호: 독립서점 오래된 서랍 | 대표: 김문장 | 사업자등록번호: 123-45-67890<br vid="300">주소: 서울특별시 종로구 서촌길 12, 1층 | 통신판매업신고: 2023-서울종로-1234</p>
+                <p vid="301">© 2024 Old Drawer Bookstore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script vid="302">
+        
+        let lastScrollY = window.scrollY;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+            if(currentScrollY > 50) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+            lastScrollY = currentScrollY;
+        }, { passive: true });
+
+        
+        function switchTab(tabId) {
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-forest', 'text-cream', 'shadow-md');
+                btn.classList.add('text-charcoal/60', 'hover:text-forest', 'hover:bg-cream/50');
+            });
+            
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.add('bg-forest', 'text-cream', 'shadow-md');
+            activeBtn.classList.remove('text-charcoal/60', 'hover:text-forest', 'hover:bg-cream/50');
+
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            
+            if(tabId === 'notice') {
+                animateNotices();
+            }
+        }
+
+        
+        function animateNotices() {
+            const items = document.querySelectorAll('.notice-item');
+            items.forEach((item, index) => {
+                item.classList.remove('animate-in');
+                setTimeout(() => {
+                    item.classList.add('animate-in');
+                }, 100 * index);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', animateNotices);
+
+        
+        function toggleFaq(btn) {
+            const faqItem = btn.closest('.faq-item');
+            const answer = faqItem.querySelector('.faq-answer');
+            const isOpen = faqItem.classList.contains('open');
+
+            
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('open');
+                item.querySelector('.faq-answer').style.maxHeight = null;
+            });
+
+            if (!isOpen) {
+                faqItem.classList.add('open');
+                answer.style.maxHeight = answer.scrollHeight + "px";
+            }
+        }
+
+        function filterFaq(category, btnElement) {
+            
+            document.querySelectorAll('.faq-filter').forEach(btn => {
+                btn.classList.remove('active', 'border-forest', 'bg-forest', 'text-cream', 'shadow-sm');
+                btn.classList.add('border-charcoal/10', 'bg-cream', 'text-charcoal/70', 'hover:border-charcoal/30');
+            });
+            btnElement.classList.add('active', 'border-forest', 'bg-forest', 'text-cream', 'shadow-sm');
+            btnElement.classList.remove('border-charcoal/10', 'bg-cream', 'text-charcoal/70', 'hover:border-charcoal/30');
+
+            
+            let visibleCount = 0;
+            document.querySelectorAll('.faq-item').forEach(item => {
+                
+                item.classList.remove('open');
+                item.querySelector('.faq-answer').style.maxHeight = null;
+
+                if (category === '전체' || item.dataset.category === category) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            const emptyMsg = document.getElementById('faq-empty');
+            if (visibleCount === 0) {
+                emptyMsg.classList.remove('hidden');
+            } else {
+                emptyMsg.classList.add('hidden');
+            }
+        }
+
+        
+        const noticeModal = document.getElementById('notice-modal');
+        const noticeModalContent = document.getElementById('notice-modal-content');
+
+        function openNoticeModal(category, title, date, bodyHtml) {
+            document.getElementById('modal-category').innerText = `[${category}]`;
+            
+            if(category === '이벤트') {
+                document.getElementById('modal-category').className = 'px-3 py-1 bg-terra text-cream text-xs font-bold rounded-full w-max';
+            } else if (category === '배송') {
+                document.getElementById('modal-category').className = 'px-3 py-1 bg-paper border border-charcoal/20 text-charcoal text-xs font-bold rounded-full w-max';
+            } else {
+                document.getElementById('modal-category').className = 'px-3 py-1 bg-forest text-cream text-xs font-bold rounded-full w-max';
+            }
+
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-date').innerText = date;
+            document.getElementById('modal-body').innerHTML = bodyHtml;
+
+            noticeModal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                noticeModalContent.classList.remove('scale-95', 'opacity-0');
+                noticeModalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeNoticeModal() {
+            noticeModalContent.classList.remove('scale-100', 'opacity-100');
+            noticeModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                noticeModal.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        
+        const qnaModal = document.getElementById('qna-modal');
+        const qnaModalContent = document.getElementById('qna-modal-content');
+
+        function openQnaModal() {
+            qnaModal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                qnaModalContent.classList.remove('scale-95', 'opacity-0');
+                qnaModalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeQnaModal() {
+            qnaModalContent.classList.remove('scale-100', 'opacity-100');
+            qnaModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                qnaModal.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        function submitQna() {
+            
+            closeQnaModal();
+            setTimeout(() => {
+                alert('문의가 성공적으로 등록되었습니다.');
+            }, 350);
+        }
+
+    </script>
+
+</body></html>

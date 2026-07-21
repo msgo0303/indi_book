@@ -1,0 +1,486 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">Book Detail - Minimalist Editorial</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet" vid="6">
+    
+    <script vid="7">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ivory: '#FDFBF7',
+                        charcoal: '#1A1A1A',
+                        muted: '#6B6B6B',
+                        surface: '#F6F4EE',
+                        borderLight: '#E8E5DF'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'book': '15px 15px 35px -10px rgba(0, 0, 0, 0.15), inset 3px 0 5px rgba(255, 255, 255, 0.5)',
+                        'header': '0 4px 20px -5px rgba(0, 0, 0, 0.05)',
+                        'bottom-bar': '0 -4px 30px rgba(0, 0, 0, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style vid="8">
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .no-scrollbar {
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        
+        .accordion-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease-out;
+        }
+        .accordion-content.is-open {
+            grid-template-rows: 1fr;
+        }
+        .accordion-inner {
+            overflow: hidden;
+        }
+        
+        
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 1rem);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-charcoal w-full h-full antialiased selection:bg-charcoal selection:text-ivory" vid="9">
+
+    
+    <main class="max-w-[480px] mx-auto bg-ivory min-h-screen relative shadow-2xl overflow-x-hidden flex flex-col" vid="10">
+        
+        
+        
+        <header id="top-bar" class="sticky top-0 z-50 bg-ivory/80 backdrop-blur-md transition-all duration-300 border-b border-transparent flex items-center justify-between px-4 py-3 h-14" vid="11">
+            <button class="p-2 -ml-2 text-charcoal active:scale-95 transition-transform" aria-label="Go back" vid="12">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vid="13"><path d="M19 12H5M12 19l-7-7 7-7" vid="14"></path></svg>
+            </button>
+            <h1 id="header-title" class="font-serif font-medium text-lg opacity-0 transition-opacity duration-300 translate-y-1" vid="15">Book Title</h1>
+            <button class="p-2 -mr-2 text-charcoal active:scale-95 transition-transform" aria-label="Share" vid="16">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vid="17"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" vid="18"></path></svg>
+            </button>
+        </header>
+
+        
+        <section class="relative pt-6 pb-10 px-6 flex flex-col items-center border-b border-borderLight" vid="19">
+            
+            <div class="relative w-[180px] sm:w-[220px] aspect-[2/3] mb-8 group perspective-[1000px]" vid="20">
+                <div class="w-full h-full relative transition-transform duration-700 transform-style-3d group-hover:rotate-y-[-5deg]" vid="21">
+                    
+                    <div class="absolute left-0 top-0 w-2 h-full bg-black/10 rounded-l-md z-10 shadow-[inset_1px_0_2px_rgba(255,255,255,0.3)]" vid="22"></div>
+                    <img id="hero-cover" src="" alt="Book Cover" class="w-full h-full object-cover rounded-r-md rounded-l-sm shadow-book bg-surface" vid="23">
+                </div>
+            </div>
+
+            
+            <div class="text-center w-full max-w-sm space-y-3" vid="24">
+                <h2 id="hero-title" class="font-serif text-3xl font-bold tracking-tight text-charcoal leading-tight" vid="25"></h2>
+                <h3 id="hero-subtitle" class="font-serif text-lg text-muted italic font-light" vid="26"></h3>
+                <p id="hero-author" class="font-sans text-xs tracking-[0.2em] uppercase text-muted pt-2" vid="27"></p>
+            </div>
+
+            
+            <div class="mt-8 w-full bg-white rounded-2xl p-5 border border-borderLight flex flex-col items-center justify-center space-y-2 shadow-sm" vid="28">
+                <div class="flex items-center gap-2" vid="29">
+                    <span id="book-condition" class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-surface border border-borderLight text-charcoal" vid="30"></span>
+                    <span class="text-[11px] text-muted uppercase tracking-wider" vid="31">중고 상태</span>
+                </div>
+                <div class="flex items-baseline gap-3" vid="32">
+                    <span id="hero-original-price" class="text-base text-muted line-through" vid="33"></span><span class="text-base text-muted" vid="34">원</span>
+                    <div class="flex items-baseline gap-1" vid="35">
+                        <span id="hero-price" class="text-2xl font-bold tracking-tight" vid="36"></span>
+                        <span class="text-lg font-medium" vid="37">원</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs text-muted" vid="38">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vid="39"><rect x="1" y="3" width="15" height="13" vid="40"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" vid="41"></polygon><circle cx="5.5" cy="18.5" r="2.5" vid="42"></circle><circle cx="18.5" cy="18.5" r="2.5" vid="43"></circle></svg>
+                    <span id="hero-shipping" vid="44"></span>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="flex-1 bg-ivory relative" vid="45">
+            
+            <div class="sticky top-14 z-40 bg-ivory/95 backdrop-blur-md border-b border-borderLight shadow-[0_4px_10px_-10px_rgba(0,0,0,0.1)]" vid="46">
+                <nav id="tabs-nav" class="flex overflow-x-auto no-scrollbar px-2" role="tablist" vid="47">
+                    
+                </nav>
+            </div>
+
+            
+            <div id="tab-content" class="p-6 min-h-[400px]" vid="48">
+                
+            </div>
+        </section>
+
+        
+        <section class="bg-surface py-10 border-t border-borderLight" vid="49">
+            <div class="px-6 mb-6 flex items-end justify-between" vid="50">
+                <div vid="51">
+                    <h4 class="font-serif text-xl font-bold mb-1" vid="52">Readers' Reviews</h4>
+                    <p class="text-xs text-muted font-medium uppercase tracking-wider" vid="53">92% Highly Recommend</p>
+                </div>
+                <div class="text-right" vid="54">
+                    <div class="text-3xl font-bold tracking-tighter mb-1" vid="55">4.8<span class="text-lg text-muted font-normal" vid="56">/5.0</span></div>
+                    <div class="flex gap-0.5 text-charcoal" vid="57">
+                        
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20" vid="58"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" vid="59"></path></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20" vid="60"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" vid="61"></path></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20" vid="62"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" vid="63"></path></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20" vid="64"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" vid="65"></path></svg>
+                        <svg class="w-4 h-4 text-gray-300 fill-current" viewBox="0 0 20 20" vid="66"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" vid="67"></path></svg>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="flex overflow-x-auto no-scrollbar snap-x snap-mandatory px-6 pb-4 space-x-4" vid="68">
+                
+                <div id="reviews-container" class="flex gap-4" vid="69"></div>
+            </div>
+        </section>
+
+        
+        <section class="bg-ivory pt-10 pb-32" vid="70">
+            <h4 class="font-serif text-xl font-bold px-6 mb-6" vid="71">도서 및 배송 Q&amp;A</h4>
+            <div id="qa-container" class="border-t border-borderLight mx-6" vid="72">
+                
+            </div>
+        </section>
+
+        
+        
+        <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none" vid="73">
+            
+            <div class="w-full max-w-[480px] bg-white/90 backdrop-blur-xl border-t border-borderLight shadow-bottom-bar pointer-events-auto px-4 py-3 flex items-center gap-3 pb-safe" vid="74">
+                
+                <button id="btn-wishlist" class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full border border-borderLight text-charcoal hover:bg-surface transition-colors active:scale-95" vid="75">
+                    <svg id="icon-heart" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vid="76"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" vid="77"></path></svg>
+                </button>
+                
+                
+                <button class="flex-1 h-12 rounded-full border border-charcoal text-charcoal font-medium text-sm tracking-wide hover:bg-surface transition-colors active:scale-[0.98]" vid="78">
+                    장바구니
+                </button>
+                
+                
+                <button class="flex-1 h-12 rounded-full bg-charcoal text-white font-medium text-sm tracking-wide shadow-md hover:bg-black transition-colors active:scale-[0.98]" vid="79">
+                    바로 구매
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    
+    <script vid="80">
+        
+        const bookData = {
+            "id": "book_id_001",
+            "title": "The Art of Stillness",
+            "subtitle": "어느 날 문득, 멈춰서다",
+            "author": "Pico Iyer",
+            "price": "16,800",
+            "original_price": "22,000",
+            "condition": "A",
+            "shipping_fee": "3,000원 / 5만원 이상 무료",
+            "cover_image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=600",
+            "description": `
+                <div class="space-y-6 font-serif text-[15px] leading-[1.8] text-gray-700">
+                    <p class="first-letter:text-4xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:mt-1">바쁘게 돌아가는 현대 사회에서 우리는 종종 방향을 잃곤 합니다. 끊임없는 알림과 쏟아지는 정보 속에서 진정한 자아를 마주할 시간은 턱없이 부족하죠.</p>
+                    <p>피코 아이어는 이 책을 통해 물리적인 여행이 아닌, 내면으로 향하는 가장 완벽한 모험에 대해 이야기합니다. '어디로도 가지 않는 연습'은 역설적이게도 우리가 가장 도달하고 싶었던 평온의 목적지로 우리를 안내합니다.</p>
+                    <div class="py-4 border-l-2 border-charcoal pl-4 my-6 italic text-charcoal">
+                        "진정한 발견의 여정은 새로운 풍경을 찾는 것이 아니라, 새로운 눈을 가지는 데 있다."
+                    </div>
+                    <p>간결하면서도 힘 있는 문장들로 엮인 이 에세이는 번아웃에 시달리는 당신에게 건네는 따뜻한 처방전이 될 것입니다.</p>
+                </div>`,
+            "table_of_contents": `
+                <ul class="space-y-4 font-sans text-sm text-gray-700">
+                    <li class="flex gap-4 items-baseline">
+                        <span class="font-serif font-bold text-gray-400 w-6">01</span>
+                        <span class="flex-1 border-b border-dashed border-gray-200 pb-1">어디로도 가지 않는 곳</span>
+                    </li>
+                    <li class="flex gap-4 items-baseline">
+                        <span class="font-serif font-bold text-gray-400 w-6">02</span>
+                        <span class="flex-1 border-b border-dashed border-gray-200 pb-1">내면의 방을 청소하기</span>
+                    </li>
+                    <li class="flex gap-4 items-baseline">
+                        <span class="font-serif font-bold text-gray-400 w-6">03</span>
+                        <span class="flex-1 border-b border-dashed border-gray-200 pb-1">침묵이 들려주는 이야기</span>
+                    </li>
+                    <li class="flex gap-4 items-baseline">
+                        <span class="font-serif font-bold text-gray-400 w-6">04</span>
+                        <span class="flex-1 border-b border-dashed border-gray-200 pb-1">가장 멀리 떠나는 여행, 고요함</span>
+                    </li>
+                    <li class="flex gap-4 items-baseline">
+                        <span class="font-serif font-bold text-gray-400 w-6">05</span>
+                        <span class="flex-1 border-b border-dashed border-gray-200 pb-1">다시 세상 속으로</span>
+                    </li>
+                </ul>`,
+            "author_intro": `
+                <div class="flex flex-col items-center text-center space-y-4">
+                    <div class="w-16 h-16 rounded-full bg-gray-200 overflow-hidden mb-2">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200" alt="Author" class="w-full h-full object-cover mix-blend-luminosity opacity-80" />
+                    </div>
+                    <h5 class="font-serif font-bold text-lg">Pico Iyer</h5>
+                    <p class="font-sans text-sm text-gray-600 leading-relaxed text-left">
+                        옥스퍼드와 하버드에서 문학을 공부했다. 타임지 기자로 활동하며 세계 곳곳을 누빈 베테랑 여행 작가이자 에세이스트. 화려한 수식어보다는 담백하고 깊이 있는 성찰이 담긴 글로 전 세계 수많은 독자들의 사랑을 받고 있다. 대표작으로 «글로벌 소울», «쿠바의 밤» 등이 있다.
+                    </p>
+                </div>`,
+            "book_meta_info": `
+                <div class="grid grid-cols-[100px_1fr] gap-y-4 text-[13px] font-sans">
+                    <div class="text-muted border-b border-gray-100 pb-3">발행일</div>
+                    <div class="text-charcoal font-medium border-b border-gray-100 pb-3">2023년 10월 25일</div>
+                    
+                    <div class="text-muted border-b border-gray-100 pb-3">쪽수 / 무게</div>
+                    <div class="text-charcoal font-medium border-b border-gray-100 pb-3">212쪽 / 340g</div>
+                    
+                    <div class="text-muted border-b border-gray-100 pb-3">크기</div>
+                    <div class="text-charcoal font-medium border-b border-gray-100 pb-3">128 * 188 * 15 mm</div>
+                    
+                    <div class="text-muted pb-1">ISBN</div>
+                    <div class="text-charcoal font-medium pb-1">9791190000001</div>
+                </div>`,
+            "purchase_guide": {
+                "payment": "신용카드, 계좌이체, 간편결제(네이버페이, 카카오페이)를 지원합니다. 무통장 입금의 경우 주문 후 24시간 이내 미입금 시 자동 취소됩니다.",
+                "shipping": "영업일 기준 오후 2시 이전 결제 완료 건은 당일 출고됩니다. (도서산간 지역은 1~2일 추가 소요)",
+                "return_refund": "도서 수령 후 7일 이내 고객센터를 통해 접수 가능합니다. 단, 도서의 래핑이 훼손되거나 사용 흔적이 있는 경우 교환/환불이 불가합니다."
+            }
+        };
+
+        const reviewsData = [
+            { id: 1, text: "서점원의 큐레이션을 읽고 샀는데, 문장 하나하나 가슴 깊이 남는 책입니다. 주말 내내 푹 빠져 읽었어요.", user: "user_***99", rating: 5 },
+            { id: 2, text: "복잡했던 머릿속이 차분하게 정리되는 느낌. 자기 전 한 챕터씩 읽기 딱 좋은 볼륨과 내용입니다.", user: "blue***21", rating: 5 },
+            { id: 3, text: "선물용으로 구매했는데 패키징도 꼼꼼하고 내용도 너무 좋다고 하네요. 나를 위한 책으로 한 권 더 주문합니다.", user: "jin***ho", rating: 4 },
+            { id: 4, text: "요즘 같은 속도의 시대에 꼭 필요한 브레이크 같은 책. 여운이 길게 남습니다.", user: "rest***00", rating: 5 },
+            { id: 5, text: "디자인이 예뻐서 소장 가치 충분합니다. 종이 질감도 너무 좋네요.", user: "art***lover", rating: 5 }
+        ];
+
+        const qaData = [
+            {
+                q: "Q. 재입고 일정은 어떻게 되나요?",
+                a: "A. 본 도서는 독립출판물로, 작가님과의 협의에 따라 재입고까지 약 1~2주일이 소요될 수 있습니다. 재입고 알림을 신청해주시면 가장 먼저 안내해 드립니다."
+            },
+            {
+                q: "Q. 선물용 포장 배송이 가능한가요?",
+                a: "A. 네, 결제 단계에서 '선물 포장(+2,000원)' 옵션을 선택하시면 브랜드 시그니처 래핑 페이퍼와 리본으로 정성스럽게 포장하여 발송해 드립니다."
+            },
+            {
+                q: "Q. 전자책(e-book)으로도 출간 예정이 있나요?",
+                a: "A. 현재로서는 종이책의 질감과 넘기는 호흡을 의도하여 기획된 도서라 전자책 출간 계획은 미정입니다."
+            }
+        ];
+
+
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            
+            document.getElementById('header-title').textContent = bookData.title;
+            document.getElementById('hero-title').textContent = bookData.title;
+            document.getElementById('hero-subtitle').textContent = bookData.subtitle;
+            document.getElementById('hero-author').textContent = bookData.author;
+            document.getElementById('hero-original-price').textContent = bookData.original_price;
+            document.getElementById('hero-price').textContent = bookData.price;
+            document.getElementById('book-condition').textContent = bookData.condition;
+            document.getElementById('hero-shipping').textContent = bookData.shipping_fee;
+            document.getElementById('hero-cover').src = bookData.cover_image;
+
+            
+            const tabs = [
+                { id: 'intro', label: '책 소개', content: bookData.description },
+                { id: 'toc', label: '목차', content: bookData.table_of_contents },
+                { id: 'author', label: '저자 소개', content: bookData.author_intro },
+                { id: 'specs', label: '도서 정보', content: bookData.book_meta_info },
+                { id: 'guide', label: '구매 안내', content: `
+                    <div class="space-y-6 font-sans text-sm">
+                        <div>
+                            <h6 class="font-bold text-charcoal mb-2 flex items-center gap-2"><div class="w-1 h-1 bg-charcoal rounded-full"></div>결제 정보</h6>
+                            <p class="text-gray-600 leading-relaxed pl-3">${bookData.purchase_guide.payment}</p>
+                        </div>
+                        <div>
+                            <h6 class="font-bold text-charcoal mb-2 flex items-center gap-2"><div class="w-1 h-1 bg-charcoal rounded-full"></div>배송 정보</h6>
+                            <p class="text-gray-600 leading-relaxed pl-3">${bookData.purchase_guide.shipping}</p>
+                        </div>
+                        <div>
+                            <h6 class="font-bold text-charcoal mb-2 flex items-center gap-2"><div class="w-1 h-1 bg-charcoal rounded-full"></div>교환 및 반품</h6>
+                            <p class="text-gray-600 leading-relaxed pl-3">${bookData.purchase_guide.return_refund}</p>
+                        </div>
+                    </div>` 
+                }
+            ];
+
+            const tabsNav = document.getElementById('tabs-nav');
+            const tabContent = document.getElementById('tab-content');
+
+            
+            tabs.forEach((tab, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn flex-1 min-w-fit px-4 py-3.5 text-[14px] font-medium whitespace-nowrap transition-colors relative
+                                ${index === 0 ? 'text-charcoal' : 'text-gray-400'}`;
+                btn.textContent = tab.label;
+                btn.dataset.target = tab.id;
+                
+                
+                const indicator = document.createElement('div');
+                indicator.className = `tab-indicator absolute bottom-0 left-0 w-full h-[2px] bg-charcoal transition-opacity duration-300
+                                     ${index === 0 ? 'opacity-100' : 'opacity-0'}`;
+                btn.appendChild(indicator);
+
+                btn.addEventListener('click', () => switchTab(tab, btn));
+                tabsNav.appendChild(btn);
+            });
+
+            
+            tabContent.innerHTML = `<div class="fade-in">${tabs[0].content}</div>`;
+
+            function switchTab(tabData, clickedBtn) {
+                
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('text-charcoal');
+                    b.classList.add('text-gray-400');
+                    b.querySelector('.tab-indicator').classList.replace('opacity-100', 'opacity-0');
+                });
+                clickedBtn.classList.remove('text-gray-400');
+                clickedBtn.classList.add('text-charcoal');
+                clickedBtn.querySelector('.tab-indicator').classList.replace('opacity-0', 'opacity-100');
+
+                
+                tabContent.innerHTML = `<div class="fade-in">${tabData.content}</div>`;
+                
+                
+                const tabsTop = tabsNav.parentElement.getBoundingClientRect().top;
+                if(tabsTop < 0) {
+                    window.scrollTo({ top: window.scrollY + tabsTop - 60, behavior: 'smooth' });
+                }
+            }
+
+            
+            const reviewsContainer = document.getElementById('reviews-container');
+            reviewsData.forEach(review => {
+                const starsHtml = Array(5).fill(0).map((_, i) => 
+                    `<svg class="w-3.5 h-3.5 ${i < review.rating ? 'text-charcoal fill-current' : 'text-gray-300 fill-current'}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`
+                ).join('');
+
+                const card = document.createElement('div');
+                card.className = 'snap-center flex-shrink-0 w-[280px] bg-white border border-borderLight rounded-2xl p-5 shadow-sm flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex gap-0.5 mb-3">${starsHtml}</div>
+                        <p class="font-sans text-[14px] leading-relaxed text-charcoal mb-4 line-clamp-4">"${review.text}"</p>
+                    </div>
+                    <div class="text-[11px] text-muted font-medium tracking-wide flex items-center justify-between">
+                        <span>${review.user}</span>
+                        <span class="text-gray-300 px-2 py-1 bg-gray-50 rounded-md">Verified</span>
+                    </div>
+                `;
+                reviewsContainer.appendChild(card);
+            });
+
+            
+            const qaContainer = document.getElementById('qa-container');
+            qaData.forEach((qa, index) => {
+                const item = document.createElement('div');
+                item.className = 'border-b border-borderLight';
+                item.innerHTML = `
+                    <button class="w-full py-5 flex items-center justify-between text-left focus:outline-none group">
+                        <span class="font-medium text-[15px] pr-4 group-hover:text-black transition-colors">${qa.q}</span>
+                        <svg class="w-5 h-5 text-gray-400 transform transition-transform duration-300 chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content text-[14px] text-gray-600 leading-relaxed bg-surface/50 rounded-b-lg">
+                        <div class="accordion-inner px-4 pb-5 pt-1">
+                            ${qa.a}
+                        </div>
+                    </div>
+                `;
+                
+                const btn = item.querySelector('button');
+                btn.addEventListener('click', () => {
+                    const content = item.querySelector('.accordion-content');
+                    const chevron = item.querySelector('.chevron');
+                    const isOpen = content.classList.contains('is-open');
+                    
+                    
+                    document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('is-open'));
+                    document.querySelectorAll('.chevron').forEach(c => c.classList.remove('rotate-180'));
+
+                    if (!isOpen) {
+                        content.classList.add('is-open');
+                        chevron.classList.add('rotate-180');
+                    }
+                });
+                
+                qaContainer.appendChild(item);
+            });
+
+            
+            const btnWishlist = document.getElementById('btn-wishlist');
+            const iconHeart = document.getElementById('icon-heart');
+            let isWishlisted = false;
+
+            btnWishlist.addEventListener('click', () => {
+                isWishlisted = !isWishlisted;
+                if (isWishlisted) {
+                    iconHeart.setAttribute('fill', 'currentColor');
+                    iconHeart.classList.add('text-red-500');
+                    
+                    iconHeart.style.transform = 'scale(1.2)';
+                    setTimeout(() => iconHeart.style.transform = 'scale(1)', 150);
+                } else {
+                    iconHeart.setAttribute('fill', 'none');
+                    iconHeart.classList.remove('text-red-500');
+                }
+                iconHeart.style.transition = 'transform 0.15s ease, color 0.2s ease';
+            });
+
+            
+            const topBar = document.getElementById('top-bar');
+            const headerTitle = document.getElementById('header-title');
+            const heroTitle = document.getElementById('hero-title');
+
+            window.addEventListener('scroll', () => {
+                const heroTitleRect = heroTitle.getBoundingClientRect();
+                
+                
+                if (heroTitleRect.bottom < 60) { 
+                    headerTitle.classList.remove('opacity-0', 'translate-y-1');
+                    headerTitle.classList.add('opacity-100', 'translate-y-0');
+                    topBar.classList.replace('border-transparent', 'border-borderLight');
+                    topBar.classList.add('shadow-header');
+                } else {
+                    headerTitle.classList.add('opacity-0', 'translate-y-1');
+                    headerTitle.classList.remove('opacity-100', 'translate-y-0');
+                    topBar.classList.replace('border-borderLight', 'border-transparent');
+                    topBar.classList.remove('shadow-header');
+                }
+            }, { passive: true });
+
+        });
+    </script>
+
+</body></html>

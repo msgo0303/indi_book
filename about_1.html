@@ -1,0 +1,751 @@
+<html lang="ko" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">About - 오래된 서랍</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
+    
+    <script vid="10">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7',
+                        forest: '#1B4332',
+                        terra: '#A36A00',
+                        charcoal: '#2D2D2D',
+                        paper: '#F5F2EB',
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif KR"', 'serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '4px 8px 24px rgba(0,0,0,0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style vid="11">
+        body {
+            font-family: 'Noto Serif KR', serif;
+            background-color: #FDFBF7;
+            color: #2D2D2D;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+            overflow-x: hidden;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        #navbar {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        #navbar.hidden-nav {
+            transform: translateY(-100%);
+        }
+
+        
+        .hero-frame {
+            transition: all 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+        .hero-overlay {
+            transition: opacity 1.2s ease;
+        }
+        .hero-text {
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .hero-frame.expanded {
+            width: calc(100% - 2rem);
+            height: 85vh;
+            border-radius: 1rem;
+        }
+        @media (min-width: 768px) {
+            .hero-frame.expanded {
+                width: calc(100% - 4rem);
+            }
+        }
+        .hero-frame.expanded .hero-overlay {
+            opacity: 1;
+        }
+        .hero-frame.expanded .hero-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: tabEnter 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes tabEnter {
+            0% { 
+                opacity: 0; 
+                filter: blur(12px); 
+                transform: translateY(30px); 
+            }
+            100% { 
+                opacity: 1; 
+                filter: blur(0); 
+                transform: translateY(0); 
+            }
+        }
+
+        .stamp-logo {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #A36A00;
+            border-radius: 50%;
+            padding: 8px;
+            color: #A36A00;
+            transform: rotate(-10deg);
+        }
+
+        
+        .modal-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .modal-overlay.active .modal-content {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        
+        .roadmap-line::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: rgba(27, 67, 50, 0.2);
+            z-index: -1;
+        }
+        .roadmap-item:last-child .roadmap-line::before {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-forest selection:text-cream" vid="12">
+
+    
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-cream/95 backdrop-blur-md border-b border-forest/10 py-4 px-4 md:px-8" vid="13">
+        <div class="max-w-7xl mx-auto flex justify-between items-center" vid="14">
+            <a href="#" class="flex items-center gap-2 group" vid="15">
+                <div class="stamp-logo w-10 h-10 transition-transform group-hover:rotate-0 duration-300" vid="16">
+                    <i class="ph ph-books text-xl" vid="17"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-forest" vid="18">오래된 서랍</span>
+            </a>
+            
+            <div class="hidden lg:flex items-center gap-8 text-sm font-medium" vid="19">
+                <a href="#" class="hover:text-terra transition-colors" vid="20">홈</a>
+                <a href="#" class="text-terra transition-colors border-b-2 border-terra pb-1" vid="21">About</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="22">Event</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="23">커뮤니티</a>
+            </div>
+
+            <div class="hidden lg:flex items-center gap-6 text-sm" vid="24">
+                <a href="#" class="hover:text-forest transition-colors" vid="25">로그인</a>
+                <a href="#" class="px-4 py-2 bg-forest text-cream rounded-full hover:bg-forest/90 transition-colors" vid="26">회원가입</a>
+                <a href="#" class="hover:text-terra transition-colors flex items-center gap-1" vid="27">마이페이지 <i class="ph ph-user text-lg" vid="28"></i></a>
+            </div>
+
+            <button class="lg:hidden text-charcoal p-2" vid="29">
+                <i class="ph ph-list text-2xl" vid="30"></i>
+            </button>
+        </div>
+    </nav>
+
+    
+    <header class="relative w-full h-[150vh] bg-paper" vid="31">
+        <div class="sticky top-0 w-full h-screen flex items-center justify-center overflow-hidden pt-16" vid="32">
+            
+            <div id="hero-frame" class="hero-frame relative overflow-hidden w-[240px] h-[340px] md:w-[320px] md:h-[460px] rounded-r-[40px] rounded-l-md shadow-2xl bg-forest" vid="33">
+                <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&amp;w=2070&amp;auto=format&amp;fit=crop" alt="Bookstore Interior" class="absolute inset-0 w-full h-full object-cover" vid="34">
+                
+                
+                <div class="hero-overlay absolute inset-0 bg-black/50 opacity-0 mix-blend-multiply" vid="35"></div>
+                
+                
+                <div class="hero-text absolute inset-0 flex flex-col justify-end md:justify-center items-center text-center p-6 md:p-16 opacity-0 translate-y-12" vid="36">
+                    <h1 class="text-2xl md:text-5xl lg:text-6xl font-bold text-cream mb-4 md:mb-6 leading-[1.3] max-w-4xl tracking-tight" vid="37">
+                        우리는 책과 사람의 온기를 연결합니다
+                    </h1>
+                    <p class="text-base md:text-xl text-cream/90 font-medium mb-6 md:mb-8 tracking-wider" vid="38">
+                        시간이 멈춘 공간, 깊은 사유의 숲으로 당신을 초대합니다.
+                    </p>
+                    <p class="text-sm md:text-base text-cream/70 max-w-2xl font-light leading-relaxed hidden md:block" vid="39">
+                        독립서점은 단순히 책을 파는 곳이 아닌, 작가의 영혼과 독자의 내면이 만나 조용히 공명하는 은신처입니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <div class="sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-y border-forest/10 mt-[-1px] transition-transform duration-300" id="subnav" vid="40">
+        <div class="max-w-7xl mx-auto px-4 md:px-8" vid="41">
+            <div class="flex overflow-x-auto hide-scrollbar gap-8 text-sm md:text-base font-medium whitespace-nowrap" vid="42">
+                <button class="tab-btn active py-4 border-b-2 border-terra text-terra transition-colors" data-target="tab1" vid="43">독립 서점이 뭔가요?</button>
+                <button class="tab-btn py-4 border-b-2 border-transparent text-charcoal/60 hover:text-terra transition-colors" data-target="tab2" vid="44">우리의 사업</button>
+                <button class="tab-btn py-4 border-b-2 border-transparent text-charcoal/60 hover:text-terra transition-colors" data-target="tab3" vid="45">북 큐레이션</button>
+                <button class="tab-btn py-4 border-b-2 border-transparent text-charcoal/60 hover:text-terra transition-colors" data-target="tab4" vid="46">리브레 AI</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <main class="min-h-screen bg-cream pb-32 pt-16" vid="47">
+        
+        
+        <section id="tab1" class="tab-content active max-w-7xl mx-auto px-4 md:px-8" vid="48">
+            
+            <div class="max-w-3xl mx-auto text-center mb-24 mt-8" vid="49">
+                <p class="text-terra font-semibold mb-4 tracking-wider text-sm" vid="50">Q &amp; A</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-forest mb-6" vid="51">독립서점이 무엇인가요?</h2>
+                <h3 class="text-xl md:text-2xl text-charcoal/80 font-medium mb-8" vid="52">대형 서점의 분류표에는 없는, 당신을 위한 이야기</h3>
+                <p class="text-base md:text-lg text-charcoal/70 leading-relaxed font-light break-keep" vid="53">
+                    자본과 유통의 논리에서 벗어나 책방지기의 뚜렷한 가치관과 취향으로 채워진 공간입니다.<br class="hidden md:block" vid="54">
+                    세상에 단 몇 권만 존재하는 독립출판물과 깊은 교감을 나눌 수 있습니다.
+                </p>
+            </div>
+
+            
+            <div class="mb-16" vid="55">
+                <div class="text-center md:text-left mb-10" vid="56">
+                    <h3 class="text-2xl md:text-3xl font-bold text-forest mb-3" vid="57">우리 독립서점을 소개합니다</h3>
+                    <p class="text-charcoal/60" vid="58">골목길 끝자락, 문을 열면 펼쳐지는 서정적인 기록들</p>
+                </div>
+                
+                <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-6 pb-8 -mx-4 px-4 md:mx-0 md:px-0" vid="59">
+                    <div class="snap-center shrink-0 w-[85vw] md:w-[500px] h-[300px] md:h-[400px] rounded-xl overflow-hidden shadow-soft" vid="60">
+                        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&amp;w=2128&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="아늑한 서가" vid="61">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6" vid="62">
+                            <p class="text-cream font-medium text-lg" vid="63">아늑한 서가</p>
+                        </div>
+                    </div>
+                    <div class="snap-center shrink-0 w-[85vw] md:w-[500px] h-[300px] md:h-[400px] rounded-xl overflow-hidden shadow-soft relative" vid="64">
+                        <img src="https://images.unsplash.com/photo-1544928147-79a2dbc1f389?q=80&amp;w=2187&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="스탠드 불빛 아래의 시집" vid="65">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6" vid="66">
+                            <p class="text-cream font-medium text-lg" vid="67">스탠드 불빛 아래의 시집</p>
+                        </div>
+                    </div>
+                    <div class="snap-center shrink-0 w-[85vw] md:w-[500px] h-[300px] md:h-[400px] rounded-xl overflow-hidden shadow-soft relative" vid="68">
+                        <img src="https://images.unsplash.com/photo-1455390582262-044cdead27d8?q=80&amp;w=1973&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="방명록 방명 기록" vid="69">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6" vid="70">
+                            <p class="text-cream font-medium text-lg" vid="71">방명록 방명 기록</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="tab2" class="tab-content max-w-7xl mx-auto px-4 md:px-8" vid="72">
+            <div class="flex flex-col gap-16 md:gap-24 mt-8" vid="73">
+                
+                
+                <div class="flex flex-col md:flex-row gap-8 md:gap-16 items-center" vid="74">
+                    <div class="w-full md:w-1/2 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden shadow-card relative group" vid="75">
+                        <div class="absolute inset-0 bg-forest/10 group-hover:bg-transparent transition-colors z-10 pointer-events-none" vid="76"></div>
+                        <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Indie Publishing" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" vid="77">
+                    </div>
+                    <div class="w-full md:w-1/2 flex flex-col items-start" vid="78">
+                        <span class="px-4 py-1.5 bg-paper border border-charcoal/10 rounded-full text-xs font-bold text-terra mb-4" vid="79">BUSINESS 01</span>
+                        <h3 class="text-3xl font-bold text-forest mb-4" vid="80">독립 출판 파트너십</h3>
+                        <p class="text-charcoal/70 leading-relaxed mb-8 font-light text-lg" vid="81">신진 작가들의 서정적이고 실험적인 텍스트를 발굴하고, 한 권의 아름다운 실물 책으로 세상에 빛을 보게 돕습니다.</p>
+                        <button onclick="openModal('modal-partnership')" class="inline-flex items-center gap-2 px-8 py-4 bg-forest text-cream rounded-full hover:bg-forest/90 transition-all hover:gap-4 shadow-md font-medium" vid="82">
+                            제휴 문의하기 <i class="ph ph-arrow-right" vid="83"></i>
+                        </button>
+                    </div>
+                </div>
+
+                
+                <div class="flex flex-col md:flex-row-reverse gap-8 md:gap-16 items-center" vid="84">
+                    <div class="w-full md:w-1/2 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden shadow-card relative group" vid="85">
+                        <div class="absolute inset-0 bg-forest/10 group-hover:bg-transparent transition-colors z-10 pointer-events-none" vid="86"></div>
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Personalized Curation" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" vid="87">
+                    </div>
+                    <div class="w-full md:w-1/2 flex flex-col items-start" vid="88">
+                        <span class="px-4 py-1.5 bg-paper border border-charcoal/10 rounded-full text-xs font-bold text-terra mb-4" vid="89">BUSINESS 02</span>
+                        <h3 class="text-3xl font-bold text-forest mb-4" vid="90">개인 맞춤형 도서 큐레이션</h3>
+                        <p class="text-charcoal/70 leading-relaxed mb-8 font-light text-lg" vid="91">독서 성향 분석을 통해 일상에 가장 필요한 영감과 문장을 선별하여 맞춤 배송해 드립니다.</p>
+                        <button onclick="openModal('modal-curation')" class="inline-flex items-center gap-2 px-8 py-4 bg-paper text-forest border border-forest rounded-full hover:bg-forest hover:text-cream transition-all shadow-md font-medium" vid="92">
+                            이벤트 자세히 보기 <i class="ph ph-magnifying-glass" vid="93"></i>
+                        </button>
+                    </div>
+                </div>
+
+                
+                <div class="flex flex-col md:flex-row gap-8 md:gap-16 items-center" vid="94">
+                    <div class="w-full md:w-1/2 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden shadow-card relative group" vid="95">
+                        <div class="absolute inset-0 bg-forest/10 group-hover:bg-transparent transition-colors z-10 pointer-events-none" vid="96"></div>
+                        <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Libre AI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" vid="97">
+                    </div>
+                    <div class="w-full md:w-1/2 flex flex-col items-start" vid="98">
+                        <span class="px-4 py-1.5 bg-paper border border-charcoal/10 rounded-full text-xs font-bold text-terra mb-4" vid="99">BUSINESS 03</span>
+                        <h3 class="text-3xl font-bold text-forest mb-4" vid="100">인공지능 기반의 독서 라이프케어</h3>
+                        <p class="text-charcoal/70 leading-relaxed mb-8 font-light text-lg" vid="101">독서 취향을 추적하고, 완독률과 독서 습관을 정밀 분석하는 리브레 AI 솔루션을 연구하고 개발합니다.</p>
+                        <button class="inline-flex items-center gap-2 text-terra font-bold border-b border-terra pb-1 hover:text-forest hover:border-forest transition-colors" vid="102">
+                            기술 블로그 보기 <i class="ph ph-arrow-up-right" vid="103"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        
+        <section id="tab3" class="tab-content max-w-7xl mx-auto px-4 md:px-8" vid="104">
+            
+            <div class="text-center mb-20 mt-8" vid="105">
+                <p class="text-terra font-semibold mb-3 tracking-widest text-sm" vid="106">BOOK CURATION</p>
+                <h2 class="text-3xl md:text-5xl font-bold text-forest mb-6" vid="107">나의 인생책은 무엇일까?</h2>
+                <p class="text-charcoal/70 max-w-2xl mx-auto text-lg font-light" vid="108">우연한 만남을 넘어, 과학적이고 감성적인 여정을 통해 찾게 될 당신만의 한 줄.</p>
+            </div>
+
+            
+            <div class="mb-24" vid="109">
+                <div class="flex overflow-x-auto hide-scrollbar snap-x py-8 -mx-4 px-4 md:mx-0 md:px-0 relative" vid="110">
+                    
+                    <div class="roadmap-item snap-center shrink-0 w-[200px] flex flex-col items-center relative roadmap-line" vid="111">
+                        <button onclick="openRoadmapPopup('1단계', '선호 독서 추적', '과거에 즐겁게 읽었던 책들과 밑줄 친 문장들을 수집하여 기본적인 독서 DNA를 추출합니다.')" class="w-12 h-12 rounded-full bg-paper border-2 border-forest text-forest flex items-center justify-center font-bold mb-4 hover:bg-forest hover:text-cream transition-colors z-10 relative" vid="112">1</button>
+                        <h4 class="font-bold text-forest mb-1" vid="113">선호 독서 추적</h4>
+                    </div>
+                    
+                    <div class="roadmap-item snap-center shrink-0 w-[200px] flex flex-col items-center relative roadmap-line" vid="114">
+                        <button onclick="openRoadmapPopup('2단계', '성향 분석', '심층 설문을 통해 현재의 감정 상태, 라이프스타일, 그리고 내면의 결핍을 분석합니다.')" class="w-12 h-12 rounded-full bg-paper border-2 border-forest text-forest flex items-center justify-center font-bold mb-4 hover:bg-forest hover:text-cream transition-colors z-10 relative" vid="115">2</button>
+                        <h4 class="font-bold text-forest mb-1" vid="116">성향 분석</h4>
+                    </div>
+
+                    <div class="roadmap-item snap-center shrink-0 w-[200px] flex flex-col items-center relative roadmap-line" vid="117">
+                        <button onclick="openRoadmapPopup('3단계', '니즈 분석', '지금 당신의 일상에 가장 필요한 위로, 통찰, 혹은 모험의 방향을 설정합니다.')" class="w-12 h-12 rounded-full bg-forest text-cream shadow-[0_0_15px_rgba(27,67,50,0.4)] flex items-center justify-center font-bold mb-4 hover:scale-110 transition-transform z-10 relative" vid="118">3</button>
+                        <h4 class="font-bold text-forest mb-1 text-lg" vid="119">니즈 분석</h4>
+                    </div>
+
+                    <div class="roadmap-item snap-center shrink-0 w-[200px] flex flex-col items-center relative roadmap-line" vid="120">
+                        <button onclick="openRoadmapPopup('4단계', '도서 선정', '책방지기의 안목과 리브레 AI의 데이터를 결합하여 세상에 숨겨진 보석 같은 책을 발굴합니다.')" class="w-12 h-12 rounded-full bg-paper border-2 border-forest text-forest flex items-center justify-center font-bold mb-4 hover:bg-forest hover:text-cream transition-colors z-10 relative" vid="121">4</button>
+                        <h4 class="font-bold text-forest mb-1" vid="122">도서 선정</h4>
+                    </div>
+
+                    <div class="roadmap-item snap-center shrink-0 w-[200px] flex flex-col items-center relative roadmap-line" vid="123">
+                        <button onclick="openRoadmapPopup('5단계', '도서 전달', '정성스러운 손편지, 블라인드 포장과 함께 당신의 문앞으로 따뜻한 위로를 배달합니다.')" class="w-12 h-12 rounded-full bg-paper border-2 border-forest text-forest flex items-center justify-center font-bold mb-4 hover:bg-forest hover:text-cream transition-colors z-10 relative" vid="124">5</button>
+                        <h4 class="font-bold text-forest mb-1" vid="125">도서 전달</h4>
+                    </div>
+                </div>
+                <p class="text-center text-sm text-charcoal/40 mt-4" vid="126"><i class="ph ph-hand-tap" vid="127"></i> 단계를 터치하여 자세히 알아보세요</p>
+            </div>
+
+            
+            <div class="bg-forest/5 rounded-3xl p-8 md:p-12 border border-forest/10" vid="128">
+                <h3 class="text-2xl font-bold text-forest mb-8 text-center" vid="129">큐레이션 경험자들의 이야기</h3>
+                <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-6 pb-4" vid="130">
+                    
+                    <div class="snap-center shrink-0 w-[300px] md:w-[350px] bg-cream p-8 rounded-2xl shadow-sm border border-paper" vid="131">
+                        <div class="flex text-terra mb-4 text-xl" vid="132">
+                            <i class="ph-fill ph-star" vid="133"></i><i class="ph-fill ph-star" vid="134"></i><i class="ph-fill ph-star" vid="135"></i><i class="ph-fill ph-star" vid="136"></i><i class="ph-fill ph-star" vid="137"></i>
+                        </div>
+                        <p class="text-charcoal/80 font-light leading-relaxed mb-6" vid="138">"요즘 번아웃이 심해서 어떤 책을 읽어야 할지 몰랐는데, 마치 저를 아는 오랜 친구가 골라준 것 같은 책을 받았습니다. 첫 페이지를 넘기자마자 눈물이 났어요."</p>
+                        <div class="flex items-center gap-3" vid="139">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold" vid="140">A</div>
+                            <div vid="141">
+                                <p class="text-sm font-bold text-forest" vid="142">지친 직장인 A님</p>
+                                <p class="text-xs text-charcoal/50" vid="143">2023. 10. 15</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="snap-center shrink-0 w-[300px] md:w-[350px] bg-cream p-8 rounded-2xl shadow-sm border border-paper" vid="144">
+                        <div class="flex text-terra mb-4 text-xl" vid="145">
+                            <i class="ph-fill ph-star" vid="146"></i><i class="ph-fill ph-star" vid="147"></i><i class="ph-fill ph-star" vid="148"></i><i class="ph-fill ph-star" vid="149"></i><i class="ph-fill ph-star" vid="150"></i>
+                        </div>
+                        <p class="text-charcoal/80 font-light leading-relaxed mb-6" vid="151">"포장을 뜯기 전부터 향긋한 종이 냄새에 기분이 좋아졌어요. 평소라면 절대 고르지 않았을 분야의 책인데, 지금 제 상황에 완벽한 해답을 주네요."</p>
+                        <div class="flex items-center gap-3" vid="152">
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold" vid="153">K</div>
+                            <div vid="154">
+                                <p class="text-sm font-bold text-forest" vid="155">새로운 도전을 앞둔 K님</p>
+                                <p class="text-xs text-charcoal/50" vid="156">2023. 11. 02</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="snap-center shrink-0 w-[300px] md:w-[350px] bg-cream p-8 rounded-2xl shadow-sm border border-paper" vid="157">
+                        <div class="flex text-terra mb-4 text-xl" vid="158">
+                            <i class="ph-fill ph-star" vid="159"></i><i class="ph-fill ph-star" vid="160"></i><i class="ph-fill ph-star" vid="161"></i><i class="ph-fill ph-star" vid="162"></i><i class="ph ph-star" vid="163"></i>
+                        </div>
+                        <p class="text-charcoal/80 font-light leading-relaxed mb-6" vid="164">"설문 과정 자체가 저를 돌아보는 힐링의 시간이었습니다. 배송된 책 안에는 책방지기님의 정성스러운 손편지까지 있어서 감동이 두 배였어요."</p>
+                        <div class="flex items-center gap-3" vid="165">
+                            <div class="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 font-bold" vid="166">S</div>
+                            <div vid="167">
+                                <p class="text-sm font-bold text-forest" vid="168">주부 S님</p>
+                                <p class="text-xs text-charcoal/50" vid="169">2023. 11. 20</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="snap-center shrink-0 w-[300px] md:w-[350px] bg-cream p-8 rounded-2xl shadow-sm border border-paper" vid="170">
+                        <div class="flex text-terra mb-4 text-xl" vid="171">
+                            <i class="ph-fill ph-star" vid="172"></i><i class="ph-fill ph-star" vid="173"></i><i class="ph-fill ph-star" vid="174"></i><i class="ph-fill ph-star" vid="175"></i><i class="ph-fill ph-star" vid="176"></i>
+                        </div>
+                        <p class="text-charcoal/80 font-light leading-relaxed mb-6" vid="177">"매달 구독하고 싶을 정도입니다. 베스트셀러 코너에서는 느낄 수 없는 깊이 있는 큐레이션 안목에 박수를 보냅니다. 주변에도 적극 추천 중이에요."</p>
+                        <div class="flex items-center gap-3" vid="178">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold" vid="179">L</div>
+                            <div vid="180">
+                                <p class="text-sm font-bold text-forest" vid="181">독서가 L님</p>
+                                <p class="text-xs text-charcoal/50" vid="182">2023. 12. 05</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="tab4" class="tab-content max-w-7xl mx-auto px-4 md:px-8" vid="183">
+            <div class="text-center mb-16 mt-8" vid="184">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-forest text-cream mb-6 shadow-lg" vid="185">
+                    <i class="ph ph-cpu text-3xl" vid="186"></i>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold text-forest mb-6" vid="187">가상의 지능형 앱 서비스, 리브레 AI</h2>
+                <p class="text-charcoal/70 max-w-2xl mx-auto text-lg font-light" vid="188">독서의 가치를 현대적으로 확장하고, 당신의 모든 독서 여정을 스마트하게 기록합니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" vid="189">
+                
+                <div class="bg-paper p-8 rounded-2xl border border-cream hover:border-terra/30 hover:shadow-card transition-all group" vid="190">
+                    <div class="w-12 h-12 rounded-full bg-cream text-terra flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:bg-terra group-hover:text-cream transition-colors" vid="191">
+                        <i class="ph ph-fingerprint" vid="192"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-forest mb-3" vid="193">정밀 독서 성향 스캐너</h4>
+                    <p class="text-sm text-charcoal/70 font-light leading-relaxed" vid="194">독자의 선호 단어와 어조 분석</p>
+                </div>
+
+                
+                <div class="bg-paper p-8 rounded-2xl border border-cream hover:border-terra/30 hover:shadow-card transition-all group" vid="195">
+                    <div class="w-12 h-12 rounded-full bg-cream text-terra flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:bg-terra group-hover:text-cream transition-colors" vid="196">
+                        <i class="ph ph-heart-beat" vid="197"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-forest mb-3" vid="198">시절과 감정 맞춤 추천</h4>
+                    <p class="text-sm text-charcoal/70 font-light leading-relaxed" vid="199">상실, 위로, 모험 등 현재 마음에 어울리는 책 매칭</p>
+                </div>
+
+                
+                <div class="bg-paper p-8 rounded-2xl border border-cream hover:border-terra/30 hover:shadow-card transition-all group" vid="200">
+                    <div class="w-12 h-12 rounded-full bg-cream text-terra flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:bg-terra group-hover:text-cream transition-colors" vid="201">
+                        <i class="ph ph-highlighter" vid="202"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-forest mb-3" vid="203">에센셜 AI 아카이빙</h4>
+                    <p class="text-sm text-charcoal/70 font-light leading-relaxed" vid="204">책을 읽는 도중 영감을 준 문장을 자동으로 수집 및 분류</p>
+                </div>
+
+                
+                <div class="bg-paper p-8 rounded-2xl border border-cream hover:border-terra/30 hover:shadow-card transition-all group" vid="205">
+                    <div class="w-12 h-12 rounded-full bg-cream text-terra flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:bg-terra group-hover:text-cream transition-colors" vid="206">
+                        <i class="ph ph-chart-line-up" vid="207"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-forest mb-3" vid="208">독서 습관 분석 대시보드</h4>
+                    <p class="text-sm text-charcoal/70 font-light leading-relaxed" vid="209">완독 시간과 빈도를 추적하는 감성 통계 리포트</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 rounded-3xl overflow-hidden shadow-2xl bg-forest relative aspect-[21/9] md:aspect-[21/7] flex items-center justify-center" vid="210">
+                <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#FDFBF7 1px, transparent 1px); background-size: 20px 20px;" vid="211"></div>
+                <div class="relative z-10 text-center text-cream" vid="212">
+                    <p class="text-sm tracking-widest text-terra font-bold mb-2" vid="213">COMING SOON</p>
+                    <h3 class="text-2xl md:text-4xl font-bold mb-6" vid="214">내 손 안의 인공지능 사서</h3>
+                    <button class="px-8 py-3 bg-cream text-forest rounded-full font-bold hover:bg-paper transition-colors" vid="215">베타 테스터 신청</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    
+    <footer class="bg-forest text-cream pt-20 pb-12 border-t-[8px] border-terra" vid="216">
+        <div class="max-w-7xl mx-auto px-4 md:px-8" vid="217">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16" vid="218">
+                <div class="md:col-span-5 flex flex-col items-start" vid="219">
+                    <div class="stamp-logo w-16 h-16 mb-6 text-cream border-cream" vid="220">
+                        <i class="ph ph-books text-3xl" vid="221"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4" vid="222">오래된 서랍</h2>
+                    <p class="text-cream/70 text-sm leading-relaxed mb-8 font-light" vid="223">
+                        바쁜 일상 속, 잠시 멈추어 페이지를 넘기는 소리에 귀 기울여보세요.<br vid="224">
+                        당신의 마음을 다독일 문장들이 서랍 속에서 기다리고 있습니다.
+                    </p>
+                </div>
+
+                <div class="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8 text-sm pt-4 md:pt-0" vid="225">
+                    <div vid="226">
+                        <h3 class="font-bold mb-4 text-terra" vid="227">책방 안내</h3>
+                        <ul class="space-y-3 text-cream/70 font-light" vid="228">
+                            <li vid="229"><a href="#" class="hover:text-cream transition-colors" vid="230">소개 및 오시는 길</a></li>
+                            <li vid="231"><a href="#" class="hover:text-cream transition-colors" vid="232">영업시간 및 휴무일</a></li>
+                            <li vid="233"><a href="#" class="hover:text-cream transition-colors" vid="234">공간 대관 안내</a></li>
+                            <li vid="235"><a href="#" class="hover:text-cream transition-colors" vid="236">입고 문의</a></li>
+                        </ul>
+                    </div>
+                    <div vid="237">
+                        <h3 class="font-bold mb-4 text-terra" vid="238">고객 센터</h3>
+                        <ul class="space-y-3 text-cream/70 font-light" vid="239">
+                            <li vid="240"><a href="#" class="hover:text-cream transition-colors" vid="241">공지사항</a></li>
+                            <li vid="242"><a href="#" class="hover:text-cream transition-colors" vid="243">자주 묻는 질문</a></li>
+                            <li vid="244"><a href="#" class="hover:text-cream transition-colors" vid="245">1:1 문의</a></li>
+                            <li vid="246"><a href="#" class="hover:text-cream transition-colors" vid="247">이용약관</a></li>
+                            <li vid="248"><a href="#" class="hover:text-cream transition-colors font-medium text-cream" vid="249">개인정보처리방침</a></li>
+                        </ul>
+                    </div>
+                    <div vid="250">
+                        <h3 class="font-bold mb-4 text-terra" vid="251">소셜 미디어</h3>
+                        <ul class="space-y-4 text-cream/70" vid="252">
+                            <li vid="253"><a href="#" class="flex items-center gap-2 hover:text-cream transition-colors" vid="254"><i class="ph ph-instagram-logo text-lg" vid="255"></i> Instagram</a></li>
+                            <li vid="256"><a href="#" class="flex items-center gap-2 hover:text-cream transition-colors" vid="257"><i class="ph ph-twitter-logo text-lg" vid="258"></i> Twitter</a></li>
+                            <li vid="259"><a href="#" class="flex items-center gap-2 hover:text-cream transition-colors" vid="260"><i class="ph ph-youtube-logo text-lg" vid="261"></i> YouTube</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-cream/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-cream/50 font-light text-center md:text-left" vid="262">
+                <p vid="263">상호: 독립서점 오래된 서랍 | 대표: 김문장 | 사업자등록번호: 123-45-67890<br vid="264">주소: 서울특별시 종로구 서촌길 12, 1층 | 통신판매업신고: 2023-서울종로-1234</p>
+                <p vid="265">© 2024 Old Drawer Bookstore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    
+    
+    <div id="modal-partnership" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center" vid="266">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeModal('modal-partnership')" vid="267"></div>
+        <div class="modal-content bg-cream rounded-2xl w-[90%] max-w-lg relative z-10 shadow-2xl p-8 border border-terra/20" vid="268">
+            <button onclick="closeModal('modal-partnership')" class="absolute top-4 right-4 text-charcoal/50 hover:text-terra transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-paper" vid="269">
+                <i class="ph ph-x text-xl" vid="270"></i>
+            </button>
+            <h3 class="text-2xl font-bold text-forest mb-2" vid="271">제휴 문의</h3>
+            <p class="text-charcoal/60 mb-6 font-light text-sm" vid="272">독립 출판 및 프로젝트 협업을 위한 문의를 남겨주세요.</p>
+            
+            <form class="space-y-4" vid="273">
+                <div vid="274">
+                    <label class="block text-sm font-medium text-forest mb-1" vid="275">이름 / 단체명</label>
+                    <input type="text" class="w-full px-4 py-3 rounded-xl bg-paper border border-charcoal/10 focus:outline-none focus:border-terra transition-colors" placeholder="홍길동" vid="276">
+                </div>
+                <div vid="277">
+                    <label class="block text-sm font-medium text-forest mb-1" vid="278">연락처 (이메일)</label>
+                    <input type="email" class="w-full px-4 py-3 rounded-xl bg-paper border border-charcoal/10 focus:outline-none focus:border-terra transition-colors" placeholder="email@example.com" vid="279">
+                </div>
+                <div vid="280">
+                    <label class="block text-sm font-medium text-forest mb-1" vid="281">문의 내용</label>
+                    <textarea rows="4" class="w-full px-4 py-3 rounded-xl bg-paper border border-charcoal/10 focus:outline-none focus:border-terra transition-colors resize-none" placeholder="어떤 이야기를 나누고 싶으신가요?" vid="282"></textarea>
+                </div>
+                <button type="button" class="w-full py-4 bg-terra text-cream font-bold rounded-xl hover:bg-[#8A5A00] transition-colors mt-2" vid="283">문의 등록하기</button>
+            </form>
+        </div>
+    </div>
+
+    
+    <div id="modal-curation" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center" vid="284">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeModal('modal-curation')" vid="285"></div>
+        <div class="modal-content bg-cream rounded-2xl w-[90%] max-w-2xl max-h-[85vh] overflow-y-auto relative z-10 shadow-2xl border border-terra/20 hide-scrollbar" vid="286">
+            <button onclick="closeModal('modal-curation')" class="absolute top-4 right-4 text-charcoal/50 hover:text-terra transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-paper z-20 bg-cream shadow-sm" vid="287">
+                <i class="ph ph-x text-xl" vid="288"></i>
+            </button>
+            
+            <div class="p-8" vid="289">
+                <h3 class="text-2xl font-bold text-forest mb-6 border-b border-charcoal/10 pb-4" vid="290">북 큐레이션 가이드</h3>
+                
+                <div class="mb-8" vid="291">
+                    <h4 class="font-bold text-terra mb-4" vid="292">큐레이션 프로세스</h4>
+                    <div class="flex flex-col md:flex-row items-center gap-4 bg-paper p-6 rounded-xl border border-cream" vid="293">
+                        <div class="text-center flex-1" vid="294">
+                            <div class="w-12 h-12 mx-auto bg-forest text-cream rounded-full flex items-center justify-center mb-2" vid="295"><i class="ph ph-clipboard-text text-xl" vid="296"></i></div>
+                            <p class="text-sm font-bold text-forest" vid="297">1. 설문 작성</p>
+                        </div>
+                        <i class="ph ph-caret-right text-terra text-xl hidden md:block" vid="298"></i>
+                        <i class="ph ph-caret-down text-terra text-xl md:hidden" vid="299"></i>
+                        <div class="text-center flex-1" vid="300">
+                            <div class="w-12 h-12 mx-auto bg-forest text-cream rounded-full flex items-center justify-center mb-2" vid="301"><i class="ph ph-brain text-xl" vid="302"></i></div>
+                            <p class="text-sm font-bold text-forest" vid="303">2. 분석 및 선정</p>
+                        </div>
+                        <i class="ph ph-caret-right text-terra text-xl hidden md:block" vid="304"></i>
+                        <i class="ph ph-caret-down text-terra text-xl md:hidden" vid="305"></i>
+                        <div class="text-center flex-1" vid="306">
+                            <div class="w-12 h-12 mx-auto bg-forest text-cream rounded-full flex items-center justify-center mb-2" vid="307"><i class="ph ph-package text-xl" vid="308"></i></div>
+                            <p class="text-sm font-bold text-forest" vid="309">3. 맞춤 배송</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8" vid="310">
+                    <h4 class="font-bold text-terra mb-4" vid="311">서비스 상세 안내</h4>
+                    <ul class="space-y-2 text-sm text-charcoal/80 font-light list-disc list-inside" vid="312">
+                        <li vid="313">월 1회, 오직 한 사람만을 위한 블라인드 도서 발송</li>
+                        <li vid="314">책방지기의 서평과 따뜻한 차 한 봉지 동봉</li>
+                        <li vid="315">도서가 마음에 들지 않을 경우 1회 교환 가능</li>
+                        <li vid="316">구독 기간에 따른 멤버십 할인 혜택 제공</li>
+                    </ul>
+                </div>
+
+                <div vid="317">
+                    <h4 class="font-bold text-terra mb-4" vid="318">구독자 리뷰</h4>
+                    
+                    <div class="flex overflow-x-auto snap-x hide-scrollbar gap-4 pb-2" vid="319">
+                        <div class="snap-center shrink-0 w-[260px] bg-white p-4 rounded-xl border border-charcoal/5 shadow-sm" vid="320">
+                            <div class="flex text-terra mb-2 text-sm" vid="321"><i class="ph-fill ph-star" vid="322"></i><i class="ph-fill ph-star" vid="323"></i><i class="ph-fill ph-star" vid="324"></i><i class="ph-fill ph-star" vid="325"></i><i class="ph-fill ph-star" vid="326"></i></div>
+                            <p class="text-xs text-charcoal/70 line-clamp-3 mb-2" vid="327">"매달 선물을 받는 기분이에요. 제 취향을 저보다 더 잘 아는 것 같습니다."</p>
+                            <p class="text-[10px] text-charcoal/40 font-bold" vid="328">- 이지은님</p>
+                        </div>
+                        <div class="snap-center shrink-0 w-[260px] bg-white p-4 rounded-xl border border-charcoal/5 shadow-sm" vid="329">
+                            <div class="flex text-terra mb-2 text-sm" vid="330"><i class="ph-fill ph-star" vid="331"></i><i class="ph-fill ph-star" vid="332"></i><i class="ph-fill ph-star" vid="333"></i><i class="ph-fill ph-star" vid="334"></i><i class="ph-fill ph-star" vid="335"></i></div>
+                            <p class="text-xs text-charcoal/70 line-clamp-3 mb-2" vid="336">"편지에 적힌 문장들이 큰 위로가 되었습니다. 감사해요."</p>
+                            <p class="text-[10px] text-charcoal/40 font-bold" vid="337">- 박준서님</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="w-full mt-6 py-4 bg-forest text-cream font-bold rounded-xl hover:bg-forest/90 transition-colors" vid="338">구독 신청하러 가기</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="modal-roadmap" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center" vid="339">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeModal('modal-roadmap')" vid="340"></div>
+        <div class="modal-content bg-cream rounded-2xl w-[90%] max-w-sm relative z-10 shadow-2xl p-8 text-center border-t-8 border-terra" vid="341">
+            <button onclick="closeModal('modal-roadmap')" class="absolute top-4 right-4 text-charcoal/50 hover:text-terra transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-paper" vid="342">
+                <i class="ph ph-x text-xl" vid="343"></i>
+            </button>
+            <p id="rm-step" class="text-terra font-bold text-sm mb-2" vid="344">단계</p>
+            <h3 id="rm-title" class="text-2xl font-bold text-forest mb-4" vid="345">타이틀</h3>
+            <p id="rm-desc" class="text-charcoal/70 font-light leading-relaxed" vid="346">상세 설명</p>
+        </div>
+    </div>
+
+    
+    <script vid="347">
+        
+        let lastScrollY = window.scrollY;
+        const navbar = document.getElementById('navbar');
+        const subnav = document.getElementById('subnav');
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            
+            
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                
+                navbar.classList.add('hidden-nav');
+                subnav.style.top = '0'; 
+            } else {
+                
+                navbar.classList.remove('hidden-nav');
+                subnav.style.top = navbar.offsetHeight + 'px'; 
+            }
+            
+            
+            if(currentScrollY > 50) {
+                navbar.classList.add('shadow-md');
+                subnav.classList.add('shadow-sm');
+            } else {
+                navbar.classList.remove('shadow-md');
+                subnav.classList.remove('shadow-sm');
+                subnav.style.top = navbar.offsetHeight + 'px';
+            }
+
+            
+            const heroFrame = document.getElementById('hero-frame');
+            
+            if (currentScrollY > 50) {
+                heroFrame.classList.add('expanded');
+            }
+
+            lastScrollY = currentScrollY;
+        }, { passive: true });
+
+        
+        window.addEventListener('load', () => {
+            subnav.style.top = navbar.offsetHeight + 'px';
+            
+            if (window.scrollY > 50) {
+                document.getElementById('hero-frame').classList.add('expanded');
+            }
+        });
+
+        
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                
+                tabBtns.forEach(b => {
+                    b.classList.remove('active', 'border-terra', 'text-terra');
+                    b.classList.add('border-transparent', 'text-charcoal/60');
+                });
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                
+                btn.classList.add('active', 'border-terra', 'text-terra');
+                btn.classList.remove('border-transparent', 'text-charcoal/60');
+                
+                const targetId = btn.getAttribute('data-target');
+                const targetContent = document.getElementById(targetId);
+                
+                
+                void targetContent.offsetWidth;
+                targetContent.classList.add('active');
+
+                
+                
+            });
+        });
+
+        
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if(modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if(modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function openRoadmapPopup(step, title, desc) {
+            document.getElementById('rm-step').innerText = step;
+            document.getElementById('rm-title').innerText = title;
+            document.getElementById('rm-desc').innerText = desc;
+            openModal('modal-roadmap');
+        }
+    </script>
+
+</body></html>

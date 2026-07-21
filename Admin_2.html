@@ -1,0 +1,1195 @@
+<html lang="ko" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">오래된 서랍 - Unified Admin Dashboard</title>
+    
+    
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    
+    
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
+    
+    <script vid="10">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7',
+                        forest: '#1B4332',
+                        terra: '#A36A00',
+                        charcoal: '#2D2D2D',
+                        paper: '#F5F2EB',
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif KR"', 'serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '0 2px 10px rgba(0,0,0,0.03)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style vid="11">
+        body {
+            font-family: 'Noto Serif KR', serif;
+            background-color: #FDFBF7;
+            color: #2D2D2D;
+            
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            overflow: hidden; 
+        }
+
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(27, 67, 50, 0.2);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(27, 67, 50, 0.4);
+        }
+
+        
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #1B4332;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #1B4332;
+        }
+        .toggle-checkbox:checked + .toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+        }
+
+        
+        .admin-view {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .admin-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        
+        .nav-item.active {
+            background-color: rgba(253, 251, 247, 0.1);
+            color: #A36A00;
+            border-right: 3px solid #A36A00;
+        }
+        
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        @media (max-width: 1024px) {
+            #sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="antialiased text-sm" vid="12">
+
+    <div class="flex h-screen w-full overflow-hidden" vid="13">
+        
+        
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-forest text-cream transform -translate-x-full lg:translate-x-0 lg:static lg:block flex flex-col shadow-2xl lg:shadow-none border-r border-forest" vid="14">
+            
+            
+            <div class="h-16 flex items-center px-6 border-b border-cream/10 bg-forest shrink-0" vid="15">
+                <div class="flex items-center gap-2" vid="16">
+                    <div class="w-8 h-8 rounded border border-terra/50 flex items-center justify-center text-terra bg-cream/5" vid="17">
+                        <i class="ph ph-books text-xl" vid="18"></i>
+                    </div>
+                    <span class="font-bold text-lg tracking-wide" vid="19">독립서점 Admin</span>
+                </div>
+                <button id="close-sidebar" class="ml-auto lg:hidden text-cream/70 hover:text-cream" vid="20">
+                    <i class="ph ph-x text-xl" vid="21"></i>
+                </button>
+            </div>
+
+            
+            <div class="p-6 border-b border-cream/10 shrink-0" vid="22">
+                <div class="flex items-center gap-3 mb-2" vid="23">
+                    <div class="w-10 h-10 rounded-full bg-terra text-cream flex items-center justify-center font-bold text-lg shadow-inner" vid="24">
+                        문
+                    </div>
+                    <div vid="25">
+                        <p class="font-medium" vid="26">김문장 님</p>
+                        <p class="text-xs text-cream/50" vid="27">kim@olddrawer.com</p>
+                    </div>
+                </div>
+                <div class="inline-flex items-center gap-1.5 px-2 py-1 bg-terra/20 border border-terra/30 rounded text-xs font-bold text-terra mt-2" vid="28">
+                    <i class="ph-fill ph-shield-check" vid="29"></i> [Owner] 권한
+                </div>
+            </div>
+
+            
+            <nav class="flex-1 overflow-y-auto custom-scrollbar py-4 px-3 flex flex-col gap-1" vid="30">
+                <a href="#" data-target="view-dashboard" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-cream/5 transition-colors text-cream/80 hover:text-cream" vid="31">
+                    <i class="ph ph-squares-four text-lg" vid="32"></i> 대시보드 홈
+                </a>
+                <a href="#" data-target="view-books" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-cream/5 transition-colors text-cream/80 hover:text-cream" vid="33">
+                    <i class="ph ph-book-open text-lg" vid="34"></i> 도서 관리
+                </a>
+                <a href="#" data-target="view-events" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-cream/5 transition-colors text-cream/80 hover:text-cream" vid="35">
+                    <i class="ph ph-calendar-star text-lg" vid="36"></i> 이벤트/콘텐츠 관리
+                </a>
+                <a href="#" data-target="view-curation" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-cream/5 transition-colors text-cream/80 hover:text-cream" vid="37">
+                    <i class="ph ph-sparkle text-lg text-terra" vid="38"></i> 큐레이션 폼 관리
+                </a>
+                <a href="#" data-target="view-community" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-cream/5 transition-colors text-cream/80 hover:text-cream" vid="39">
+                    <i class="ph ph-users-three text-lg" vid="40"></i> 커뮤니티 관리
+                </a>
+                
+                <div class="mt-6 mb-2 px-3 text-xs font-bold text-cream/40 tracking-wider" vid="41">SYSTEM SETTINGS</div>
+                
+                <a href="#" data-target="view-roles" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-cream/5 transition-colors text-cream/80 hover:text-cream" vid="42">
+                    <i class="ph ph-lock-key text-lg" vid="43"></i> 회원/권한 관리 <i class="ph-fill ph-lock text-terra ml-auto" title="Owner Only" vid="44"></i>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-cream/10 shrink-0" vid="45">
+                <button class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-cream/60 hover:text-cream hover:bg-cream/5 rounded transition-colors" vid="46">
+                    <i class="ph ph-sign-out" vid="47"></i> 로그아웃
+                </button>
+            </div>
+        </aside>
+
+        
+        <div id="mobile-overlay" class="fixed inset-0 bg-forest/80 backdrop-blur-sm z-40 hidden lg:hidden" vid="48"></div>
+
+        
+        <main class="flex-1 flex flex-col h-screen overflow-hidden relative" vid="49">
+            
+            
+            <header class="h-16 bg-cream/95 backdrop-blur border-b border-forest/10 flex items-center justify-between px-6 shrink-0 z-30" vid="50">
+                <div class="flex items-center gap-4" vid="51">
+                    <button id="open-sidebar" class="lg:hidden text-charcoal hover:text-forest p-1 rounded hover:bg-forest/5" vid="52">
+                        <i class="ph ph-list text-2xl" vid="53"></i>
+                    </button>
+                    <h1 id="page-title" class="text-xl font-bold text-forest" vid="54">대시보드 홈</h1>
+                </div>
+                
+                <div class="flex items-center gap-4" vid="55">
+                    <div class="hidden md:flex items-center gap-2 text-xs text-charcoal/60 bg-paper px-3 py-1.5 rounded-full border border-charcoal/5" vid="56">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse" vid="57"></span>
+                        DB 연결됨
+                    </div>
+                    <button class="relative p-2 text-charcoal hover:text-forest rounded-full hover:bg-forest/5 transition-colors" vid="58">
+                        <i class="ph ph-bell text-xl" vid="59"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-terra rounded-full border border-cream" vid="60"></span>
+                    </button>
+                </div>
+            </header>
+
+            
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8" vid="61">
+                
+                
+                
+                
+                <div id="view-dashboard" class="admin-view active w-full max-w-7xl mx-auto space-y-8" vid="62">
+                    
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" vid="63">
+                        
+                        <div class="bg-white p-6 rounded-xl border border-charcoal/5 shadow-soft relative overflow-hidden group" vid="64">
+                            <div class="absolute -right-4 -top-4 w-24 h-24 bg-terra/5 rounded-full group-hover:scale-150 transition-transform duration-500" vid="65"></div>
+                            <div class="relative z-10" vid="66">
+                                <div class="flex justify-between items-start mb-4" vid="67">
+                                    <p class="text-charcoal/60 font-medium" vid="68">신규 큐레이션 신청</p>
+                                    <div class="w-8 h-8 rounded bg-terra/10 text-terra flex items-center justify-center" vid="69"><i class="ph ph-sparkle text-lg" vid="70"></i></div>
+                                </div>
+                                <h3 class="text-3xl font-bold text-forest" vid="71">12<span class="text-lg font-normal text-charcoal/40 ml-1" vid="72">건</span></h3>
+                                <p class="text-xs text-green-600 mt-2 flex items-center gap-1" vid="73"><i class="ph ph-trend-up" vid="74"></i> 어제 대비 +3</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl border border-charcoal/5 shadow-soft relative overflow-hidden group" vid="75">
+                            <div class="absolute -right-4 -top-4 w-24 h-24 bg-forest/5 rounded-full group-hover:scale-150 transition-transform duration-500" vid="76"></div>
+                            <div class="relative z-10" vid="77">
+                                <div class="flex justify-between items-start mb-4" vid="78">
+                                    <p class="text-charcoal/60 font-medium" vid="79">금일 신규 QnA</p>
+                                    <div class="w-8 h-8 rounded bg-forest/10 text-forest flex items-center justify-center" vid="80"><i class="ph ph-question text-lg" vid="81"></i></div>
+                                </div>
+                                <h3 class="text-3xl font-bold text-forest" vid="82">3<span class="text-lg font-normal text-charcoal/40 ml-1" vid="83">건</span></h3>
+                                <p class="text-xs text-terra mt-2 flex items-center gap-1" vid="84"><i class="ph ph-clock" vid="85"></i> 미답변 3건 대기중</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl border border-charcoal/5 shadow-soft relative overflow-hidden group" vid="86">
+                            <div class="absolute -right-4 -top-4 w-24 h-24 bg-charcoal/5 rounded-full group-hover:scale-150 transition-transform duration-500" vid="87"></div>
+                            <div class="relative z-10" vid="88">
+                                <div class="flex justify-between items-start mb-4" vid="89">
+                                    <p class="text-charcoal/60 font-medium" vid="90">등록된 총 도서</p>
+                                    <div class="w-8 h-8 rounded bg-charcoal/10 text-charcoal flex items-center justify-center" vid="91"><i class="ph ph-books text-lg" vid="92"></i></div>
+                                </div>
+                                <h3 class="text-3xl font-bold text-forest" vid="93">87<span class="text-lg font-normal text-charcoal/40 mx-1" vid="94">/</span><span class="text-xl text-charcoal/40" vid="95">100</span></h3>
+                                <div class="w-full bg-paper h-1.5 rounded-full mt-3 overflow-hidden" vid="96">
+                                    <div class="bg-forest h-full rounded-full" style="width: 87%" vid="97"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-xl border border-charcoal/5 shadow-soft relative overflow-hidden group" vid="98">
+                            <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/5 rounded-full group-hover:scale-150 transition-transform duration-500" vid="99"></div>
+                            <div class="relative z-10" vid="100">
+                                <div class="flex justify-between items-start mb-4" vid="101">
+                                    <p class="text-charcoal/60 font-medium" vid="102">이번 달 이벤트 참여</p>
+                                    <div class="w-8 h-8 rounded bg-blue-500/10 text-blue-600 flex items-center justify-center" vid="103"><i class="ph ph-users text-lg" vid="104"></i></div>
+                                </div>
+                                <h3 class="text-3xl font-bold text-forest" vid="105">142<span class="text-lg font-normal text-charcoal/40 ml-1" vid="106">명</span></h3>
+                                <p class="text-xs text-charcoal/50 mt-2" vid="107">심야 독서회, 낭독회 합산</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="bg-paper border border-charcoal/10 rounded-xl p-6" vid="108">
+                        <h4 class="font-bold text-forest mb-4" vid="109">빠른 작업 (Quick Actions)</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" vid="110">
+                            <button class="flex items-center justify-center gap-2 py-3 px-4 bg-forest text-cream rounded-lg hover:bg-forest/90 transition-colors shadow-sm font-medium" vid="111">
+                                <i class="ph ph-plus-circle text-lg" vid="112"></i> 신규 도서 등록
+                            </button>
+                            <button class="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-charcoal/20 text-forest rounded-lg hover:border-terra hover:text-terra transition-colors shadow-sm font-medium" vid="113">
+                                <i class="ph ph-file-csv text-lg" vid="114"></i> 큐레이션 응답 엑셀 내보내기
+                            </button>
+                            <button class="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-charcoal/20 text-forest rounded-lg hover:border-forest hover:bg-forest/5 transition-colors shadow-sm font-medium" vid="115">
+                                <i class="ph ph-arrow-bend-down-right text-lg" vid="116"></i> QnA 미답변 목록 바로가기
+                            </button>
+                        </div>
+                    </div>
+
+                    
+                    <div class="bg-white border border-charcoal/5 shadow-soft rounded-xl p-6" vid="117">
+                        <div class="flex justify-between items-end mb-6 border-b border-charcoal/10 pb-4" vid="118">
+                            <h4 class="font-bold text-forest" vid="119">최근 시스템 활동</h4>
+                            <span class="text-xs text-charcoal/50 cursor-pointer hover:text-terra" vid="120">전체보기</span>
+                        </div>
+                        <div class="space-y-4" vid="121">
+                            <div class="flex gap-4 items-start" vid="122">
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-terra shrink-0" vid="123"></div>
+                                <div vid="124">
+                                    <p class="font-medium text-forest text-sm" vid="125">신규 큐레이션 폼 연동이 정상적으로 완료되었습니다.</p>
+                                    <p class="text-xs text-charcoal/50 mt-1" vid="126">10분 전 • 시스템</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start" vid="127">
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-forest shrink-0" vid="128"></div>
+                                <div vid="129">
+                                    <p class="font-medium text-forest text-sm" vid="130">'우리가 사랑한 내일들' 도서 정보가 수정되었습니다.</p>
+                                    <p class="text-xs text-charcoal/50 mt-1" vid="131">1시간 전 • 김문장(Owner)</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start" vid="132">
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-charcoal/30 shrink-0" vid="133"></div>
+                                <div vid="134">
+                                    <p class="font-medium text-forest text-sm" vid="135">월간 매거진 7월호 템플릿이 임시저장 되었습니다.</p>
+                                    <p class="text-xs text-charcoal/50 mt-1" vid="136">어제 • 이서점(Admin)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                
+                
+                
+                <div id="view-books" class="admin-view w-full max-w-7xl mx-auto space-y-8" vid="137">
+                    
+                    
+                    <div class="bg-white border border-charcoal/10 shadow-soft rounded-xl overflow-hidden flex flex-col" vid="138">
+                        
+                        
+                        <div class="p-4 border-b border-charcoal/10 bg-paper/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4" vid="139">
+                            <h3 class="font-bold text-forest text-lg flex items-center gap-2" vid="140"><i class="ph-fill ph-books" vid="141"></i> 보유 도서 목록</h3>
+                            
+                            <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto" vid="142">
+                                <select class="px-3 py-2 border border-charcoal/20 rounded-md bg-white text-sm focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra" vid="143">
+                                    <option value="" vid="144">모든 장르</option>
+                                    <option value="novel" vid="145">소설</option>
+                                    <option value="essay" vid="146">에세이</option>
+                                    <option value="poem" vid="147">시/희곡</option>
+                                    <option value="humanities" vid="148">인문학</option>
+                                </select>
+                                <div class="relative flex-1 sm:w-64" vid="149">
+                                    <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-charcoal/40" vid="150"></i>
+                                    <input type="text" placeholder="도서명, 작가 검색..." class="w-full pl-9 pr-3 py-2 border border-charcoal/20 rounded-md bg-white text-sm focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra" vid="151">
+                                </div>
+                                <button class="px-4 py-2 bg-forest text-cream rounded-md hover:bg-forest/90 text-sm font-medium whitespace-nowrap" vid="152">
+                                    검색
+                                </button>
+                            </div>
+                        </div>
+
+                        
+                        <div class="overflow-x-auto custom-scrollbar" vid="153">
+                            <table class="w-full text-left border-collapse min-w-[800px]" vid="154">
+                                <thead vid="155">
+                                    <tr class="bg-cream border-b border-charcoal/10 text-charcoal/60 text-xs uppercase tracking-wider" vid="156">
+                                        <th class="p-4 font-medium w-16" vid="157">표지</th>
+                                        <th class="p-4 font-medium" vid="158">도서명</th>
+                                        <th class="p-4 font-medium" vid="159">작가</th>
+                                        <th class="p-4 font-medium" vid="160">가격</th>
+                                        <th class="p-4 font-medium" vid="161">장르</th>
+                                        <th class="p-4 font-medium text-center" vid="162">상태</th>
+                                        <th class="p-4 font-medium text-right" vid="163">관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-charcoal/5" vid="164">
+                                    
+                                    <tr class="hover:bg-paper/30 transition-colors group" vid="165">
+                                        <td class="p-4" vid="166">
+                                            <div class="w-10 h-14 bg-gray-200 rounded overflow-hidden shadow-sm" vid="167">
+                                                <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&amp;w=100&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="book" vid="168">
+                                            </div>
+                                        </td>
+                                        <td class="p-4" vid="169">
+                                            <p class="font-bold text-forest" vid="170">어느 날, 내 마음에 자리 잡은 것들</p>
+                                            <p class="text-xs text-charcoal/50 mt-0.5" vid="171">서점원의 밑줄 에디션</p>
+                                        </td>
+                                        <td class="p-4 text-charcoal/80" vid="172">김하나</td>
+                                        <td class="p-4 font-medium" vid="173">15,800원</td>
+                                        <td class="p-4" vid="174"><span class="px-2.5 py-1 bg-paper border border-charcoal/10 rounded-full text-xs text-charcoal/70" vid="175">에세이</span></td>
+                                        <td class="p-4 text-center" vid="176">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-xs font-medium" vid="177">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500" vid="178"></span> 판매중
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-right" vid="179">
+                                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity" vid="180">
+                                                <button class="p-1.5 text-charcoal/60 hover:text-terra hover:bg-terra/10 rounded" vid="181"><i class="ph ph-pencil-simple text-lg" vid="182"></i></button>
+                                                <button class="p-1.5 text-charcoal/60 hover:text-red-600 hover:bg-red-50 rounded" title="Owner Only" vid="183"><i class="ph ph-trash text-lg" vid="184"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-paper/30 transition-colors group" vid="185">
+                                        <td class="p-4" vid="186">
+                                            <div class="w-10 h-14 bg-gray-200 rounded overflow-hidden shadow-sm" vid="187">
+                                                <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&amp;w=100&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="book" vid="188">
+                                            </div>
+                                        </td>
+                                        <td class="p-4" vid="189">
+                                            <p class="font-bold text-forest" vid="190">고요한 우연</p>
+                                        </td>
+                                        <td class="p-4 text-charcoal/80" vid="191">박서련</td>
+                                        <td class="p-4 font-medium" vid="192">14,000원</td>
+                                        <td class="p-4" vid="193"><span class="px-2.5 py-1 bg-paper border border-charcoal/10 rounded-full text-xs text-charcoal/70" vid="194">소설</span></td>
+                                        <td class="p-4 text-center" vid="195">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-xs font-medium" vid="196">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500" vid="197"></span> 판매중
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-right" vid="198">
+                                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity" vid="199">
+                                                <button class="p-1.5 text-charcoal/60 hover:text-terra hover:bg-terra/10 rounded" vid="200"><i class="ph ph-pencil-simple text-lg" vid="201"></i></button>
+                                                <button class="p-1.5 text-charcoal/60 hover:text-red-600 hover:bg-red-50 rounded" title="Owner Only" vid="202"><i class="ph ph-trash text-lg" vid="203"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-paper/30 transition-colors group bg-red-50/30" vid="204">
+                                        <td class="p-4" vid="205">
+                                            <div class="w-10 h-14 bg-gray-200 rounded overflow-hidden shadow-sm" vid="206">
+                                                <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&amp;w=100&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="book" vid="207">
+                                            </div>
+                                        </td>
+                                        <td class="p-4" vid="208">
+                                            <p class="font-bold text-forest" vid="209">다정한 매일매일</p>
+                                        </td>
+                                        <td class="p-4 text-charcoal/80" vid="210">백수린</td>
+                                        <td class="p-4 font-medium" vid="211">16,500원</td>
+                                        <td class="p-4" vid="212"><span class="px-2.5 py-1 bg-paper border border-charcoal/10 rounded-full text-xs text-charcoal/70" vid="213">에세이</span></td>
+                                        <td class="p-4 text-center" vid="214">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-50 text-red-700 border border-red-200 rounded-full text-xs font-medium" vid="215">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-red-500" vid="216"></span> 품절
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-right" vid="217">
+                                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity" vid="218">
+                                                <button class="p-1.5 text-charcoal/60 hover:text-terra hover:bg-terra/10 rounded" vid="219"><i class="ph ph-pencil-simple text-lg" vid="220"></i></button>
+                                                <button class="p-1.5 text-charcoal/60 hover:text-red-600 hover:bg-red-50 rounded" title="Owner Only" vid="221"><i class="ph ph-trash text-lg" vid="222"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                     
+                                    <tr class="hover:bg-paper/30 transition-colors group" vid="223">
+                                        <td class="p-4" vid="224">
+                                            <div class="w-10 h-14 bg-gray-200 rounded overflow-hidden shadow-sm" vid="225">
+                                                <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&amp;w=100&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="book" vid="226">
+                                            </div>
+                                        </td>
+                                        <td class="p-4" vid="227">
+                                            <p class="font-bold text-forest" vid="228">우리가 빛의 속도로 갈 수 없다면</p>
+                                        </td>
+                                        <td class="p-4 text-charcoal/80" vid="229">김초엽</td>
+                                        <td class="p-4 font-medium" vid="230">14,000원</td>
+                                        <td class="p-4" vid="231"><span class="px-2.5 py-1 bg-paper border border-charcoal/10 rounded-full text-xs text-charcoal/70" vid="232">소설</span></td>
+                                        <td class="p-4 text-center" vid="233">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-xs font-medium" vid="234">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500" vid="235"></span> 판매중
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-right" vid="236">
+                                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity" vid="237">
+                                                <button class="p-1.5 text-charcoal/60 hover:text-terra hover:bg-terra/10 rounded" vid="238"><i class="ph ph-pencil-simple text-lg" vid="239"></i></button>
+                                                <button class="p-1.5 text-charcoal/60 hover:text-red-600 hover:bg-red-50 rounded" title="Owner Only" vid="240"><i class="ph ph-trash text-lg" vid="241"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                     
+                                    <tr class="hover:bg-paper/30 transition-colors group bg-gray-50/50" vid="242">
+                                        <td class="p-4" vid="243">
+                                            <div class="w-10 h-14 bg-gray-200 rounded overflow-hidden shadow-sm" vid="244">
+                                                <img src="https://images.unsplash.com/photo-1629196914275-a81d45904fc4?q=80&amp;w=100&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="book" vid="245">
+                                            </div>
+                                        </td>
+                                        <td class="p-4" vid="246">
+                                            <p class="font-bold text-forest" vid="247">모든 것은 기본에서 시작한다</p>
+                                        </td>
+                                        <td class="p-4 text-charcoal/80" vid="248">손웅정</td>
+                                        <td class="p-4 font-medium" vid="249">16,000원</td>
+                                        <td class="p-4" vid="250"><span class="px-2.5 py-1 bg-paper border border-charcoal/10 rounded-full text-xs text-charcoal/70" vid="251">인문학</span></td>
+                                        <td class="p-4 text-center" vid="252">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 text-gray-600 border border-gray-200 rounded-full text-xs font-medium" vid="253">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-gray-400" vid="254"></span> 숨김처리
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-right" vid="255">
+                                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity" vid="256">
+                                                <button class="p-1.5 text-charcoal/60 hover:text-terra hover:bg-terra/10 rounded" vid="257"><i class="ph ph-pencil-simple text-lg" vid="258"></i></button>
+                                                <button class="p-1.5 text-charcoal/60 hover:text-red-600 hover:bg-red-50 rounded" title="Owner Only" vid="259"><i class="ph ph-trash text-lg" vid="260"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="p-4 border-t border-charcoal/10 bg-cream flex justify-between items-center text-xs text-charcoal/50" vid="261">
+                            <span vid="262">총 87건 중 1-5건 표시</span>
+                            <div class="flex gap-1" vid="263">
+                                <button class="w-8 h-8 rounded border border-charcoal/10 flex items-center justify-center hover:bg-paper" vid="264">&lt;</button>
+                                <button class="w-8 h-8 rounded bg-forest text-cream flex items-center justify-center" vid="265">1</button>
+                                <button class="w-8 h-8 rounded border border-charcoal/10 flex items-center justify-center hover:bg-paper" vid="266">2</button>
+                                <button class="w-8 h-8 rounded border border-charcoal/10 flex items-center justify-center hover:bg-paper" vid="267">3</button>
+                                <button class="w-8 h-8 rounded border border-charcoal/10 flex items-center justify-center hover:bg-paper" vid="268">&gt;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="bg-white border border-charcoal/10 shadow-soft rounded-xl p-6 md:p-8" vid="269">
+                        <div class="flex items-center justify-between mb-8 border-b border-charcoal/10 pb-4" vid="270">
+                            <h3 class="font-bold text-forest text-xl flex items-center gap-2" vid="271"><i class="ph-fill ph-book-open-text" vid="272"></i> 신규 도서 등록 / 수정</h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8" vid="273">
+                            
+                            
+                            <div class="lg:col-span-4 flex flex-col" vid="274">
+                                <label class="block text-sm font-bold text-forest mb-2" vid="275">도서 표지 이미지 <span class="text-terra" vid="276">*</span></label>
+                                <div class="flex-1 min-h-[320px] border-2 border-dashed border-charcoal/20 rounded-xl bg-paper/30 flex flex-col items-center justify-center p-6 text-center hover:bg-paper/50 hover:border-terra/50 transition-all cursor-pointer group relative overflow-hidden" vid="277">
+                                    <i class="ph ph-cloud-arrow-up text-4xl text-charcoal/30 mb-3 group-hover:text-terra transition-colors" vid="278"></i>
+                                    <p class="font-medium text-forest mb-1" vid="279">클릭하거나 이미지를 드래그하세요</p>
+                                    <p class="text-xs text-charcoal/50" vid="280">PNG, JPG, WEBP (최대 5MB)</p>
+                                    
+                                    
+                                    <div class="absolute inset-x-4 bottom-4 bg-white p-3 rounded-lg border border-charcoal/10 shadow-sm flex flex-col gap-2" vid="281">
+                                        <div class="flex justify-between text-xs font-medium" vid="282">
+                                            <span class="text-forest truncate" vid="283">book_cover_v2.jpg</span>
+                                            <span class="text-terra" vid="284">65%</span>
+                                        </div>
+                                        <div class="w-full bg-paper h-1.5 rounded-full overflow-hidden" vid="285">
+                                            <div class="bg-terra h-full rounded-full w-[65%] relative overflow-hidden" vid="286">
+                                                <div class="absolute inset-0 bg-white/20 animate-pulse" vid="287"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div class="lg:col-span-8 space-y-6" vid="288">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" vid="289">
+                                    <div vid="290">
+                                        <label class="block text-sm font-bold text-forest mb-2" vid="291">도서명 <span class="text-terra" vid="292">*</span></label>
+                                        <input type="text" class="w-full px-4 py-2.5 border border-charcoal/20 rounded-md bg-white focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra text-sm" placeholder="예: 우리가 사랑한 내일들" vid="293">
+                                    </div>
+                                    <div vid="294">
+                                        <label class="block text-sm font-bold text-forest mb-2" vid="295">부제 (Subtitle)</label>
+                                        <input type="text" class="w-full px-4 py-2.5 border border-charcoal/20 rounded-md bg-white focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra text-sm" placeholder="부제가 있다면 입력해주세요" vid="296">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" vid="297">
+                                    <div vid="298">
+                                        <label class="block text-sm font-bold text-forest mb-2" vid="299">작가 <span class="text-terra" vid="300">*</span></label>
+                                        <input type="text" class="w-full px-4 py-2.5 border border-charcoal/20 rounded-md bg-white focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra text-sm" placeholder="작가명 입력" vid="301">
+                                    </div>
+                                    <div vid="302">
+                                        <label class="block text-sm font-bold text-forest mb-2" vid="303">장르 선택 <span class="text-terra" vid="304">*</span></label>
+                                        <select class="w-full px-4 py-2.5 border border-charcoal/20 rounded-md bg-white focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra text-sm" vid="305">
+                                            <option value="" vid="306">장르를 선택하세요</option>
+                                            <option value="novel" vid="307">소설</option>
+                                            <option value="essay" vid="308">에세이</option>
+                                            <option value="poem" vid="309">시/희곡</option>
+                                            <option value="humanities" vid="310">인문학</option>
+                                        </select>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2" vid="311">
+                                        <div vid="312">
+                                            <label class="block text-sm font-bold text-forest mb-2" vid="313">판매가 <span class="text-terra" vid="314">*</span></label>
+                                            <div class="relative" vid="315">
+                                                <input type="number" class="w-full pl-3 pr-8 py-2.5 border border-charcoal/20 rounded-md bg-white focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra text-sm text-right" placeholder="0" vid="316">
+                                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal/50 text-sm" vid="317">원</span>
+                                            </div>
+                                        </div>
+                                        <div vid="318">
+                                            <label class="block text-sm font-bold text-forest mb-2" vid="319">배송비</label>
+                                            <div class="relative" vid="320">
+                                                <input type="number" class="w-full pl-3 pr-8 py-2.5 border border-charcoal/20 rounded-md bg-white focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra text-sm text-right" value="3000" vid="321">
+                                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal/50 text-sm" vid="322">원</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="border border-charcoal/20 rounded-md overflow-hidden bg-white" vid="323">
+                                    <div class="bg-paper px-3 py-2 border-b border-charcoal/20 flex gap-2 text-charcoal/60" vid="324">
+                                        <button class="p-1 hover:bg-charcoal/10 rounded" vid="325"><i class="ph ph-text-b" vid="326"></i></button>
+                                        <button class="p-1 hover:bg-charcoal/10 rounded" vid="327"><i class="ph ph-text-italic" vid="328"></i></button>
+                                        <div class="w-px h-5 bg-charcoal/20 mx-1 my-auto" vid="329"></div>
+                                        <button class="p-1 hover:bg-charcoal/10 rounded" vid="330"><i class="ph ph-link" vid="331"></i></button>
+                                        <button class="p-1 hover:bg-charcoal/10 rounded" vid="332"><i class="ph ph-list-bullets" vid="333"></i></button>
+                                    </div>
+                                    <textarea class="w-full p-4 min-h-[100px] focus:outline-none text-sm resize-y" placeholder="서점원의 한 줄 코멘트 (editor_comment)" vid="334"></textarea>
+                                </div>
+
+                                
+                                <div class="border border-charcoal/20 rounded-md overflow-hidden bg-white" vid="335">
+                                    <div class="bg-paper px-3 py-2 border-b border-charcoal/20 flex gap-2 text-charcoal/60" vid="336">
+                                        <button class="p-1 hover:bg-charcoal/10 rounded" vid="337"><i class="ph ph-text-b" vid="338"></i></button>
+                                        <button class="p-1 hover:bg-charcoal/10 rounded" vid="339"><i class="ph ph-text-italic" vid="340"></i></button>
+                                        <div class="w-px h-5 bg-charcoal/20 mx-1 my-auto" vid="341"></div>
+                                        <button class="p-1 hover:bg-charcoal/10 rounded" vid="342"><i class="ph ph-image" vid="343"></i></button>
+                                        <button class="p-1 hover:bg-charcoal/10 rounded" vid="344"><i class="ph ph-link" vid="345"></i></button>
+                                    </div>
+                                    <textarea class="w-full p-4 min-h-[160px] focus:outline-none text-sm resize-y" placeholder="도서 상세 설명 (description)" vid="346"></textarea>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" vid="347">
+                                    <div class="border border-charcoal/20 rounded-md overflow-hidden bg-white" vid="348">
+                                        <div class="bg-paper px-3 py-1.5 border-b border-charcoal/20 text-xs font-bold text-forest" vid="349">목차 (table_of_contents)</div>
+                                        <textarea class="w-full p-3 min-h-[120px] focus:outline-none text-sm resize-y text-charcoal/80" vid="350"></textarea>
+                                    </div>
+                                    <div class="border border-charcoal/20 rounded-md overflow-hidden bg-white" vid="351">
+                                        <div class="bg-paper px-3 py-1.5 border-b border-charcoal/20 text-xs font-bold text-forest" vid="352">작가 소개 (author_intro)</div>
+                                        <textarea class="w-full p-3 min-h-[120px] focus:outline-none text-sm resize-y text-charcoal/80" vid="353"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        
+                        <div class="mt-8 pt-6 border-t border-charcoal/10 flex justify-end gap-3" vid="354">
+                            <button class="px-6 py-2.5 border border-charcoal/20 text-charcoal rounded-md hover:bg-paper transition-colors font-medium" vid="355">임시저장</button>
+                            <button class="px-6 py-2.5 bg-forest text-cream rounded-md hover:bg-forest/90 transition-colors font-bold shadow-md flex items-center gap-2" vid="356">
+                                <i class="ph ph-floppy-disk" vid="357"></i> DB에 최종 저장 및 발행
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                
+                
+                
+                <div id="view-curation" class="admin-view w-full mx-auto space-y-6 max-w-full" vid="358">
+                    
+                    
+                    <div class="bg-white border border-charcoal/10 shadow-soft rounded-xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4" vid="359">
+                        <div class="flex gap-4 items-center" vid="360">
+                            <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-600 shrink-0" vid="361">
+                                <i class="ph-fill ph-google-logo text-2xl" vid="362"></i>
+                            </div>
+                            <div vid="363">
+                                <h3 class="font-bold text-forest text-lg" vid="364">구글 스프레드시트 및 DB 연동 상태</h3>
+                                <div class="flex items-center gap-2 mt-1" vid="365">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold" vid="366">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" vid="367"></span> 연동 완료 - 정상
+                                    </span>
+                                    <span class="text-xs text-charcoal/50" vid="368">마지막 동기화: 10분 전</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 w-full md:w-auto" vid="369">
+                            <button class="flex-1 md:flex-none px-4 py-2 border border-charcoal/20 text-forest rounded hover:border-terra hover:text-terra transition-colors text-sm font-medium" vid="370">
+                                연동 주소(Webhook URL) 변경
+                            </button>
+                            <button class="flex-1 md:flex-none px-4 py-2 bg-forest text-cream rounded hover:bg-forest/90 transition-colors text-sm font-medium flex items-center justify-center gap-2" vid="371">
+                                <i class="ph ph-arrows-clockwise" vid="372"></i> 지금 동기화하기
+                            </button>
+                        </div>
+                    </div>
+
+                    
+                    <div class="bg-white border border-charcoal/10 shadow-soft rounded-xl overflow-hidden flex flex-col" vid="373">
+                        <div class="p-4 border-b border-charcoal/10 bg-paper/50 flex justify-between items-center" vid="374">
+                            <h3 class="font-bold text-forest text-lg flex items-center gap-2" vid="375">
+                                <i class="ph-fill ph-table" vid="376"></i> 큐레이션 신청 응답 DB
+                            </h3>
+                            <button class="px-3 py-1.5 bg-white border border-charcoal/20 text-forest rounded hover:bg-forest/5 transition-colors text-xs font-medium flex items-center gap-1.5" vid="377">
+                                <i class="ph ph-download-simple text-sm" vid="378"></i> 스프레드시트(CSV)로 다운로드
+                            </button>
+                        </div>
+                        
+                        
+                        <div class="overflow-x-auto custom-scrollbar" vid="379">
+                            <table class="w-full text-left border-collapse min-w-[1400px] text-[13px]" vid="380">
+                                <thead vid="381">
+                                    <tr class="bg-cream border-b border-charcoal/10 text-charcoal/60 uppercase tracking-wide" vid="382">
+                                        <th class="p-3 font-medium w-16 text-center" vid="383">신청 ID</th>
+                                        <th class="p-3 font-medium w-24" vid="384">성함</th>
+                                        <th class="p-3 font-medium w-32" vid="385">연락처</th>
+                                        <th class="p-3 font-medium w-24" vid="386">거주지</th>
+                                        <th class="p-3 font-medium w-20" vid="387">연령대</th>
+                                        <th class="p-3 font-medium max-w-[200px]" vid="388">필요한 책 느낌</th>
+                                        <th class="p-3 font-medium max-w-[150px]" vid="389">독서 분위기</th>
+                                        <th class="p-3 font-medium w-24" vid="390">유입 경로</th>
+                                        <th class="p-3 font-medium w-20 text-center" vid="391">동의 여부</th>
+                                        <th class="p-3 font-medium w-40 text-center" vid="392">선정 상태 배지</th>
+                                        <th class="p-3 font-medium w-20 text-center" vid="393">상세</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-charcoal/5" vid="394">
+                                    
+                                    <tr class="hover:bg-paper/30 transition-colors" vid="395">
+                                        <td class="p-3 text-center text-charcoal/50 font-mono" vid="396">#1042</td>
+                                        <td class="p-3 font-bold text-forest" vid="397">이지은</td>
+                                        <td class="p-3 font-mono text-charcoal/80" vid="398">010-1234-5678</td>
+                                        <td class="p-3 text-charcoal/80" vid="399">서울 종로구</td>
+                                        <td class="p-3 text-charcoal/80" vid="400">20대 후반</td>
+                                        <td class="p-3 text-charcoal/80 truncate max-w-[200px]" title="퇴근 후 지친 마음을 다독여주는 따뜻한 에세이" vid="401">퇴근 후 지친 마음을 다독여주는 따뜻한 에세이</td>
+                                        <td class="p-3 text-charcoal/80 truncate max-w-[150px]" vid="402">조용한 새벽, 스탠드 불빛</td>
+                                        <td class="p-3" vid="403"><span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[11px]" vid="404">인스타그램</span></td>
+                                        <td class="p-3 text-center" vid="405"><i class="ph-fill ph-check-circle text-green-500 text-lg" vid="406"></i></td>
+                                        <td class="p-3" vid="407">
+                                            <div class="flex items-center justify-center gap-2" vid="408">
+                                                <span class="text-xs text-charcoal/50" vid="409">대기</span>
+                                                
+                                                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in" vid="410">
+                                                    <input type="checkbox" name="toggle" id="toggle-1" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-charcoal/20 appearance-none cursor-pointer transition-all duration-300 z-10 top-0 left-0" checked="" vid="411">
+                                                    <label for="toggle-1" class="toggle-label block overflow-hidden h-5 rounded-full bg-charcoal/20 cursor-pointer transition-colors duration-300" vid="412"></label>
+                                                </div>
+                                                <span class="text-xs font-bold text-forest" vid="413">완료</span>
+                                            </div>
+                                        </td>
+                                        <td class="p-3 text-center" vid="414">
+                                            <button class="text-charcoal/60 hover:text-terra bg-white border border-charcoal/10 rounded px-2 py-1 shadow-sm text-xs" vid="415">보기</button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-paper/30 transition-colors" vid="416">
+                                        <td class="p-3 text-center text-charcoal/50 font-mono" vid="417">#1041</td>
+                                        <td class="p-3 font-bold text-forest" vid="418">박준형</td>
+                                        <td class="p-3 font-mono text-charcoal/80" vid="419">010-9876-5432</td>
+                                        <td class="p-3 text-charcoal/80" vid="420">경기 성남시</td>
+                                        <td class="p-3 text-charcoal/80" vid="421">30대 초반</td>
+                                        <td class="p-3 text-charcoal/80 truncate max-w-[200px]" title="생각을 깊게 할 수 있는 철학적인 고전 문학" vid="422">생각을 깊게 할 수 있는 철학적인 고전 문학</td>
+                                        <td class="p-3 text-charcoal/80 truncate max-w-[150px]" vid="423">주말 오후 카페</td>
+                                        <td class="p-3" vid="424"><span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[11px]" vid="425">지인추천</span></td>
+                                        <td class="p-3 text-center" vid="426"><i class="ph-fill ph-check-circle text-green-500 text-lg" vid="427"></i></td>
+                                        <td class="p-3" vid="428">
+                                            <div class="flex items-center justify-center gap-2" vid="429">
+                                                <span class="text-xs font-bold text-charcoal/50" vid="430">대기</span>
+                                                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in" vid="431">
+                                                    <input type="checkbox" name="toggle" id="toggle-2" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-charcoal/20 appearance-none cursor-pointer transition-all duration-300 z-10 top-0 left-0" vid="432">
+                                                    <label for="toggle-2" class="toggle-label block overflow-hidden h-5 rounded-full bg-charcoal/20 cursor-pointer transition-colors duration-300" vid="433"></label>
+                                                </div>
+                                                <span class="text-xs text-charcoal/30" vid="434">완료</span>
+                                            </div>
+                                        </td>
+                                        <td class="p-3 text-center" vid="435">
+                                            <button class="text-charcoal/60 hover:text-terra bg-white border border-charcoal/10 rounded px-2 py-1 shadow-sm text-xs" vid="436">보기</button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-paper/30 transition-colors" vid="437">
+                                        <td class="p-3 text-center text-charcoal/50 font-mono" vid="438">#1040</td>
+                                        <td class="p-3 font-bold text-forest" vid="439">최민아</td>
+                                        <td class="p-3 font-mono text-charcoal/80" vid="440">010-5555-4444</td>
+                                        <td class="p-3 text-charcoal/80" vid="441">서울 마포구</td>
+                                        <td class="p-3 text-charcoal/80" vid="442">20대 중반</td>
+                                        <td class="p-3 text-charcoal/80 truncate max-w-[200px]" title="가볍게 읽기 좋고 여운이 남는 단편 소설" vid="443">가볍게 읽기 좋고 여운이 남는 단편 소설</td>
+                                        <td class="p-3 text-charcoal/80 truncate max-w-[150px]" vid="444">출퇴근 지하철</td>
+                                        <td class="p-3" vid="445"><span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[11px]" vid="446">블로그 검색</span></td>
+                                        <td class="p-3 text-center" vid="447"><i class="ph-fill ph-check-circle text-green-500 text-lg" vid="448"></i></td>
+                                        <td class="p-3" vid="449">
+                                            <div class="flex items-center justify-center gap-2" vid="450">
+                                                <span class="text-xs text-charcoal/50" vid="451">대기</span>
+                                                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in" vid="452">
+                                                    <input type="checkbox" name="toggle" id="toggle-3" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-charcoal/20 appearance-none cursor-pointer transition-all duration-300 z-10 top-0 left-0" checked="" vid="453">
+                                                    <label for="toggle-3" class="toggle-label block overflow-hidden h-5 rounded-full bg-charcoal/20 cursor-pointer transition-colors duration-300" vid="454"></label>
+                                                </div>
+                                                <span class="text-xs font-bold text-forest" vid="455">완료</span>
+                                            </div>
+                                        </td>
+                                        <td class="p-3 text-center" vid="456">
+                                            <button class="text-charcoal/60 hover:text-terra bg-white border border-charcoal/10 rounded px-2 py-1 shadow-sm text-xs" vid="457">보기</button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-paper/30 transition-colors opacity-60" vid="458">
+                                        <td class="p-3 text-center text-charcoal/50 font-mono" vid="459">#1039</td>
+                                        <td class="p-3 font-bold text-forest" vid="460">김철수</td>
+                                        <td class="p-3 font-mono text-charcoal/80" vid="461">010-1111-2222</td>
+                                        <td class="p-3 text-charcoal/80" vid="462">부산 해운대구</td>
+                                        <td class="p-3 text-charcoal/80" vid="463">40대 초반</td>
+                                        <td class="p-3 text-charcoal/80 truncate max-w-[200px]" title="경영/경제 트렌드를 알 수 있는 실용서" vid="464">경영/경제 트렌드를 알 수 있는 실용서</td>
+                                        <td class="p-3 text-charcoal/80 truncate max-w-[150px]" vid="465">자기 전 침대</td>
+                                        <td class="p-3" vid="466"><span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[11px]" vid="467">트위터</span></td>
+                                        <td class="p-3 text-center" vid="468"><i class="ph-fill ph-x-circle text-red-400 text-lg" title="동의안함" vid="469"></i></td>
+                                        <td class="p-3 text-center text-xs text-red-500 font-bold" vid="470">
+                                            처리 불가 (미동의)
+                                        </td>
+                                        <td class="p-3 text-center" vid="471">
+                                            <button class="text-charcoal/40 bg-gray-50 border border-charcoal/10 rounded px-2 py-1 shadow-sm text-xs cursor-not-allowed" vid="472">보기</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="p-4 border-t border-charcoal/10 bg-cream flex justify-between items-center text-xs text-charcoal/50" vid="473">
+                            <span vid="474">총 142건 중 1-4건 표시</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                
+                
+                
+                <div id="view-events" class="admin-view w-full max-w-7xl mx-auto space-y-6" vid="475">
+                    
+                    <div class="flex gap-2 p-1.5 bg-paper rounded-lg w-max border border-charcoal/10" vid="476">
+                        <button class="px-6 py-2 bg-white shadow-sm rounded-md text-forest font-bold text-sm" vid="477">진행중인 이벤트</button>
+                        <button class="px-6 py-2 text-charcoal/60 hover:text-forest rounded-md text-sm font-medium transition-colors" vid="478">종료된 이벤트</button>
+                        <button class="px-6 py-2 text-charcoal/60 hover:text-forest rounded-md text-sm font-medium transition-colors border-l border-charcoal/10" vid="479">매거진 템플릿(Temp)</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" vid="480">
+                        
+                        <div class="bg-white border border-charcoal/10 shadow-soft rounded-xl p-6" vid="481">
+                            <h3 class="font-bold text-forest text-lg mb-6 flex justify-between items-center border-b border-charcoal/10 pb-4" vid="482">
+                                <span vid="483">이벤트 카드 수정</span>
+                                <div class="flex items-center gap-2 text-sm" vid="484">
+                                    <span class="text-charcoal/60" vid="485">진행중</span>
+                                    <div class="relative inline-block w-10 align-middle select-none" vid="486">
+                                        <input type="checkbox" id="evt-toggle" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-charcoal/20 appearance-none cursor-pointer z-10" checked="" vid="487">
+                                        <label for="evt-toggle" class="toggle-label block overflow-hidden h-5 rounded-full bg-charcoal/20 cursor-pointer" vid="488"></label>
+                                    </div>
+                                </div>
+                            </h3>
+                            <div class="space-y-4" vid="489">
+                                <div vid="490">
+                                    <label class="block text-xs font-bold text-forest mb-1.5" vid="491">이벤트명</label>
+                                    <input type="text" class="w-full px-3 py-2 border border-charcoal/20 rounded-md bg-white text-sm focus:border-terra outline-none" value="작가와 함께 걷는 창작의 길" vid="492">
+                                </div>
+                                <div class="grid grid-cols-2 gap-4" vid="493">
+                                    <div vid="494">
+                                        <label class="block text-xs font-bold text-forest mb-1.5" vid="495">기간</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-charcoal/20 rounded-md bg-white text-sm focus:border-terra outline-none" value="2024.07.15 - 07.30" vid="496">
+                                    </div>
+                                    <div vid="497">
+                                        <label class="block text-xs font-bold text-forest mb-1.5" vid="498">비용 (Cost)</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-charcoal/20 rounded-md bg-white text-sm focus:border-terra outline-none" value="무료 (선착순 15명)" vid="499">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4" vid="500">
+                                    <div vid="501">
+                                        <label class="block text-xs font-bold text-forest mb-1.5" vid="502">장소</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-charcoal/20 rounded-md bg-white text-sm focus:border-terra outline-none" value="오래된 서랍 지하 라운지" vid="503">
+                                    </div>
+                                    <div vid="504">
+                                        <label class="block text-xs font-bold text-forest mb-1.5" vid="505">대상</label>
+                                        <input type="text" class="w-full px-3 py-2 border border-charcoal/20 rounded-md bg-white text-sm focus:border-terra outline-none" value="독서모임 기존 회원 우선" vid="506">
+                                    </div>
+                                </div>
+                                <div vid="507">
+                                    <label class="block text-xs font-bold text-forest mb-1.5" vid="508">주의사항</label>
+                                    <textarea class="w-full px-3 py-2 border border-charcoal/20 rounded-md bg-white text-sm focus:border-terra outline-none min-h-[80px]" vid="509">주차 공간이 협소하오니 대중교통 이용을 부탁드립니다.</textarea>
+                                </div>
+                                <button class="w-full py-2.5 mt-2 bg-forest text-cream rounded-md hover:bg-forest/90 transition-colors text-sm font-bold shadow-sm" vid="510">업데이트 저장</button>
+                            </div>
+                        </div>
+
+                        
+                        <div class="bg-white border border-charcoal/10 shadow-soft rounded-xl p-6 relative overflow-hidden" vid="511">
+                            <div class="absolute inset-0 bg-paper/50 pointer-events-none opacity-50 z-0" vid="512"></div>
+                            <div class="relative z-10" vid="513">
+                                <h3 class="font-bold text-forest text-lg mb-6 border-b border-charcoal/10 pb-4" vid="514">매거진 콘텐츠 상태 관리 (Temp)</h3>
+                                
+                                <div class="space-y-6" vid="515">
+                                    
+                                    <div class="bg-white p-4 border border-charcoal/10 rounded-lg shadow-sm" vid="516">
+                                        <label class="block text-xs font-bold text-forest mb-2" vid="517">대표 리뷰 선정 픽커 (Featured)</label>
+                                        <div class="flex gap-2" vid="518">
+                                            <input type="text" placeholder="리뷰 ID 입력 (예: R-102)" class="flex-1 px-3 py-1.5 border border-charcoal/20 rounded text-sm focus:border-terra outline-none" vid="519">
+                                            <button class="px-4 py-1.5 bg-paper border border-charcoal/20 rounded text-sm font-medium hover:bg-charcoal/5" vid="520">불러오기</button>
+                                        </div>
+                                    </div>
+
+                                    
+                                    <div class="bg-white p-4 border border-charcoal/10 rounded-lg shadow-sm" vid="521">
+                                        <label class="block text-xs font-bold text-forest mb-2 flex justify-between" vid="522">
+                                            심야 독서회 안내문 
+                                            <span class="text-terra font-normal cursor-pointer hover:underline" vid="523">수정</span>
+                                        </label>
+                                        <div class="p-3 bg-gray-50 border border-charcoal/5 rounded text-sm text-charcoal/70 line-clamp-2" vid="524">
+                                            금요일 밤, 불이 꺼지지 않는 독립서점 이야기. 따뜻한 차 한잔과 함께...
+                                        </div>
+                                    </div>
+
+                                    
+                                    <div class="bg-white p-4 border border-charcoal/10 rounded-lg shadow-sm" vid="525">
+                                        <label class="block text-xs font-bold text-forest mb-2 flex justify-between" vid="526">
+                                            인터뷰 행 (3-pair row builder)
+                                            <button class="text-terra hover:bg-terra/10 px-1 rounded" vid="527"><i class="ph ph-plus" vid="528"></i> 추가</button>
+                                        </label>
+                                        <div class="space-y-2" vid="529">
+                                            <div class="flex items-center gap-2 text-sm bg-gray-50 p-2 border border-charcoal/5 rounded" vid="530">
+                                                <i class="ph ph-list text-charcoal/30 cursor-grab" vid="531"></i>
+                                                <span class="flex-1 truncate" vid="532">Q. 독립서점을 열게 된 가장 큰 계기는 무엇인가요?</span>
+                                                <button class="text-red-400 hover:text-red-600" vid="533"><i class="ph ph-trash" vid="534"></i></button>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-sm bg-gray-50 p-2 border border-charcoal/5 rounded" vid="535">
+                                                <i class="ph ph-list text-charcoal/30 cursor-grab" vid="536"></i>
+                                                <span class="flex-1 truncate" vid="537">Q. 책방지기님의 인생 책 한 권을 꼽자면?</span>
+                                                <button class="text-red-400 hover:text-red-600" vid="538"><i class="ph ph-trash" vid="539"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                     
+                                     <div class="bg-white p-4 border border-charcoal/10 rounded-lg shadow-sm" vid="540">
+                                        <label class="block text-xs font-bold text-forest mb-2 flex justify-between" vid="541">공모전 양식 구조 관리</label>
+                                        <button class="w-full py-2 border border-dashed border-charcoal/30 rounded text-charcoal/50 hover:text-forest hover:border-forest hover:bg-paper transition-colors text-sm font-medium" vid="542">
+                                            구조 편집기 열기 <i class="ph ph-arrow-square-out ml-1" vid="543"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                
+                
+                <div id="view-community" class="admin-view w-full max-w-7xl mx-auto space-y-8" vid="544">
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" vid="545">
+                        
+                        
+                        <div class="lg:col-span-1 space-y-6" vid="546">
+                            
+                            
+                            <div class="bg-white border border-charcoal/10 shadow-soft rounded-xl p-5" vid="547">
+                                <h3 class="font-bold text-forest border-b border-charcoal/10 pb-3 mb-4" vid="548"><i class="ph-fill ph-megaphone" vid="549"></i> 새 공지사항 등록</h3>
+                                <div class="space-y-3" vid="550">
+                                    <select class="w-full px-3 py-2 border border-charcoal/20 rounded bg-white text-sm focus:border-terra outline-none" vid="551">
+                                        <option vid="552">태그 (분류) 선택</option>
+                                        <option vid="553">[안내]</option>
+                                        <option vid="554">[이벤트]</option>
+                                        <option vid="555">[입고]</option>
+                                    </select>
+                                    <input type="text" placeholder="공지 제목" class="w-full px-3 py-2 border border-charcoal/20 rounded bg-white text-sm focus:border-terra outline-none" vid="556">
+                                    <textarea placeholder="본문 작성..." class="w-full px-3 py-2 border border-charcoal/20 rounded bg-white text-sm focus:border-terra outline-none min-h-[120px] resize-y" vid="557"></textarea>
+                                    <button class="w-full py-2 bg-forest text-cream rounded text-sm font-bold shadow-sm hover:bg-forest/90" vid="558">등록하기</button>
+                                </div>
+                            </div>
+
+                            
+                            <div class="bg-white border border-charcoal/10 shadow-soft rounded-xl p-5" vid="559">
+                                <h3 class="font-bold text-forest border-b border-charcoal/10 pb-3 mb-4 flex justify-between items-center" vid="560">
+                                    <span vid="561"><i class="ph-fill ph-chat-centered-text" vid="562"></i> FAQ 빌더</span>
+                                    <button class="text-terra text-xs hover:underline" vid="563"><i class="ph ph-plus" vid="564"></i> 항목 추가</button>
+                                </h3>
+                                <div class="flex gap-1 mb-4 flex-wrap" vid="565">
+                                    <span class="px-2 py-1 bg-forest text-cream rounded text-xs cursor-pointer" vid="566">전체</span>
+                                    <span class="px-2 py-1 bg-paper border border-charcoal/10 rounded text-xs cursor-pointer hover:bg-charcoal/5" vid="567">배송</span>
+                                    <span class="px-2 py-1 bg-paper border border-charcoal/10 rounded text-xs cursor-pointer hover:bg-charcoal/5" vid="568">반품</span>
+                                    <span class="px-2 py-1 bg-paper border border-charcoal/10 rounded text-xs cursor-pointer hover:bg-charcoal/5" vid="569">운영</span>
+                                </div>
+                                <div class="space-y-2" vid="570">
+                                    
+                                    <div class="border border-charcoal/10 rounded bg-gray-50 p-3" vid="571">
+                                        <div class="flex justify-between items-center text-sm font-medium text-forest cursor-pointer" vid="572">
+                                            <span vid="573">Q. 도서 배송은 며칠이 소요되나요?</span>
+                                            <i class="ph ph-caret-down text-charcoal/50" vid="574"></i>
+                                        </div>
+                                    </div>
+                                    <div class="border border-charcoal/10 rounded bg-gray-50 p-3" vid="575">
+                                        <div class="flex justify-between items-center text-sm font-medium text-forest cursor-pointer" vid="576">
+                                            <span vid="577">Q. 해외 배송도 가능한가요?</span>
+                                            <i class="ph ph-caret-down text-charcoal/50" vid="578"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="lg:col-span-2 bg-white border border-charcoal/10 shadow-soft rounded-xl flex flex-col h-full min-h-[600px]" vid="579">
+                            <div class="p-5 border-b border-charcoal/10 bg-paper/30 flex justify-between items-center" vid="580">
+                                <h3 class="font-bold text-forest text-lg flex items-center gap-2" vid="581">
+                                    <i class="ph-fill ph-lock-key text-terra" vid="582"></i> 1:1 비밀 문의 (QnA) 대시보드
+                                </h3>
+                                <span class="bg-terra text-cream text-xs px-2 py-1 rounded font-bold" vid="583">3건 대기중</span>
+                            </div>
+                            
+                            <div class="flex-1 p-5 overflow-y-auto custom-scrollbar space-y-4 bg-gray-50/50" vid="584">
+                                
+                                
+                                <div class="bg-white border-2 border-terra/30 shadow-md rounded-lg overflow-hidden transition-all" vid="585">
+                                    <div class="p-4 border-b border-charcoal/5 cursor-pointer bg-paper/10 flex justify-between items-center" vid="586">
+                                        <div class="flex items-center gap-3" vid="587">
+                                            <span class="px-2 py-0.5 bg-gray-200 text-charcoal/60 rounded text-[10px] font-bold tracking-wider" vid="588">입고문의</span>
+                                            <h4 class="font-bold text-forest text-sm" vid="589">특정 절판 도서 구해주실 수 있나요?</h4>
+                                            <i class="ph-fill ph-lock text-charcoal/30 text-xs" title="비밀글" vid="590"></i>
+                                        </div>
+                                        <div class="text-xs text-charcoal/50 flex items-center gap-2" vid="591">
+                                            <span vid="592">user_a***</span>
+                                            <span vid="593">1시간 전</span>
+                                            <i class="ph ph-caret-up text-terra font-bold ml-2" vid="594"></i>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 bg-white" vid="595">
+                                        <p class="text-sm text-charcoal/80 mb-4 whitespace-pre-wrap leading-relaxed" vid="596">안녕하세요, 예전에 출판된 '이방인' 초판본 표지 디자인을 구하고 싶습니다. 혹시 중고로라도 입고 계획이 있으신지, 아니면 개인적으로 구해다 주실 수 있는지 문의드립니다. 감사합니다.</p>
+                                        
+                                        <div class="bg-paper p-4 rounded-md border border-terra/20 relative" vid="597">
+                                            <div class="absolute -top-3 left-4 bg-terra text-cream text-[10px] px-2 py-0.5 rounded font-bold shadow-sm" vid="598">답변 작성 중</div>
+                                            <textarea class="w-full bg-transparent border-none focus:outline-none text-sm text-forest min-h-[80px] resize-y mt-2" placeholder="답변을 입력하세요..." vid="599"></textarea>
+                                            <div class="flex justify-end mt-2" vid="600">
+                                                <button class="px-4 py-1.5 bg-forest text-cream rounded text-xs font-bold hover:bg-forest/90 transition-colors shadow-sm flex items-center gap-1.5" vid="601">
+                                                    DB 등록 (답변 완료) <i class="ph ph-paper-plane-tilt" vid="602"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="bg-white border border-charcoal/10 shadow-sm rounded-lg overflow-hidden hover:border-charcoal/30 transition-colors" vid="603">
+                                    <div class="p-4 cursor-pointer flex justify-between items-center" vid="604">
+                                        <div class="flex items-center gap-3" vid="605">
+                                            <span class="px-2 py-0.5 bg-gray-200 text-charcoal/60 rounded text-[10px] font-bold tracking-wider" vid="606">배송/결제</span>
+                                            <h4 class="font-medium text-forest text-sm" vid="607">주소지를 잘못 입력했어요</h4>
+                                            <i class="ph-fill ph-lock text-charcoal/30 text-xs" vid="608"></i>
+                                            <span class="w-2 h-2 rounded-full bg-terra animate-pulse" title="미답변" vid="609"></span>
+                                        </div>
+                                        <div class="text-xs text-charcoal/50 flex items-center gap-2" vid="610">
+                                            <span vid="611">book_l***</span>
+                                            <span vid="612">3시간 전</span>
+                                            <i class="ph ph-caret-down ml-2" vid="613"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="bg-white border border-charcoal/10 shadow-sm rounded-lg overflow-hidden opacity-60" vid="614">
+                                    <div class="p-4 cursor-pointer flex justify-between items-center" vid="615">
+                                        <div class="flex items-center gap-3" vid="616">
+                                            <span class="px-2 py-0.5 bg-gray-200 text-charcoal/60 rounded text-[10px] font-bold tracking-wider" vid="617">기타</span>
+                                            <h4 class="font-medium text-charcoal/80 text-sm line-through decoration-charcoal/30" vid="618">공간 대관 비용 문의</h4>
+                                            <span class="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-bold border border-green-200" vid="619">답변완료</span>
+                                        </div>
+                                        <div class="text-xs text-charcoal/50 flex items-center gap-2" vid="620">
+                                            <span vid="621">space***</span>
+                                            <span vid="622">어제</span>
+                                            <i class="ph ph-caret-down ml-2" vid="623"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                
+                
+                <div id="view-roles" class="admin-view w-full max-w-5xl mx-auto space-y-6" vid="624">
+                    
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-4 mb-6 shadow-sm" vid="625">
+                        <div class="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center shrink-0" vid="626">
+                            <i class="ph-fill ph-shield-warning text-xl" vid="627"></i>
+                        </div>
+                        <div vid="628">
+                            <h3 class="font-bold text-red-800" vid="629">보안 경고: 최고 관리자(Owner) 전용 구역</h3>
+                            <p class="text-xs text-red-600 mt-1" vid="630">이 페이지는 Admin 계정으로 접근이 불가능하며, 민감한 삭제 로그 및 시스템 권한 설정을 제어합니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-charcoal/10 shadow-soft rounded-xl overflow-hidden flex flex-col" vid="631">
+                        <div class="p-5 border-b border-charcoal/10 bg-paper/50 flex justify-between items-center" vid="632">
+                            <h3 class="font-bold text-forest text-lg" vid="633">관리자 계정 매트릭스</h3>
+                            <button class="px-4 py-1.5 bg-forest text-cream rounded text-sm font-medium hover:bg-forest/90" vid="634"><i class="ph ph-user-plus mr-1" vid="635"></i> 관리자 초대</button>
+                        </div>
+                        
+                        <div class="overflow-x-auto" vid="636">
+                            <table class="w-full text-left border-collapse" vid="637">
+                                <thead vid="638">
+                                    <tr class="bg-cream border-b border-charcoal/10 text-charcoal/60 text-xs uppercase tracking-wider" vid="639">
+                                        <th class="p-4 font-medium" vid="640">관리자 정보</th>
+                                        <th class="p-4 font-medium text-center" vid="641">권한 등급</th>
+                                        <th class="p-4 font-medium text-center" vid="642">도서 삭제 권한</th>
+                                        <th class="p-4 font-medium text-center" vid="643">민감 로그 열람</th>
+                                        <th class="p-4 font-medium text-right" vid="644">상태 제어</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-charcoal/5" vid="645">
+                                    <tr class="hover:bg-paper/30 transition-colors" vid="646">
+                                        <td class="p-4" vid="647">
+                                            <div class="flex items-center gap-3" vid="648">
+                                                <div class="w-8 h-8 rounded-full bg-terra text-cream flex items-center justify-center font-bold text-xs" vid="649">문</div>
+                                                <div vid="650">
+                                                    <p class="font-bold text-forest text-sm" vid="651">김문장 (나)</p>
+                                                    <p class="text-[11px] text-charcoal/50" vid="652">kim@olddrawer.com</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-center" vid="653">
+                                            <span class="inline-flex items-center px-2.5 py-1 bg-terra text-cream rounded-full text-xs font-bold shadow-sm" vid="654">
+                                                OWNER
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-center" vid="655"><i class="ph-fill ph-check-circle text-green-500 text-lg" vid="656"></i></td>
+                                        <td class="p-4 text-center" vid="657"><i class="ph-fill ph-check-circle text-green-500 text-lg" vid="658"></i></td>
+                                        <td class="p-4 text-right" vid="659">
+                                            <button class="text-xs text-charcoal/40 cursor-not-allowed border border-charcoal/10 px-2 py-1 rounded" disabled="" vid="660">변경 불가</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-paper/30 transition-colors" vid="661">
+                                        <td class="p-4" vid="662">
+                                            <div class="flex items-center gap-3" vid="663">
+                                                <div class="w-8 h-8 rounded-full bg-forest text-cream flex items-center justify-center font-bold text-xs" vid="664">서</div>
+                                                <div vid="665">
+                                                    <p class="font-medium text-charcoal text-sm" vid="666">이서점</p>
+                                                    <p class="text-[11px] text-charcoal/50" vid="667">lee@olddrawer.com</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-center" vid="668">
+                                            <span class="inline-flex items-center px-2.5 py-1 bg-forest/10 text-forest border border-forest/20 rounded-full text-xs font-bold" vid="669">
+                                                ADMIN
+                                            </span>
+                                        </td>
+                                        <td class="p-4 text-center" vid="670">
+                                            <div class="relative inline-block w-8 align-middle select-none" vid="671">
+                                                <input type="checkbox" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-2 border-charcoal/20 appearance-none cursor-pointer z-10" disabled="" vid="672">
+                                                <label class="toggle-label block overflow-hidden h-4 rounded-full bg-charcoal/20 cursor-not-allowed opacity-50" vid="673"></label>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-center" vid="674">
+                                            <div class="relative inline-block w-8 align-middle select-none" vid="675">
+                                                <input type="checkbox" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-2 border-charcoal/20 appearance-none cursor-pointer z-10" disabled="" vid="676">
+                                                <label class="toggle-label block overflow-hidden h-4 rounded-full bg-charcoal/20 cursor-not-allowed opacity-50" vid="677"></label>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-right" vid="678">
+                                            <button class="text-xs text-red-500 hover:text-red-700 font-medium bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded transition-colors" vid="679">계정 정지</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    
+    <script vid="680">
+        document.addEventListener('DOMContentLoaded', () => {
+            const navItems = document.querySelectorAll('.nav-item');
+            const views = document.querySelectorAll('.admin-view');
+            const pageTitle = document.getElementById('page-title');
+            
+            
+            const openSidebarBtn = document.getElementById('open-sidebar');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const sidebar = document.getElementById('sidebar');
+            const mobileOverlay = document.getElementById('mobile-overlay');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('-translate-x-full');
+                mobileOverlay.classList.toggle('hidden');
+            }
+
+            openSidebarBtn.addEventListener('click', toggleSidebar);
+            closeSidebarBtn.addEventListener('click', toggleSidebar);
+            mobileOverlay.addEventListener('click', toggleSidebar);
+
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = item.getAttribute('data-target');
+                    
+                    
+                    navItems.forEach(nav => nav.classList.remove('active', 'border-r-4', 'border-terra'));
+                    item.classList.add('active');
+                    
+                    
+                    pageTitle.textContent = item.textContent.trim();
+
+                    
+                    views.forEach(view => {
+                        view.classList.remove('active');
+                        if(view.id === targetId) {
+                            
+                            setTimeout(() => {
+                                view.classList.add('active');
+                            }, 10);
+                        }
+                    });
+
+                    
+                    if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
+                        toggleSidebar();
+                    }
+                });
+            });
+        });
+    </script>
+
+</body></html>

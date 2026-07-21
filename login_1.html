@@ -1,0 +1,400 @@
+<html lang="ko" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">오래된 서랍 - 로그인 / 회원가입</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
+    
+    <script vid="10">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7',
+                        forest: '#1B4332',
+                        terra: '#A36A00',
+                        charcoal: '#2D2D2D',
+                        paper: '#F5F2EB', 
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif KR"', 'serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '0 10px 40px -10px rgba(27, 67, 50, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style vid="11">
+        body {
+            font-family: 'Noto Serif KR', serif;
+            background-color: #FDFBF7;
+            color: #2D2D2D;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+            overflow-x: hidden;
+        }
+
+        .stamp-logo {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #A36A00;
+            border-radius: 50%;
+            padding: 8px;
+            color: #A36A00;
+            transform: rotate(-10deg);
+        }
+
+        
+        .custom-checkbox {
+            appearance: none;
+            background-color: transparent;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 1.5px solid #1B4332;
+            border-radius: 0.25rem;
+            display: grid;
+            place-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .custom-checkbox::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em white;
+            background-color: #FDFBF7;
+            transform-origin: center;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+
+        .custom-checkbox:checked {
+            background-color: #1B4332;
+            border-color: #1B4332;
+        }
+
+        .custom-checkbox:checked::before {
+            transform: scale(1);
+        }
+
+        .social-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .social-btn:active {
+            transform: scale(0.95);
+        }
+
+        .bg-kakao { background-color: #FEE500; color: #391B1B; }
+        .bg-naver { background-color: #03C75A; color: #FFFFFF; font-family: sans-serif; font-weight: 900; font-style: italic; }
+        .bg-google { background-color: #FFFFFF; color: #000000; border: 1px solid #E5E0D5; }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #FDFBF7 inset !important;
+            -webkit-text-fill-color: #2D2D2D !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-forest selection:text-cream flex flex-col min-h-screen" vid="12">
+
+    
+    <nav class="fixed top-0 w-full z-50 bg-cream/95 backdrop-blur-md border-b border-forest/10 py-3 px-4 md:px-8" vid="13">
+        <div class="max-w-7xl mx-auto flex justify-between items-center" vid="14">
+            <a href="#" class="flex items-center gap-2 group" vid="15">
+                <div class="stamp-logo w-9 h-9 transition-transform group-hover:rotate-0 duration-300" vid="16">
+                    <i class="ph ph-books text-lg" vid="17"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight text-forest hidden sm:block" vid="18">오래된 서랍</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium" vid="19">
+                <a href="#" class="hover:text-terra transition-colors" vid="20">홈</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="21">About</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="22">Event</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="23">커뮤니티</a>
+            </div>
+
+            <div class="flex items-center gap-5 text-sm font-medium" vid="24">
+                <a href="#" class="text-terra hidden sm:block" vid="25">로그인</a>
+                <a href="#" class="text-charcoal hover:text-forest transition-colors hidden sm:block" vid="26">회원가입</a>
+                <a href="#" class="text-charcoal hover:text-terra transition-colors" vid="27"><i class="ph ph-user text-xl" vid="28"></i></a>
+                <button class="md:hidden text-charcoal" vid="29">
+                    <i class="ph ph-list text-2xl" vid="30"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    
+    <main class="flex-grow flex flex-col items-center justify-center pt-[72px] pb-12 px-4 w-full" vid="31">
+        
+        
+        <div class="w-full max-w-[480px] bg-transparent md:bg-white md:shadow-card md:border md:border-forest/5 rounded-3xl md:p-10 transition-all duration-300 relative overflow-hidden mt-4 md:mt-10" vid="32">
+            
+            
+            
+            
+            <div id="login-view" class="w-full fade-in" vid="33">
+                
+                
+                <div class="text-center mb-10 mt-6 md:mt-0" vid="34">
+                    <div class="stamp-logo w-14 h-14 mb-6 mx-auto text-terra border-terra bg-cream" vid="35">
+                        <i class="ph ph-books text-2xl" vid="36"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-forest mb-3" vid="37">반가워요, 독자님</h1>
+                    <p class="text-charcoal/70 text-sm font-light" vid="38">로그인하고 나만의 독서 취향을 기록해 보세요.</p>
+                </div>
+
+                
+                <div class="space-y-4 mb-6" vid="39">
+                    <div class="flex flex-col gap-1.5 relative" vid="40">
+                        <label class="text-sm font-medium text-forest pl-1" vid="41">이메일</label>
+                        <div class="relative" vid="42">
+                            <i class="ph ph-envelope-simple absolute left-4 top-1/2 -translate-y-1/2 text-charcoal/40 text-xl" vid="43"></i>
+                            <input type="email" placeholder="이메일 주소를 입력하세요" class="w-full h-[56px] bg-cream md:bg-paper/50 rounded-xl border border-charcoal/15 pl-12 pr-4 outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-all placeholder:text-charcoal/30 text-charcoal font-sans" vid="44">
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-1.5 relative" vid="45">
+                        <label class="text-sm font-medium text-forest pl-1" vid="46">비밀번호</label>
+                        <div class="relative" vid="47">
+                            <i class="ph ph-lock-key absolute left-4 top-1/2 -translate-y-1/2 text-charcoal/40 text-xl" vid="48"></i>
+                            <input type="password" placeholder="비밀번호를 입력하세요" class="w-full h-[56px] bg-cream md:bg-paper/50 rounded-xl border border-charcoal/15 pl-12 pr-12 outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-all placeholder:text-charcoal/30 text-charcoal font-sans" vid="49">
+                            <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-charcoal/40 hover:text-forest focus:outline-none" vid="50">
+                                <i class="ph ph-eye-slash text-xl" vid="51"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="flex items-center justify-between mb-8 px-1" vid="52">
+                    <label class="flex items-center gap-2 cursor-pointer group" vid="53">
+                        <input type="checkbox" class="custom-checkbox" vid="54">
+                        <span class="text-sm text-charcoal/80 group-hover:text-forest transition-colors mt-0.5" vid="55">로그인 상태 유지</span>
+                    </label>
+                    <a href="#" class="text-sm text-terra font-medium hover:underline underline-offset-4" vid="56">비밀번호를 잊으셨나요?</a>
+                </div>
+
+                
+                <button class="w-full h-[56px] bg-forest text-cream rounded-full font-bold text-lg hover:bg-[#133224] active:scale-[0.98] transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2" vid="57">
+                    로그인 <i class="ph-bold ph-arrow-right" vid="58"></i>
+                </button>
+
+                
+                <div class="flex items-center gap-4 my-8" vid="59">
+                    <div class="flex-1 h-px bg-charcoal/10" vid="60"></div>
+                    <span class="text-xs font-medium text-charcoal/40 tracking-wider" vid="61">또는 다른 방법으로 로그인</span>
+                    <div class="flex-1 h-px bg-charcoal/10" vid="62"></div>
+                </div>
+
+                
+                <div class="flex items-center justify-center gap-5 mb-10" vid="63">
+                    <button class="social-btn bg-google shadow-sm" aria-label="Google Login" vid="64">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="G" vid="65">
+                    </button>
+                    <button class="social-btn bg-kakao shadow-sm text-[#391B1B]" aria-label="Kakao Login" vid="66">
+                        <svg viewBox="0 0 24 24" class="w-7 h-7 fill-current" vid="67"><path d="M12 4C7.58172 4 4 7.13401 4 11C4 13.5042 5.5898 15.7001 7.97136 16.9247L7.15926 19.865C7.07223 20.1798 7.42065 20.4354 7.69766 20.2575L11.238 17.9868C11.4883 17.9955 11.7423 18 12 18C16.4183 18 20 14.866 20 11C20 7.13401 16.4183 4 12 4Z" vid="68"></path></svg>
+                    </button>
+                    <button class="social-btn bg-naver shadow-sm flex items-center justify-center" aria-label="Naver Login" vid="69">
+                        <span class="text-[22px] mt-0.5 leading-none" vid="70">N</span>
+                    </button>
+                </div>
+
+                
+                <p class="text-center text-sm text-charcoal/70 pb-4 md:pb-0" vid="71">
+                    아직 회원이 아니신가요? 
+                    <button onclick="toggleView('signup')" class="text-terra font-bold ml-1 hover:underline underline-offset-4 focus:outline-none" vid="72">회원가입하기</button>
+                </p>
+            </div>
+
+
+            
+            
+            
+            <div id="signup-view" class="w-full hidden fade-in" vid="73">
+                
+                
+                <div class="mb-10 mt-2 md:mt-0" vid="74">
+                    <div class="w-12 h-12 bg-terra/10 rounded-full flex items-center justify-center text-terra mb-4" vid="75">
+                        <i class="ph-fill ph-user-plus text-2xl" vid="76"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-forest mb-2" vid="77">첫 걸음 환영합니다</h2>
+                    <p class="text-charcoal/70 text-sm font-light" vid="78">독립서점의 멤버가 되어 다양한 혜택을 누려보세요.</p>
+                </div>
+
+                
+                <div class="space-y-5 mb-8" vid="79">
+                    
+                    <div class="flex flex-col gap-1.5" vid="80">
+                        <label class="text-sm font-medium text-forest pl-1" vid="81">이메일</label>
+                        <div class="flex gap-2" vid="82">
+                            <input type="email" placeholder="example@email.com" class="flex-1 h-[56px] bg-cream md:bg-paper/50 rounded-xl border border-charcoal/15 px-4 outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-all placeholder:text-charcoal/30 text-charcoal font-sans" vid="83">
+                            <button type="button" class="shrink-0 h-[56px] px-4 rounded-xl border border-forest text-forest font-medium text-sm hover:bg-forest/5 active:bg-forest/10 transition-colors" vid="84">
+                                중복 확인
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5" vid="85">
+                        <label class="text-sm font-medium text-forest pl-1" vid="86">비밀번호</label>
+                        <input type="password" placeholder="영문, 숫자 포함 8자 이상" class="w-full h-[56px] bg-cream md:bg-paper/50 rounded-xl border border-charcoal/15 px-4 outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-all placeholder:text-charcoal/30 text-charcoal font-sans" vid="87">
+                    </div>
+
+                    <div class="flex flex-col gap-1.5" vid="88">
+                        <label class="text-sm font-medium text-forest pl-1" vid="89">비밀번호 확인</label>
+                        <input type="password" placeholder="비밀번호를 한번 더 입력해 주세요" class="w-full h-[56px] bg-cream md:bg-paper/50 rounded-xl border border-charcoal/15 px-4 outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-all placeholder:text-charcoal/30 text-charcoal font-sans" vid="90">
+                    </div>
+
+                    <div class="flex flex-col gap-1.5" vid="91">
+                        <label class="text-sm font-medium text-forest pl-1" vid="92">이름 / 닉네임</label>
+                        <input type="text" placeholder="독자님의 이름을 알려주세요" class="w-full h-[56px] bg-cream md:bg-paper/50 rounded-xl border border-charcoal/15 px-4 outline-none focus:border-forest focus:ring-1 focus:ring-forest transition-all placeholder:text-charcoal/30 text-charcoal font-sans" vid="93">
+                    </div>
+                </div>
+
+                
+                <div class="mb-10" vid="94">
+                    <label class="flex items-center gap-3 bg-paper p-4 rounded-xl border border-charcoal/5 cursor-pointer group hover:bg-paper/80 transition-colors" vid="95">
+                        <input type="checkbox" class="custom-checkbox" id="check-all" onchange="toggleAllTerms(this)" vid="96">
+                        <span class="font-bold text-forest mt-0.5" vid="97">전체 약관에 동의합니다.</span>
+                    </label>
+                    
+                    <div class="pl-4 pr-2 mt-4 space-y-4" vid="98">
+                        <div class="flex items-center justify-between" vid="99">
+                            <label class="flex items-center gap-3 cursor-pointer group" vid="100">
+                                <input type="checkbox" class="custom-checkbox term-check" onchange="updateMasterCheck()" vid="101">
+                                <span class="text-sm text-charcoal/80 group-hover:text-forest mt-0.5" vid="102">[필수] 서비스 이용약관 동의</span>
+                            </label>
+                            <a href="#" class="text-xs text-charcoal/40 underline underline-offset-2 hover:text-terra transition-colors shrink-0" vid="103">보기</a>
+                        </div>
+                        
+                        <div class="flex items-center justify-between" vid="104">
+                            <label class="flex items-center gap-3 cursor-pointer group" vid="105">
+                                <input type="checkbox" class="custom-checkbox term-check" onchange="updateMasterCheck()" vid="106">
+                                <span class="text-sm text-charcoal/80 group-hover:text-forest mt-0.5" vid="107">[필수] 개인정보 수집 및 이용 동의</span>
+                            </label>
+                            <a href="#" class="text-xs text-charcoal/40 underline underline-offset-2 hover:text-terra transition-colors shrink-0" vid="108">보기</a>
+                        </div>
+                        
+                        <div class="flex items-center justify-between" vid="109">
+                            <label class="flex items-center gap-3 cursor-pointer group" vid="110">
+                                <input type="checkbox" class="custom-checkbox term-check" onchange="updateMasterCheck()" vid="111">
+                                <span class="text-sm text-charcoal/80 group-hover:text-forest mt-0.5 break-keep" vid="112">[선택] 마케팅 정보 수신 및 이벤트 알림 동의</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <button class="w-full h-[56px] bg-forest text-cream rounded-full font-bold text-lg hover:bg-[#133224] active:scale-[0.98] transition-all shadow-md mb-8" vid="113">
+                    회원가입 완료
+                </button>
+
+                
+                <p class="text-center text-sm text-charcoal/70 pb-4 md:pb-0" vid="114">
+                    이미 계정이 있으신가요? 
+                    <button onclick="toggleView('login')" class="text-terra font-bold ml-1 hover:underline underline-offset-4 focus:outline-none" vid="115">로그인하기</button>
+                </p>
+
+            </div>
+
+        </div>
+    </main>
+
+    
+    <footer class="bg-forest text-cream py-8 border-t-[6px] border-terra mt-auto relative z-10 w-full" vid="116">
+        <div class="max-w-7xl mx-auto px-4 md:px-8 text-center flex flex-col items-center" vid="117">
+            <div class="stamp-logo w-10 h-10 mb-4 text-cream border-cream" vid="118">
+                <i class="ph ph-books text-xl" vid="119"></i>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4 text-xs font-light text-cream/70 mb-4" vid="120">
+                <a href="#" class="hover:text-cream transition-colors" vid="121">이용약관</a>
+                <span class="text-cream/30" vid="122">|</span>
+                <a href="#" class="hover:text-cream transition-colors font-medium text-cream" vid="123">개인정보처리방침</a>
+                <span class="text-cream/30" vid="124">|</span>
+                <a href="#" class="hover:text-cream transition-colors" vid="125">고객센터</a>
+            </div>
+            <p class="text-[10px] text-cream/40 font-light leading-relaxed mb-2" vid="126">
+                상호: 독립서점 오래된 서랍 | 대표: 김문장<br vid="127">
+                주소: 서울특별시 종로구 서촌길 12, 1층
+            </p>
+            <p class="text-[10px] text-cream/30" vid="128">
+                © 2024 Old Drawer Bookstore. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    
+    <script vid="129">
+        function toggleView(target) {
+            const loginView = document.getElementById('login-view');
+            const signupView = document.getElementById('signup-view');
+            
+            if (target === 'signup') {
+                loginView.classList.add('hidden');
+                loginView.classList.remove('fade-in');
+                
+                signupView.classList.remove('hidden');
+                
+                void signupView.offsetWidth;
+                signupView.classList.add('fade-in');
+            } else {
+                signupView.classList.add('hidden');
+                signupView.classList.remove('fade-in');
+                
+                loginView.classList.remove('hidden');
+                void loginView.offsetWidth;
+                loginView.classList.add('fade-in');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        
+        function toggleAllTerms(masterCheckbox) {
+            const checkboxes = document.querySelectorAll('.term-check');
+            checkboxes.forEach(cb => {
+                cb.checked = masterCheckbox.checked;
+            });
+        }
+
+        function updateMasterCheck() {
+            const masterCheckbox = document.getElementById('check-all');
+            const checkboxes = document.querySelectorAll('.term-check');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            masterCheckbox.checked = allChecked;
+        }
+    </script>
+
+</body></html>

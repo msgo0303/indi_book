@@ -1,0 +1,378 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">Premium Book Detail</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="6">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="7">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet" vid="8">
+    <script vid="9">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ivory: {
+                            DEFAULT: '#FDFBF7',
+                            dark: '#F5F3ED'
+                        },
+                        charcoal: {
+                            DEFAULT: '#1A1A1A',
+                            light: '#333333'
+                        },
+                        muted: '#737373',
+                        borderline: '#E5E2DC'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 20px 40px -15px rgba(0,0,0,0.1)',
+                        'floating': '0 -4px 20px rgba(0,0,0,0.05)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style vid="10">
+        
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        
+        .accordion-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease-out;
+        }
+        .accordion-content > div {
+            overflow: hidden;
+        }
+        .accordion-content.open {
+            grid-template-rows: 1fr;
+        }
+        .chevron-icon.open {
+            transform: rotate(180deg);
+        }
+
+        
+        @keyframes softScale {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-soft-scale {
+            animation: softScale 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        
+        .editorial-content p { margin-bottom: 1.25rem; }
+        .editorial-content p:last-child { margin-bottom: 0; }
+        .editorial-content ul { list-style: none; padding: 0; }
+        .editorial-content li { margin-bottom: 0.75rem; }
+    </style>
+</head>
+<body class="w-full h-full bg-ivory text-charcoal font-sans antialiased selection:bg-charcoal selection:text-ivory" vid="11">
+
+    
+    <div id="app" class="w-full min-h-screen relative pb-[100px] flex flex-col" vid="12">
+        
+        
+        <header id="main-header" class="fixed top-0 left-0 w-full z-40 bg-ivory/95 backdrop-blur-md border-b border-transparent transition-all duration-300 flex items-center justify-between px-4 h-14" vid="13">
+            <button class="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-opacity" aria-label="Go back" vid="14">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vid="15"><path d="M15 18l-6-6 6-6" vid="16"></path></svg>
+            </button>
+            <h1 id="header-title" class="font-serif text-base font-semibold opacity-0 transition-opacity duration-300 truncate px-4" vid="17">Loading...</h1>
+            <button class="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-opacity" aria-label="Share" vid="18">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vid="19"><circle cx="18" cy="5" r="3" vid="20"></circle><circle cx="6" cy="12" r="3" vid="21"></circle><circle cx="18" cy="19" r="3" vid="22"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" vid="23"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" vid="24"></line></svg>
+            </button>
+        </header>
+
+        
+        <main class="pt-24 px-6 pb-14 flex flex-col items-center text-center" vid="25">
+            
+            <div class="relative w-[200px] h-[300px] mb-10 group rounded-[2px] shadow-soft bg-borderline/30 flex-shrink-0" vid="26">
+                <img id="hero-cover" class="w-full h-full object-cover rounded-[2px] animate-soft-scale" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Book Cover" vid="27">
+            </div>
+            
+            
+            <div class="max-w-[320px] mx-auto w-full" vid="28">
+                <h2 id="hero-title" class="font-serif text-[28px] font-bold mb-3 leading-[1.2] text-charcoal" vid="29"></h2>
+                <h3 id="hero-subtitle" class="font-serif text-lg text-charcoal/80 italic mb-5" vid="30"></h3>
+                <p id="hero-author" class="font-sans font-light tracking-wide text-sm text-muted uppercase mb-10" vid="31"></p>
+            </div>
+
+            
+            <div class="w-full border-t border-borderline pt-8 flex flex-col items-center" vid="32">
+                <div class="flex items-baseline gap-1 mb-2" vid="33">
+                    <span id="hero-price" class="text-3xl font-bold tracking-tight" vid="34"></span>
+                    <span class="text-xl font-medium" vid="35">원</span>
+                </div>
+                <p id="hero-shipping" class="text-xs text-muted tracking-wide" vid="36"></p>
+            </div>
+        </main>
+
+        
+        <section class="w-full sticky top-14 z-30 bg-ivory/95 backdrop-blur-md border-y border-borderline" vid="37">
+            <div class="flex overflow-x-auto hide-scrollbar px-2" id="tab-menu" vid="38">
+                
+            </div>
+        </section>
+        
+        <section class="px-6 py-12 min-h-[400px] bg-ivory" vid="39">
+            <div id="tab-content" class="editorial-content text-[15px] leading-[1.8] text-charcoal/90 font-light max-w-[600px] mx-auto" vid="40">
+                
+            </div>
+        </section>
+
+        
+        <section class="border-t border-borderline py-16 bg-ivory.dark" vid="41">
+            <div class="px-6 mb-8 flex justify-between items-end max-w-[600px] mx-auto" vid="42">
+                <h3 class="font-serif text-2xl font-bold" vid="43">Reader Reviews</h3>
+                <div class="text-right" vid="44">
+                    <div class="text-[32px] font-bold tracking-tighter leading-none mb-2" vid="45">4.8 <span class="text-sm text-muted font-normal" vid="46">/ 5.0</span></div>
+                    <div class="flex gap-[2px] justify-end" id="review-stars" vid="47">
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="flex overflow-x-auto hide-scrollbar px-6 pb-4 snap-x snap-mandatory gap-5 max-w-[1200px] mx-auto" id="review-carousel" vid="48">
+                
+            </div>
+        </section>
+
+        
+        <section class="border-t border-borderline py-16 px-6 bg-ivory" vid="49">
+            <div class="max-w-[600px] mx-auto" vid="50">
+                <h3 class="font-serif text-2xl font-bold mb-8" vid="51">도서 및 배송 Q&amp;A</h3>
+                <div id="faq-container" class="border-t border-borderline" vid="52">
+                    
+                </div>
+            </div>
+        </section>
+
+        
+        <footer class="fixed bottom-0 left-0 w-full z-50 bg-ivory border-t border-borderline shadow-floating" vid="53">
+            <div class="flex items-center gap-3 px-4 py-3 pb-[calc(12px+env(safe-area-inset-bottom))] max-w-[600px] mx-auto" vid="54">
+                <button class="w-[52px] h-[52px] flex-shrink-0 flex items-center justify-center border border-borderline rounded-[2px] hover:bg-borderline/30 transition-colors" aria-label="Add to wishlist" vid="55">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vid="56"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" vid="57"></path></svg>
+                </button>
+                <button class="flex-1 h-[52px] border border-charcoal text-charcoal font-medium text-[15px] tracking-wide rounded-[2px] hover:bg-charcoal/5 transition-colors" vid="58">
+                    장바구니
+                </button>
+                <button class="flex-1 h-[52px] bg-charcoal text-ivory font-medium text-[15px] tracking-wide rounded-[2px] hover:bg-charcoal-light transition-colors" vid="59">
+                    바로 구매
+                </button>
+            </div>
+        </footer>
+
+    </div>
+
+    
+    <script vid="60">
+        
+        const bookData = {
+            id: "book_id_001",
+            title: "The Art of Stillness",
+            subtitle: "Adventures in Going Nowhere",
+            author: "Pico Iyer",
+            price: 18500,
+            shipping_fee: "3,000원 / 5만원 이상 무료",
+            cover_image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+            description: "<p>In The Art of Stillness, Pico Iyer investigates the lives of people who have made a life seeking stillness: from Matthieu Ricard, a Frenchman with a PhD in molecular biology who left a promising scientific career to become a Tibetan monk, to revered singer-songwriter Leonard Cohen, who traded the pleasures of the senses for several years of living the near-silent life of meditation as an ordained Zen monk.</p><p>Iyer also draws on his own experiences exploring the world to show how taking back our time can bring us true happiness.</p>",
+            table_of_contents: "<ul><li><span class='block text-[11px] uppercase tracking-widest text-muted mb-1 mt-4'>Chapter 1</span> <span class='font-medium'>Nowhere to Go</span></li><li><span class='block text-[11px] uppercase tracking-widest text-muted mb-1 mt-4'>Chapter 2</span> <span class='font-medium'>The Joy of Missing Out</span></li><li><span class='block text-[11px] uppercase tracking-widest text-muted mb-1 mt-4'>Chapter 3</span> <span class='font-medium'>A Cabin in the Woods</span></li><li><span class='block text-[11px] uppercase tracking-widest text-muted mb-1 mt-4'>Chapter 4</span> <span class='font-medium'>The Secular Sabbath</span></li></ul>",
+            author_intro: "<p>Pico Iyer is the author of eight works of nonfiction and two novels. A writer for Time since 1986, he is a frequent contributor to The New York Times, Harper's, The New York Review of Books, the Los Angeles Times, and many other publications.</p>",
+            book_meta_info: "<table class='w-full text-[14px] text-left border-collapse mt-2'><tbody><tr class='border-b border-borderline'><th class='py-4 font-normal w-24 text-muted'>발행일</th><td class='py-4'>2023년 10월 15일</td></tr><tr class='border-b border-borderline'><th class='py-4 font-normal w-24 text-muted'>쪽수</th><td class='py-4'>256쪽</td></tr><tr class='border-b border-borderline'><th class='py-4 font-normal w-24 text-muted'>크기</th><td class='py-4'>130 * 195 * 20 mm</td></tr><tr class='border-b border-borderline'><th class='py-4 font-normal w-24 text-muted'>ISBN</th><td class='py-4'>9788934972314</td></tr></tbody></table>",
+            purchase_guide: {
+                payment: "신용카드, 계좌이체, 가상계좌, 휴대폰결제, 카카오페이, 네이버페이 등을 이용하실 수 있습니다.",
+                shipping: "평일 오후 2시 이전 결제 완료 건은 당일 출고됩니다. (주말 및 공휴일 제외)",
+                return_refund: "상품 수령 후 7일 이내에 교환/반품이 가능합니다. 단, 포장을 개봉하여 사용하거나 상품 가치가 훼손된 경우에는 불가합니다."
+            },
+            reviews: [
+                { rating: 5, text: "서점원의 큐레이션을 읽고 샀는데, 문장 하나하나 가슴 깊이 남는 책입니다. 오랫동안 곁에 두고 읽고 싶어요.", reviewer: "user_***99", date: "2023.11.02" },
+                { rating: 5, text: "조용히 차 한잔 마시며 읽기 좋은 책. 복잡한 마음이 편안해지는 것을 느꼈습니다. 디자인도 무척 아름답네요.", reviewer: "book_***er", date: "2023.10.28" },
+                { rating: 4, text: "선물용으로 구매했는데 받으신 분이 너무 좋아하셨어요. 패키지도 고급스럽고 배송도 빠릅니다.", reviewer: "jin_***22", date: "2023.10.15" },
+                { rating: 5, text: "바쁜 현대인들에게 꼭 필요한 메시지를 담고 있네요. 한 번쯤 멈춰서 생각하게 만드는 훌륭한 도서입니다.", reviewer: "alex_***1", date: "2023.10.10" }
+            ],
+            faqs: [
+                { q: "재입고 일정은 어떻게 되나요?", a: "본 도서는 독립출판물로, 작가님과의 협의에 따라 재입고까지 약 1~2주일이 소요될 수 있습니다. 입고 알림을 신청해주시면 가장 먼저 안내해 드립니다." },
+                { q: "선물용 포장 배송이 가능한가요?", a: "결제 단계에서 '선물 포장' 옵션을 선택하시면 정성스럽게 리본 포장하여 발송해 드립니다. (추가 비용 2,000원 발생)" },
+                { q: "도서 산간 지역 배송비는 얼마인가요?", a: "제주도 및 도서 산간 지역은 기본 배송비 외에 3,000원의 추가 운임이 발생합니다." }
+            ]
+        };
+
+        
+        function initApp() {
+            
+            document.getElementById('header-title').textContent = bookData.title;
+            document.getElementById('hero-title').textContent = bookData.title;
+            document.getElementById('hero-subtitle').textContent = bookData.subtitle;
+            document.getElementById('hero-author').textContent = bookData.author;
+            document.getElementById('hero-price').textContent = bookData.price.toLocaleString();
+            document.getElementById('hero-shipping').textContent = bookData.shipping_fee;
+            document.getElementById('hero-cover').src = bookData.cover_image;
+
+            
+            const header = document.getElementById('main-header');
+            const headerTitle = document.getElementById('header-title');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 200) {
+                    header.classList.add('border-borderline');
+                    header.classList.remove('border-transparent');
+                    headerTitle.classList.remove('opacity-0');
+                } else {
+                    header.classList.remove('border-borderline');
+                    header.classList.add('border-transparent');
+                    headerTitle.classList.add('opacity-0');
+                }
+            });
+
+            
+            renderTabs();
+            
+            
+            renderReviews();
+            
+            
+            renderFAQs();
+        }
+
+        function renderTabs() {
+            const tabs = ['책 소개', '목차', '저자 소개', '도서 정보', '구매 안내'];
+            const tabMenu = document.getElementById('tab-menu');
+            const tabContent = document.getElementById('tab-content');
+            
+            
+            tabMenu.innerHTML = tabs.map((tab, index) => `
+                <button 
+                    class="tab-btn px-5 py-4 whitespace-nowrap text-[14px] tracking-wide border-b-2 transition-all duration-300 ${index === 0 ? 'border-charcoal text-charcoal font-semibold' : 'border-transparent text-muted hover:text-charcoal'}" 
+                    data-target="${tab}"
+                >
+                    ${tab}
+                </button>
+            `).join('');
+
+            
+            const tabData = {
+                '책 소개': bookData.description,
+                '목차': bookData.table_of_contents,
+                '저자 소개': bookData.author_intro,
+                '도서 정보': bookData.book_meta_info,
+                '구매 안내': `
+                    <div class="space-y-8 mt-2">
+                        <div>
+                            <h4 class="font-serif font-bold text-base mb-2 text-charcoal">결제 정보</h4>
+                            <p class="text-[14px] text-muted">${bookData.purchase_guide.payment}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-serif font-bold text-base mb-2 text-charcoal">배송 정보</h4>
+                            <p class="text-[14px] text-muted">${bookData.purchase_guide.shipping}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-serif font-bold text-base mb-2 text-charcoal">교환 및 반품</h4>
+                            <p class="text-[14px] text-muted">${bookData.purchase_guide.return_refund}</p>
+                        </div>
+                    </div>
+                `
+            };
+
+            
+            tabContent.innerHTML = tabData[tabs[0]];
+
+            
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    
+                    buttons.forEach(b => {
+                        b.classList.remove('border-charcoal', 'text-charcoal', 'font-semibold');
+                        b.classList.add('border-transparent', 'text-muted');
+                    });
+                    const target = e.currentTarget;
+                    target.classList.remove('border-transparent', 'text-muted');
+                    target.classList.add('border-charcoal', 'text-charcoal', 'font-semibold');
+                    
+                    
+                    tabContent.style.opacity = 0;
+                    setTimeout(() => {
+                        tabContent.innerHTML = tabData[target.dataset.target];
+                        tabContent.style.transition = 'opacity 0.3s ease';
+                        tabContent.style.opacity = 1;
+                    }, 150);
+
+                    
+                    target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                });
+            });
+        }
+
+        function renderReviews() {
+            
+            const starSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-charcoal"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+            document.getElementById('review-stars').innerHTML = starSvg.repeat(5);
+
+            
+            const carousel = document.getElementById('review-carousel');
+            carousel.innerHTML = bookData.reviews.map(review => `
+                <div class="w-[280px] shrink-0 snap-center bg-ivory p-6 rounded-[2px] border border-borderline shadow-sm flex flex-col justify-between h-[180px]">
+                    <div>
+                        <div class="flex gap-1 mb-4 text-charcoal">
+                            ${`<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`.repeat(review.rating)}
+                        </div>
+                        <p class="text-[14px] leading-relaxed text-charcoal/90 line-clamp-3">${review.text}</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-borderline/50">
+                        <span class="text-[12px] text-muted">${review.reviewer}</span>
+                        <span class="text-[12px] text-borderline font-medium">${review.date}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderFAQs() {
+            const container = document.getElementById('faq-container');
+            container.innerHTML = bookData.faqs.map((faq, index) => `
+                <div class="border-b border-borderline faq-item">
+                    <button class="w-full py-5 flex justify-between items-center text-left focus:outline-none faq-btn">
+                        <span class="font-medium text-[15px] pr-8 leading-snug">Q. ${faq.q}</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon text-muted shrink-0 transition-transform duration-300"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="accordion-content text-[14px] text-muted leading-relaxed">
+                        <div class="pb-6 pr-8">A. ${faq.a}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            
+            const faqBtns = document.querySelectorAll('.faq-btn');
+            faqBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('.chevron-icon');
+                    
+                    
+                    document.querySelectorAll('.accordion-content').forEach(c => {
+                        if(c !== content && c.classList.contains('open')) {
+                            c.classList.remove('open');
+                            c.previousElementSibling.querySelector('.chevron-icon').classList.remove('open');
+                        }
+                    });
+
+                    
+                    content.classList.toggle('open');
+                    icon.classList.toggle('open');
+                });
+            });
+        }
+
+        
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+
+</body></html>

@@ -1,0 +1,545 @@
+<html lang="ko" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Book Detail - Minimalist Editorial</title>
+    
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet" vid="7">
+    <link rel="stylesheet" as="style" crossorigin="" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" vid="8">
+
+    
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="9"></script>
+    
+    
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="10"></script>
+
+    <script vid="11">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ivory: '#FDFBF7',
+                        charcoal: '#1A1A1A',
+                        borderGray: '#E5E0D8',
+                        muted: '#8A8A8A'
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif KR"', 'serif'],
+                        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'book': '0 20px 40px -10px rgba(26, 26, 26, 0.2), 0 10px 20px -5px rgba(26, 26, 26, 0.1)',
+                        'floating': '0 -4px 20px rgba(0, 0, 0, 0.05)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style vid="12">
+        
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+            opacity: 0;
+        }
+        .accordion-content.open {
+            opacity: 1;
+        }
+        
+        html { scroll-behavior: smooth; }
+        
+        
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .pb-safe {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+    </style>
+</head>
+<body class="w-full h-full bg-ivory text-charcoal font-sans antialiased selection:bg-charcoal selection:text-ivory flex flex-col relative" vid="13">
+
+    
+    <script vid="14">
+        const bookSingleInfo = {
+            id: "book_id_001",
+            title: "침묵의 감각",
+            subtitle: "소란스러운 세상 속, 고요함을 찾는 법",
+            author: "피코 아이어 (Pico Iyer)",
+            price: 18000,
+            shipping_fee: "3,000원 / 5만원 이상 무료",
+            cover_image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+            description: "현대 사회의 끊임없는 연결과 소음 속에서 '아무것도 하지 않음'의 가치를 탐구하는 에세이입니다. 작가는 전 세계를 여행하며 얻은 통찰을 바탕으로, 진정한 휴식과 내면의 평화를 향한 여정으로 우리를 안내합니다. 간결하고 시적인 문장들이 깊은 울림을 줍니다.",
+            table_of_contents: `
+                <ul class="space-y-4 text-charcoal/80 leading-relaxed font-serif">
+                    <li class="flex gap-4"><span class="text-muted w-6">1장</span> <span>어디로도 가지 않는 모험</span></li>
+                    <li class="flex gap-4"><span class="text-muted w-6">2장</span> <span>침묵의 건축학</span></li>
+                    <li class="flex gap-4"><span class="text-muted w-6">3장</span> <span>집으로 돌아오는 길</span></li>
+                    <li class="flex gap-4"><span class="text-muted w-6">4장</span> <span>어둠 속의 빛</span></li>
+                    <li class="flex gap-4"><span class="text-muted w-6">5장</span> <span>완벽한 정지 상태</span></li>
+                </ul>
+            `,
+            author_intro: "영국의 수필가이자 소설가. 옥스퍼드 대학교와 하버드 대학교에서 문학을 전공했습니다. 타임지의 에세이스트로 활동하며 글로벌리즘, 여행, 그리고 내면의 고요함에 대한 글을 꾸준히 발표하고 있습니다. 대표작으로는 『글로벌 소울』, 『여행의 기술』 등이 있습니다.",
+            book_meta_info: `
+                <div class="border-y border-borderGray divide-y divide-borderGray text-sm">
+                    <div class="flex py-4">
+                        <div class="w-1/3 text-muted font-medium">발행일</div>
+                        <div class="w-2/3">2023년 10월 15일</div>
+                    </div>
+                    <div class="flex py-4">
+                        <div class="w-1/3 text-muted font-medium">쪽수/크기</div>
+                        <div class="w-2/3">240쪽 | 135 * 210 * 20 mm</div>
+                    </div>
+                    <div class="flex py-4">
+                        <div class="w-1/3 text-muted font-medium">ISBN</div>
+                        <div class="w-2/3">978-89-12345-67-8</div>
+                    </div>
+                    <div class="flex py-4">
+                        <div class="w-1/3 text-muted font-medium">도서분류</div>
+                        <div class="w-2/3">국내도서 > 에세이 > 외국에세이</div>
+                    </div>
+                </div>
+            `,
+            purchase_guide: {
+                payment: "신용카드, 무통장입금, 실시간 계좌이체, 카카오페이, 네이버페이를 지원합니다.",
+                shipping: "결제 완료 후 평균 1~2영업일 이내 출고됩니다. (도서산간 지역 추가 배송비 발생)",
+                return_refund: "상품 수령 후 7일 이내 교환 및 반품이 가능합니다. (단, 래핑 개봉 또는 훼손 시 불가)"
+            }
+        };
+
+        
+        const formatPrice = (price) => new Intl.NumberFormat('ko-KR').format(price);
+    </script>
+
+    
+    
+    
+    <header id="top-bar" class="fixed top-0 left-0 w-full z-40 bg-ivory/85 backdrop-blur-md border-b border-transparent transition-all duration-300" vid="15">
+        <div class="max-w-4xl mx-auto w-full px-4 h-14 flex items-center justify-between" vid="16">
+            <button class="p-2 -ml-2 text-charcoal hover:opacity-70 transition-opacity" aria-label="Back" vid="17">
+                <i class="ph ph-caret-left text-2xl" vid="18"></i>
+            </button>
+            <h2 id="header-title" class="font-serif font-medium text-lg opacity-0 transition-opacity duration-300 truncate px-4" vid="19"></h2>
+            <button class="p-2 -mr-2 text-charcoal hover:opacity-70 transition-opacity" aria-label="Share" vid="20">
+                <i class="ph ph-export text-xl" vid="21"></i>
+            </button>
+        </div>
+    </header>
+
+    
+    <main class="w-full flex-1 flex flex-col items-center pt-24 pb-32" vid="22">
+        
+        
+        <section class="w-full max-w-4xl px-6 md:px-12 flex flex-col items-center text-center animate-fade-in-up" vid="23">
+            
+            
+            <div class="relative w-48 md:w-64 mb-10 group perspective-1000" vid="24">
+                <div class="relative w-full h-full rounded-sm overflow-hidden shadow-book transition-transform duration-700 ease-out group-hover:scale-[1.03]" vid="25">
+                    <img id="dom-cover-image" src="" alt="Book Cover" class="w-full h-full object-cover origin-left" vid="26">
+                    
+                    <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-r from-white/40 to-transparent" vid="27"></div>
+                </div>
+            </div>
+
+            
+            <div class="w-full flex flex-col items-center" vid="28">
+                <h3 id="dom-subtitle" class="font-serif text-charcoal/70 text-sm md:text-base tracking-widest uppercase mb-3" vid="29"></h3>
+                <h1 id="dom-title" class="font-serif text-3xl md:text-5xl font-semibold tracking-tight text-charcoal mb-4 leading-tight" vid="30"></h1>
+                <p id="dom-author" class="font-sans font-light text-charcoal/80 text-lg md:text-xl mb-10" vid="31"></p>
+
+                
+                <div class="w-full max-w-md bg-white border border-borderGray rounded-xl p-6 flex flex-col gap-3 shadow-sm" vid="32">
+                    <div class="flex justify-between items-center" vid="33">
+                        <span class="text-sm font-medium text-muted" vid="34">판매가</span>
+                        <span class="text-2xl font-bold tracking-tight text-charcoal" vid="35"><span id="dom-price" vid="36"></span><span class="text-lg font-medium ml-1" vid="37">원</span></span>
+                    </div>
+                    <div class="w-full h-px bg-borderGray/50 my-1" vid="38"></div>
+                    <div class="flex justify-between items-center text-sm" vid="39">
+                        <span class="text-muted" vid="40">배송비</span>
+                        <span id="dom-shipping-fee" class="text-charcoal/70" vid="41"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <div class="w-full max-w-4xl px-6 my-16" vid="42">
+            <div class="w-full h-px bg-borderGray" vid="43"></div>
+        </div>
+
+        
+        <section class="w-full max-w-3xl px-6 flex flex-col min-h-[400px]" vid="44">
+            
+            
+            <div class="sticky top-14 z-30 bg-ivory pb-4 mb-8" vid="45">
+                <div class="flex overflow-x-auto hide-scrollbar border border-borderGray rounded-full p-1 bg-white/50 backdrop-blur" vid="46">
+                    <button onclick="switchTab('tab-intro')" id="btn-tab-intro" class="tab-btn flex-1 min-w-max px-4 py-2.5 text-sm font-medium rounded-full transition-all duration-300 text-ivory bg-charcoal shadow-md" vid="47">책 소개</button>
+                    <button onclick="switchTab('tab-toc')" id="btn-tab-toc" class="tab-btn flex-1 min-w-max px-4 py-2.5 text-sm font-medium rounded-full transition-all duration-300 text-muted hover:text-charcoal" vid="48">목차</button>
+                    <button onclick="switchTab('tab-author')" id="btn-tab-author" class="tab-btn flex-1 min-w-max px-4 py-2.5 text-sm font-medium rounded-full transition-all duration-300 text-muted hover:text-charcoal" vid="49">저자 소개</button>
+                    <button onclick="switchTab('tab-specs')" id="btn-tab-specs" class="tab-btn flex-1 min-w-max px-4 py-2.5 text-sm font-medium rounded-full transition-all duration-300 text-muted hover:text-charcoal" vid="50">도서 정보</button>
+                    <button onclick="switchTab('tab-guide')" id="btn-tab-guide" class="tab-btn flex-1 min-w-max px-4 py-2.5 text-sm font-medium rounded-full transition-all duration-300 text-muted hover:text-charcoal" vid="51">구매 안내</button>
+                </div>
+            </div>
+
+            
+            <div class="relative w-full" vid="52">
+                
+                
+                <div id="tab-intro" class="tab-content active" vid="53">
+                    <h3 class="font-serif text-xl font-medium mb-6 flex items-center gap-2" vid="54">
+                        <i class="ph ph-book-open-text text-muted" vid="55"></i> 책 소개
+                    </h3>
+                    <p id="dom-description" class="text-charcoal/90 leading-loose text-base md:text-lg font-serif whitespace-pre-line" vid="56"></p>
+                </div>
+
+                
+                <div id="tab-toc" class="tab-content" vid="57">
+                    <h3 class="font-serif text-xl font-medium mb-6 flex items-center gap-2" vid="58">
+                        <i class="ph ph-list-numbers text-muted" vid="59"></i> 목차
+                    </h3>
+                    <div id="dom-toc" class="pl-2" vid="60"></div>
+                </div>
+
+                
+                <div id="tab-author" class="tab-content" vid="61">
+                    <h3 class="font-serif text-xl font-medium mb-6 flex items-center gap-2" vid="62">
+                        <i class="ph ph-pen-nib text-muted" vid="63"></i> 저자 소개
+                    </h3>
+                    <div class="bg-white border border-borderGray rounded-2xl p-6 md:p-8" vid="64">
+                        <p id="dom-author-intro" class="text-charcoal/90 leading-loose text-base font-serif" vid="65"></p>
+                    </div>
+                </div>
+
+                
+                <div id="tab-specs" class="tab-content" vid="66">
+                    <h3 class="font-serif text-xl font-medium mb-6 flex items-center gap-2" vid="67">
+                        <i class="ph ph-info text-muted" vid="68"></i> 도서 정보
+                    </h3>
+                    <div id="dom-book-meta" vid="69"></div>
+                </div>
+
+                
+                <div id="tab-guide" class="tab-content" vid="70">
+                    <h3 class="font-serif text-xl font-medium mb-6 flex items-center gap-2" vid="71">
+                        <i class="ph ph-truck text-muted" vid="72"></i> 구매 안내
+                    </h3>
+                    <div class="space-y-8" vid="73">
+                        <div vid="74">
+                            <h4 class="text-sm font-bold text-charcoal mb-3 flex items-center gap-1.5" vid="75"><i class="ph-fill ph-credit-card text-muted" vid="76"></i> 결제 정보</h4>
+                            <p id="dom-guide-payment" class="text-sm text-charcoal/80 leading-relaxed bg-white p-4 rounded-xl border border-borderGray/60" vid="77"></p>
+                        </div>
+                        <div vid="78">
+                            <h4 class="text-sm font-bold text-charcoal mb-3 flex items-center gap-1.5" vid="79"><i class="ph-fill ph-package text-muted" vid="80"></i> 배송 정보</h4>
+                            <p id="dom-guide-shipping" class="text-sm text-charcoal/80 leading-relaxed bg-white p-4 rounded-xl border border-borderGray/60" vid="81"></p>
+                        </div>
+                        <div vid="82">
+                            <h4 class="text-sm font-bold text-charcoal mb-3 flex items-center gap-1.5" vid="83"><i class="ph-fill ph-arrow-u-up-left text-muted" vid="84"></i> 교환 및 반품</h4>
+                            <p id="dom-guide-return" class="text-sm text-charcoal/80 leading-relaxed bg-white p-4 rounded-xl border border-borderGray/60" vid="85"></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        
+        <div class="w-full max-w-4xl px-6 my-20" vid="86">
+            <div class="w-full h-px bg-borderGray" vid="87"></div>
+        </div>
+
+        
+        <section class="w-full max-w-4xl overflow-hidden flex flex-col mb-20" vid="88">
+            <div class="px-6 md:px-12 mb-8 flex items-end justify-between" vid="89">
+                <div vid="90">
+                    <h3 class="font-serif text-2xl font-medium text-charcoal mb-2" vid="91">독자 리뷰</h3>
+                    <p class="text-sm text-muted font-light" vid="92">이 책을 먼저 읽은 분들의 이야기</p>
+                </div>
+                
+                
+                <div class="flex flex-col items-end text-right" vid="93">
+                    <div class="font-serif text-3xl font-semibold tracking-tighter text-charcoal" vid="94">4.8<span class="text-lg text-muted font-normal" vid="95"> / 5.0</span></div>
+                    <div class="flex text-charcoal mt-1 text-sm" vid="96">
+                        <i class="ph-fill ph-star" vid="97"></i>
+                        <i class="ph-fill ph-star" vid="98"></i>
+                        <i class="ph-fill ph-star" vid="99"></i>
+                        <i class="ph-fill ph-star" vid="100"></i>
+                        <i class="ph-fill ph-star-half" vid="101"></i>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory px-6 md:px-12 pb-8 gap-4 w-full" vid="102">
+                
+                
+                <div class="snap-center shrink-0 w-[280px] md:w-[320px] bg-white border border-borderGray rounded-2xl p-6 shadow-sm flex flex-col justify-between h-[200px]" vid="103">
+                    <div vid="104">
+                        <div class="flex text-charcoal text-xs mb-3" vid="105">
+                            <i class="ph-fill ph-star" vid="106"></i><i class="ph-fill ph-star" vid="107"></i><i class="ph-fill ph-star" vid="108"></i><i class="ph-fill ph-star" vid="109"></i><i class="ph-fill ph-star" vid="110"></i>
+                        </div>
+                        <p class="text-sm text-charcoal/90 leading-relaxed font-serif line-clamp-4" vid="111">"서점원의 큐레이션을 읽고 샀는데, 문장 하나하나 가슴 깊이 남는 책입니다. 바쁜 일상 속 오아시스 같았어요."</p>
+                    </div>
+                    <div class="text-xs text-muted font-medium mt-4 pt-4 border-t border-borderGray/50 flex items-center gap-2" vid="112">
+                        <div class="w-6 h-6 rounded-full bg-borderGray flex items-center justify-center text-white" vid="113"><i class="ph-fill ph-user text-xs" vid="114"></i></div>
+                        user_***99
+                    </div>
+                </div>
+
+                
+                <div class="snap-center shrink-0 w-[280px] md:w-[320px] bg-white border border-borderGray rounded-2xl p-6 shadow-sm flex flex-col justify-between h-[200px]" vid="115">
+                    <div vid="116">
+                        <div class="flex text-charcoal text-xs mb-3" vid="117">
+                            <i class="ph-fill ph-star" vid="118"></i><i class="ph-fill ph-star" vid="119"></i><i class="ph-fill ph-star" vid="120"></i><i class="ph-fill ph-star" vid="121"></i><i class="ph-fill ph-star" vid="122"></i>
+                        </div>
+                        <p class="text-sm text-charcoal/90 leading-relaxed font-serif line-clamp-4" vid="123">"자기 전에 한 챕터씩 읽기 너무 좋습니다. 마음이 차분해지고 생각 정리가 잘 되네요. 선물용으로도 강력 추천합니다."</p>
+                    </div>
+                    <div class="text-xs text-muted font-medium mt-4 pt-4 border-t border-borderGray/50 flex items-center gap-2" vid="124">
+                        <div class="w-6 h-6 rounded-full bg-borderGray flex items-center justify-center text-white" vid="125"><i class="ph-fill ph-user text-xs" vid="126"></i></div>
+                        book***ver
+                    </div>
+                </div>
+
+                
+                <div class="snap-center shrink-0 w-[280px] md:w-[320px] bg-white border border-borderGray rounded-2xl p-6 shadow-sm flex flex-col justify-between h-[200px]" vid="127">
+                    <div vid="128">
+                        <div class="flex text-charcoal text-xs mb-3" vid="129">
+                            <i class="ph-fill ph-star" vid="130"></i><i class="ph-fill ph-star" vid="131"></i><i class="ph-fill ph-star" vid="132"></i><i class="ph-fill ph-star" vid="133"></i><i class="ph ph-star" vid="134"></i>
+                        </div>
+                        <p class="text-sm text-charcoal/90 leading-relaxed font-serif line-clamp-4" vid="135">"디자인이 너무 예뻐서 소장 가치가 있습니다. 내용은 다소 무거울 수 있지만 곱씹어볼 만한 구절이 많습니다."</p>
+                    </div>
+                    <div class="text-xs text-muted font-medium mt-4 pt-4 border-t border-borderGray/50 flex items-center gap-2" vid="136">
+                        <div class="w-6 h-6 rounded-full bg-borderGray flex items-center justify-center text-white" vid="137"><i class="ph-fill ph-user text-xs" vid="138"></i></div>
+                        min***st
+                    </div>
+                </div>
+
+                
+                <div class="snap-center shrink-0 w-[280px] md:w-[320px] bg-white border border-borderGray rounded-2xl p-6 shadow-sm flex flex-col justify-between h-[200px]" vid="139">
+                    <div vid="140">
+                        <div class="flex text-charcoal text-xs mb-3" vid="141">
+                            <i class="ph-fill ph-star" vid="142"></i><i class="ph-fill ph-star" vid="143"></i><i class="ph-fill ph-star" vid="144"></i><i class="ph-fill ph-star" vid="145"></i><i class="ph-fill ph-star" vid="146"></i>
+                        </div>
+                        <p class="text-sm text-charcoal/90 leading-relaxed font-serif line-clamp-4" vid="147">"올해 읽은 에세이 중 단연 최고. 여백이 많은 편집 디자인 덕분에 글에 더 깊이 빠져들 수 있었습니다."</p>
+                    </div>
+                    <div class="text-xs text-muted font-medium mt-4 pt-4 border-t border-borderGray/50 flex items-center gap-2" vid="148">
+                        <div class="w-6 h-6 rounded-full bg-borderGray flex items-center justify-center text-white" vid="149"><i class="ph-fill ph-user text-xs" vid="150"></i></div>
+                        qui***ay
+                    </div>
+                </div>
+                
+                
+                <div class="snap-center shrink-0 w-4 md:w-6" vid="151"></div>
+            </div>
+        </section>
+
+        
+        <section class="w-full max-w-3xl px-6 flex flex-col pb-10" vid="152">
+            <h3 class="font-serif text-2xl font-medium text-charcoal mb-8 text-center" vid="153">도서 및 배송 Q&amp;A</h3>
+            
+            <div class="border-t border-charcoal/90 divide-y divide-borderGray" vid="154">
+                
+                
+                <div class="accordion-item group" vid="155">
+                    <button class="w-full flex justify-between items-center py-5 text-left focus:outline-none" onclick="toggleAccordion(this)" vid="156">
+                        <span class="font-medium text-charcoal text-[15px] pr-4 group-hover:text-charcoal/70 transition-colors" vid="157"><span class="text-charcoal/40 mr-2 font-serif font-bold" vid="158">Q.</span> 재입고 일정은 어떻게 되나요?</span>
+                        <i class="ph ph-caret-down text-muted transition-transform duration-300 group-[.active]:rotate-180 shrink-0" vid="159"></i>
+                    </button>
+                    <div class="accordion-content" vid="160">
+                        <p class="pb-6 pt-2 text-sm text-charcoal/80 leading-relaxed pl-6 border-l-2 border-borderGray ml-1" vid="161">
+                            <span class="text-charcoal/40 mr-2 font-serif font-bold -ml-6 bg-ivory pr-2" vid="162">A.</span> 본 도서는 독립출판물로, 작가님과의 협의에 따라 재입고까지 약 1~2주일이 소요될 수 있습니다. 알림 신청을 해두시면 입고 시 가장 먼저 안내해 드립니다.
+                        </p>
+                    </div>
+                </div>
+
+                
+                <div class="accordion-item group" vid="163">
+                    <button class="w-full flex justify-between items-center py-5 text-left focus:outline-none" onclick="toggleAccordion(this)" vid="164">
+                        <span class="font-medium text-charcoal text-[15px] pr-4 group-hover:text-charcoal/70 transition-colors" vid="165"><span class="text-charcoal/40 mr-2 font-serif font-bold" vid="166">Q.</span> 선물용 포장 배송이 가능한가요?</span>
+                        <i class="ph ph-caret-down text-muted transition-transform duration-300 group-[.active]:rotate-180 shrink-0" vid="167"></i>
+                    </button>
+                    <div class="accordion-content" vid="168">
+                        <p class="pb-6 pt-2 text-sm text-charcoal/80 leading-relaxed pl-6 border-l-2 border-borderGray ml-1" vid="169">
+                            <span class="text-charcoal/40 mr-2 font-serif font-bold -ml-6 bg-ivory pr-2" vid="170">A.</span> 결제 단계에서 '선물 포장' 옵션을 선택하시면 고급스러운 크라프트지에 정성스럽게 리본 포장하여 발송해 드립니다. (추가 비용 2,000원 발생)
+                        </p>
+                    </div>
+                </div>
+                
+                
+                <div class="accordion-item group border-b border-borderGray" vid="171">
+                    <button class="w-full flex justify-between items-center py-5 text-left focus:outline-none" onclick="toggleAccordion(this)" vid="172">
+                        <span class="font-medium text-charcoal text-[15px] pr-4 group-hover:text-charcoal/70 transition-colors" vid="173"><span class="text-charcoal/40 mr-2 font-serif font-bold" vid="174">Q.</span> 해외 배송도 지원하나요?</span>
+                        <i class="ph ph-caret-down text-muted transition-transform duration-300 group-[.active]:rotate-180 shrink-0" vid="175"></i>
+                    </button>
+                    <div class="accordion-content" vid="176">
+                        <p class="pb-6 pt-2 text-sm text-charcoal/80 leading-relaxed pl-6 border-l-2 border-borderGray ml-1" vid="177">
+                            <span class="text-charcoal/40 mr-2 font-serif font-bold -ml-6 bg-ivory pr-2" vid="178">A.</span> 현재 시스템 상 국내 배송만 지원하고 있습니다. 해외 배송이 필요하신 경우, 고객센터 1:1 문의를 통해 별도 접수 부탁드립니다.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        
+    </main>
+
+    
+    <div class="fixed bottom-0 left-0 w-full z-50 bg-ivory/95 backdrop-blur-xl border-t border-borderGray shadow-floating pb-safe transition-transform duration-300" id="bottom-bar" vid="179">
+        <div class="max-w-4xl mx-auto w-full p-4 flex gap-3 items-center" vid="180">
+            
+            
+            <button id="btn-wishlist" class="flex-shrink-0 w-14 h-14 rounded-xl border border-borderGray flex items-center justify-center text-charcoal hover:bg-white transition-colors group" aria-label="Add to Wishlist" vid="181">
+                <i class="ph ph-heart text-2xl transition-transform group-hover:scale-110" id="icon-wishlist" vid="182"></i>
+            </button>
+            
+            
+            <button class="flex-1 h-14 rounded-xl border border-charcoal text-charcoal font-medium text-sm md:text-base hover:bg-charcoal/5 transition-colors" vid="183">
+                장바구니
+            </button>
+            
+            
+            <button class="flex-[1.5] h-14 rounded-xl bg-charcoal text-ivory font-medium text-sm md:text-base shadow-md hover:bg-charcoal/90 hover:shadow-lg transition-all" vid="184">
+                바로 구매
+            </button>
+            
+        </div>
+    </div>
+
+    
+    <script vid="185">
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            
+            document.getElementById('dom-title').textContent = bookSingleInfo.title;
+            document.getElementById('header-title').textContent = bookSingleInfo.title;
+            document.getElementById('dom-subtitle').textContent = bookSingleInfo.subtitle;
+            document.getElementById('dom-author').textContent = bookSingleInfo.author;
+            document.getElementById('dom-price').textContent = formatPrice(bookSingleInfo.price);
+            document.getElementById('dom-shipping-fee').textContent = bookSingleInfo.shipping_fee;
+            document.getElementById('dom-cover-image').src = bookSingleInfo.cover_image;
+            
+            document.getElementById('dom-description').innerHTML = bookSingleInfo.description;
+            document.getElementById('dom-toc').innerHTML = bookSingleInfo.table_of_contents;
+            document.getElementById('dom-author-intro').innerHTML = bookSingleInfo.author_intro;
+            document.getElementById('dom-book-meta').innerHTML = bookSingleInfo.book_meta_info;
+            
+            document.getElementById('dom-guide-payment').textContent = bookSingleInfo.purchase_guide.payment;
+            document.getElementById('dom-guide-shipping').textContent = bookSingleInfo.purchase_guide.shipping;
+            document.getElementById('dom-guide-return').textContent = bookSingleInfo.purchase_guide.return_refund;
+
+            
+            const topBar = document.getElementById('top-bar');
+            const headerTitle = document.getElementById('header-title');
+            const heroTitle = document.getElementById('dom-title');
+            
+            window.addEventListener('scroll', () => {
+                const heroRect = heroTitle.getBoundingClientRect();
+                if (heroRect.bottom < 0) {
+                    headerTitle.classList.remove('opacity-0');
+                    headerTitle.classList.add('opacity-100');
+                    topBar.classList.add('border-borderGray', 'shadow-sm');
+                    topBar.classList.remove('border-transparent');
+                } else {
+                    headerTitle.classList.add('opacity-0');
+                    headerTitle.classList.remove('opacity-100');
+                    topBar.classList.remove('border-borderGray', 'shadow-sm');
+                    topBar.classList.add('border-transparent');
+                }
+            });
+
+            
+            const btnWishlist = document.getElementById('btn-wishlist');
+            const iconWishlist = document.getElementById('icon-wishlist');
+            let isWishlisted = false;
+            
+            btnWishlist.addEventListener('click', () => {
+                isWishlisted = !isWishlisted;
+                if (isWishlisted) {
+                    iconWishlist.classList.remove('ph-heart');
+                    iconWishlist.classList.add('ph-fill', 'ph-heart', 'text-red-500');
+                } else {
+                    iconWishlist.classList.add('ph-heart');
+                    iconWishlist.classList.remove('ph-fill', 'text-red-500');
+                }
+                
+                if (navigator.vibrate) navigator.vibrate(50);
+            });
+            
+            
+            setTimeout(() => {
+                document.querySelector('.animate-fade-in-up').classList.add('opacity-100', 'translate-y-0');
+            }, 100);
+        });
+
+        
+        function switchTab(targetId) {
+            
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.className = 'tab-btn flex-1 min-w-max px-4 py-2.5 text-sm font-medium rounded-full transition-all duration-300 text-muted hover:text-charcoal';
+            });
+            
+            
+            const activeBtn = document.getElementById(`btn-${targetId}`);
+            activeBtn.className = 'tab-btn flex-1 min-w-max px-4 py-2.5 text-sm font-medium rounded-full transition-all duration-300 text-ivory bg-charcoal shadow-md';
+
+            
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            
+            const targetContent = document.getElementById(targetId);
+            targetContent.classList.add('active');
+        }
+
+        
+        function toggleAccordion(button) {
+            const item = button.parentElement;
+            const content = button.nextElementSibling;
+            
+            
+            item.classList.toggle('active');
+            
+            
+            if (content.classList.contains('open')) {
+                content.style.maxHeight = '0px';
+                content.classList.remove('open');
+            } else {
+                
+                document.querySelectorAll('.accordion-content.open').forEach(openContent => {
+                    if (openContent !== content) {
+                        openContent.style.maxHeight = '0px';
+                        openContent.classList.remove('open');
+                        openContent.parentElement.classList.remove('active');
+                    }
+                });
+                
+                content.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+    </script>
+
+</body></html>

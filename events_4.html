@@ -1,0 +1,562 @@
+<html lang="ko" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
+    <title vid="4">책방의 이벤트 - 오래된 서랍</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
+    
+    <script vid="10">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7',
+                        forest: '#1B4332',
+                        terra: '#A36A00',
+                        charcoal: '#2D2D2D',
+                        paper: '#F5F2EB', 
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif KR"', 'serif'],
+                        sans: ['system-ui', '-apple-system', 'sans-serif'], 
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'floating': '0 10px 40px -10px rgba(27, 67, 50, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style vid="11">
+        body {
+            font-family: 'Noto Serif KR', serif;
+            background-color: #FDFBF7;
+            color: #2D2D2D;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-sans { font-family: system-ui, -apple-system, sans-serif; }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        html { scroll-behavior: smooth; }
+
+        #navbar {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+        }
+
+        .stamp-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #A36A00;
+            border-radius: 50%;
+            padding: 8px;
+            color: #A36A00;
+            transform: rotate(-10deg);
+        }
+
+        
+        .faq-content {
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+        }
+        .faq-content.open {
+            opacity: 1;
+        }
+        
+        
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-forest selection:text-cream" vid="12">
+
+    
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-cream/95 backdrop-blur-md border-b border-forest/10 py-3 px-4 md:px-8" vid="13">
+        <div class="max-w-7xl mx-auto flex justify-between items-center" vid="14">
+            
+            <a href="#" class="flex items-center gap-2 group" vid="15">
+                <div class="stamp-logo w-9 h-9 transition-transform group-hover:rotate-0 duration-300" vid="16">
+                    <i class="ph ph-books text-lg" vid="17"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight text-forest" vid="18">오래된 서랍</span>
+            </a>
+
+            
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium" vid="19">
+                <a href="#" class="hover:text-terra transition-colors" vid="20">홈</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="21">About</a>
+                <a href="#" class="text-terra transition-colors font-bold border-b-2 border-terra pb-1" vid="22">책방 이벤트</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="23">커뮤니티</a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-6 text-sm" vid="24">
+                <a href="#" class="hover:text-forest transition-colors" vid="25">로그인</a>
+                <a href="#" class="px-4 py-2 bg-forest text-cream rounded-full hover:bg-forest/90 transition-colors" vid="26">회원가입</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="27">마이페이지</a>
+            </div>
+
+            
+            <button class="md:hidden text-charcoal p-2 focus:outline-none" vid="28">
+                <i class="ph ph-list text-2xl" vid="29"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main class="pt-[80px] pb-12" vid="30">
+        
+        
+        <section class="px-5 pt-10 pb-8 max-w-7xl mx-auto md:px-8 md:pt-16 md:pb-12 text-center md:text-left" vid="31">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-forest mb-4 tracking-tight" vid="32">책방의 이벤트</h1>
+            <p class="font-sans font-light text-charcoal/70 leading-relaxed text-sm md:text-base max-w-2xl" vid="33">
+                독서 모임, 심야 책방, 작가 토크까지.<br class="md:hidden" vid="34"> 책방에서 열리는 다채로운 만남을 확인해 보세요.
+            </p>
+        </section>
+
+        
+        <section class="py-6 max-w-7xl mx-auto" vid="35">
+            <div class="px-5 md:px-8 mb-6 flex justify-between items-end" vid="36">
+                <h2 class="text-xl md:text-2xl font-bold text-forest" vid="37">진행 중인 이벤트</h2>
+                <div class="flex gap-2 hidden md:flex" vid="38">
+                    <button class="w-8 h-8 rounded-full border border-forest/20 flex items-center justify-center text-forest hover:bg-forest/5" vid="39"><i class="ph ph-caret-left" vid="40"></i></button>
+                    <button class="w-8 h-8 rounded-full border border-forest/20 flex items-center justify-center text-forest hover:bg-forest/5" vid="41"><i class="ph ph-caret-right" vid="42"></i></button>
+                </div>
+            </div>
+
+            
+            <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 px-5 md:px-8 pb-8 w-full" vid="43">
+                
+                
+                <article class="snap-center shrink-0 w-[260px] md:w-[320px] bg-white rounded-2xl overflow-hidden shadow-soft border border-paper relative cursor-pointer group transform transition-transform active:scale-95 md:hover:-translate-y-1" onclick="openEventModal('event1')" vid="44">
+                    <div class="relative h-[160px] md:h-[200px] overflow-hidden" vid="45">
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&amp;w=600&amp;auto=format&amp;fit=crop" alt="여름밤의 필사 모임" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" vid="46">
+                        <div class="absolute top-3 left-3 bg-terra text-cream text-[10px] md:text-xs font-bold px-2.5 py-1 rounded-full shadow-sm" vid="47">
+                            진행중
+                        </div>
+                        
+                    </div>
+                    <div class="p-5" vid="48">
+                        <h3 class="text-lg md:text-xl font-bold text-forest mb-2 line-clamp-1 group-hover:text-terra transition-colors" vid="49">여름밤의 필사 모임</h3>
+                        <div class="flex items-center gap-1.5 text-xs md:text-sm text-charcoal/60 font-sans" vid="50">
+                            <i class="ph-fill ph-calendar-blank text-terra/70 text-sm" vid="51"></i>
+                            <span vid="52">2026.07.20 ~ 2026.08.10</span>
+                        </div>
+                    </div>
+                </article>
+
+                
+                <article class="snap-center shrink-0 w-[260px] md:w-[320px] bg-white rounded-2xl overflow-hidden shadow-soft border border-paper relative cursor-pointer group transform transition-transform active:scale-95 md:hover:-translate-y-1" onclick="openEventModal('event2')" vid="53">
+                    <div class="relative h-[160px] md:h-[200px] overflow-hidden" vid="54">
+                        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&amp;w=600&amp;auto=format&amp;fit=crop" alt="심야 책방" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" vid="55">
+                        <div class="absolute top-3 left-3 bg-terra text-cream text-[10px] md:text-xs font-bold px-2.5 py-1 rounded-full shadow-sm" vid="56">
+                            진행중
+                        </div>
+                    </div>
+                    <div class="p-5" vid="57">
+                        <h3 class="text-lg md:text-xl font-bold text-forest mb-2 line-clamp-1 group-hover:text-terra transition-colors" vid="58">금요일 심야 책방</h3>
+                        <div class="flex items-center gap-1.5 text-xs md:text-sm text-charcoal/60 font-sans" vid="59">
+                            <i class="ph-fill ph-calendar-blank text-terra/70 text-sm" vid="60"></i>
+                            <span vid="61">매주 금요일 22:00 ~ 02:00</span>
+                        </div>
+                    </div>
+                </article>
+
+                
+                <article class="snap-center shrink-0 w-[260px] md:w-[320px] bg-white rounded-2xl overflow-hidden shadow-soft border border-paper relative cursor-pointer group transform transition-transform active:scale-95 md:hover:-translate-y-1" onclick="openEventModal('event3')" vid="62">
+                    <div class="relative h-[160px] md:h-[200px] overflow-hidden" vid="63">
+                        <img src="https://images.unsplash.com/photo-1544928147-79a2dbc1f389?q=80&amp;w=600&amp;auto=format&amp;fit=crop" alt="작가 토크" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" vid="64">
+                        <div class="absolute top-3 left-3 bg-terra text-cream text-[10px] md:text-xs font-bold px-2.5 py-1 rounded-full shadow-sm" vid="65">
+                            진행중
+                        </div>
+                    </div>
+                    <div class="p-5" vid="66">
+                        <h3 class="text-lg md:text-xl font-bold text-forest mb-2 line-clamp-1 group-hover:text-terra transition-colors" vid="67">김하나 작가 북토크</h3>
+                        <div class="flex items-center gap-1.5 text-xs md:text-sm text-charcoal/60 font-sans" vid="68">
+                            <i class="ph-fill ph-calendar-blank text-terra/70 text-sm" vid="69"></i>
+                            <span vid="70">2026.08.15 (토) 15:00</span>
+                        </div>
+                    </div>
+                </article>
+
+                
+                <article class="snap-center shrink-0 w-[260px] md:w-[320px] bg-white rounded-2xl overflow-hidden shadow-soft border border-paper relative cursor-pointer group transform transition-transform active:scale-95 md:hover:-translate-y-1" onclick="openEventModal('event4')" vid="71">
+                    <div class="relative h-[160px] md:h-[200px] overflow-hidden" vid="72">
+                        <img src="https://images.unsplash.com/photo-1463320726281-696a485928c7?q=80&amp;w=600&amp;auto=format&amp;fit=crop" alt="고전 읽기" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" vid="73">
+                        <div class="absolute top-3 left-3 bg-terra text-cream text-[10px] md:text-xs font-bold px-2.5 py-1 rounded-full shadow-sm" vid="74">
+                            진행중
+                        </div>
+                    </div>
+                    <div class="p-5" vid="75">
+                        <h3 class="text-lg md:text-xl font-bold text-forest mb-2 line-clamp-1 group-hover:text-terra transition-colors" vid="76">주말 아침 고전 클럽</h3>
+                        <div class="flex items-center gap-1.5 text-xs md:text-sm text-charcoal/60 font-sans" vid="77">
+                            <i class="ph-fill ph-calendar-blank text-terra/70 text-sm" vid="78"></i>
+                            <span vid="79">2026.09.01 ~ 2026.10.31</span>
+                        </div>
+                    </div>
+                </article>
+                
+                
+                <div class="snap-center shrink-0 w-1 md:w-4" vid="80"></div>
+            </div>
+        </section>
+
+        
+        <section class="mt-8 py-14 bg-paper border-y border-[#E5E0D5]" vid="81">
+            <div class="max-w-3xl mx-auto px-5 md:px-8" vid="82">
+                <div class="mb-8 text-center md:text-left" vid="83">
+                    <h2 class="text-2xl font-bold text-forest mb-3" vid="84">이벤트 FAQ</h2>
+                    <p class="font-sans text-sm font-light text-charcoal/70" vid="85">이벤트 신청 및 취소, 참가에 대해 자주 묻는 질문입니다.</p>
+                </div>
+
+                <div class="flex flex-col border-t border-forest/10" vid="86">
+                    
+                    
+                    <div class="border-b border-forest/10" vid="87">
+                        <button class="w-full py-5 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFAQ(this)" vid="88">
+                            <span class="font-medium text-forest pr-4 font-sans text-sm md:text-base group-hover:text-terra transition-colors" vid="89">이벤트 신청 후 취소 및 환불이 가능한가요?</span>
+                            <i class="ph ph-caret-down text-lg text-forest/50 transition-transform duration-300 transform faq-icon" vid="90"></i>
+                        </button>
+                        <div class="faq-content overflow-hidden" vid="91">
+                            <div class="pb-5 pt-1 text-sm md:text-base font-light text-charcoal/80 font-sans leading-relaxed" vid="92">
+                                네, 이벤트 시작 3일 전까지 취소하실 경우 100% 환불이 가능합니다. 마이페이지에서 신청 취소를 진행해 주세요.
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="border-b border-forest/10" vid="93">
+                        <button class="w-full py-5 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFAQ(this)" vid="94">
+                            <span class="font-medium text-forest pr-4 font-sans text-sm md:text-base group-hover:text-terra transition-colors" vid="95">도서 모임 참여 시 책은 개별 구매해야 하나요?</span>
+                            <i class="ph ph-caret-down text-lg text-forest/50 transition-transform duration-300 transform faq-icon" vid="96"></i>
+                        </button>
+                        <div class="faq-content overflow-hidden" vid="97">
+                            <div class="pb-5 pt-1 text-sm md:text-base font-light text-charcoal/80 font-sans leading-relaxed" vid="98">
+                                네, 원활한 모임 진행을 위해 선정 도서를 미리 읽고 참여해 주셔야 합니다. 서점에서 별도 구매 시 소정의 기념 굿즈를 제공해 드립니다.
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="border-b border-forest/10" vid="99">
+                        <button class="w-full py-5 flex justify-between items-center text-left focus:outline-none group" onclick="toggleFAQ(this)" vid="100">
+                            <span class="font-medium text-forest pr-4 font-sans text-sm md:text-base group-hover:text-terra transition-colors" vid="101">준비물이나 별도의 드레스코드가 있나요?</span>
+                            <i class="ph ph-caret-down text-lg text-forest/50 transition-transform duration-300 transform faq-icon" vid="102"></i>
+                        </button>
+                        <div class="faq-content overflow-hidden" vid="103">
+                            <div class="pb-5 pt-1 text-sm md:text-base font-light text-charcoal/80 font-sans leading-relaxed" vid="104">
+                                특별한 준비물이 필요한 경우 모임 시작 하루 전 개별 안내 문자를 발송해 드립니다. 기본적으로 편안한 복장으로 오시면 됩니다.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="max-w-3xl mx-auto px-5 md:px-8 mt-12 mb-8" vid="105">
+            <div class="bg-cream border border-terra/20 rounded-2xl p-8 md:p-10 text-center shadow-floating relative overflow-hidden" vid="106">
+                
+                <div class="absolute top-0 right-0 w-32 h-32 bg-terra/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" vid="107"></div>
+                <div class="absolute bottom-0 left-0 w-40 h-40 bg-forest/5 rounded-full blur-2xl -ml-20 -mb-20 pointer-events-none" vid="108"></div>
+                
+                <div class="relative z-10" vid="109">
+                    <div class="w-12 h-12 mx-auto bg-paper text-terra rounded-full flex items-center justify-center mb-4 border border-terra/10" vid="110">
+                        <i class="ph ph-envelope-simple-open text-2xl" vid="111"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold text-forest mb-3" vid="112">원하는 모임이나 이벤트가 없으신가요?</h3>
+                    <p class="font-sans font-light text-charcoal/70 text-sm md:text-base mb-8 max-w-md mx-auto leading-relaxed" vid="113">
+                        함께 나누고 싶은 이야기, 개설되길 바라는 특별한 독서 모임이나 클래스가 있다면 의견을 남겨주세요.
+                    </p>
+                    <button onclick="openRequestModal()" class="w-full md:w-auto px-8 py-4 bg-terra text-cream rounded-full font-bold shadow-lg shadow-terra/20 hover:bg-[#8A5A00] transition-colors active:scale-95 transform flex items-center justify-center gap-2 mx-auto" vid="114">
+                        <span vid="115">희망 이벤트 제안하기</span>
+                        <i class="ph-bold ph-arrow-right" vid="116"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    
+    <footer class="bg-forest text-cream pt-12 pb-8 border-t-[6px] border-terra" vid="117">
+        <div class="max-w-7xl mx-auto px-5 md:px-8" vid="118">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-cream/10 pb-8 mb-6" vid="119">
+                <div class="flex items-center gap-2" vid="120">
+                    <div class="stamp-logo w-10 h-10 border-cream text-cream" vid="121">
+                        <i class="ph ph-books text-xl" vid="122"></i>
+                    </div>
+                    <span class="font-bold text-xl" vid="123">오래된 서랍</span>
+                </div>
+                <div class="flex gap-4 text-sm font-light" vid="124">
+                    <a href="#" class="hover:text-terra transition-colors" vid="125">이용약관</a>
+                    <a href="#" class="font-medium hover:text-terra transition-colors" vid="126">개인정보처리방침</a>
+                </div>
+            </div>
+            <div class="text-xs text-cream/50 font-light leading-relaxed font-sans flex flex-col md:flex-row justify-between gap-4" vid="127">
+                <p vid="128">
+                    상호: 독립서점 오래된 서랍 | 대표: 김문장<br vid="129">
+                    사업자등록번호: 123-45-67890 | 서울특별시 종로구 서촌길 12, 1층<br vid="130">
+                    통신판매업신고: 2023-서울종로-1234
+                </p>
+                <p class="md:text-right mt-2 md:mt-0" vid="131">
+                    © 2024 Old Drawer Bookstore.<br class="hidden md:block" vid="132"> All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+    
+
+    
+    <div id="event-modal" class="fixed inset-0 z-[100] flex items-end md:items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 modal-backdrop" vid="133">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeEventModal()" vid="134"></div>
+        
+        <div class="bg-cream w-full md:w-[90%] md:max-w-xl h-[85vh] md:h-auto md:max-h-[85vh] relative z-10 rounded-t-3xl md:rounded-2xl transform translate-y-full md:translate-y-10 transition-transform duration-400 flex flex-col shadow-2xl modal-content border-t md:border border-cream" vid="135">
+            
+            
+            <div class="w-full flex justify-center py-3 md:hidden absolute top-0 left-0 z-20" vid="136">
+                <div class="w-12 h-1.5 bg-white/50 rounded-full" vid="137"></div>
+            </div>
+            
+            <button onclick="closeEventModal()" class="absolute top-4 right-4 z-20 text-cream bg-black/20 backdrop-blur-md hover:bg-black/40 transition-colors w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full" vid="138">
+                <i class="ph ph-x text-lg md:text-xl" vid="139"></i>
+            </button>
+            
+            
+            <div class="overflow-y-auto flex-1 hide-scrollbar rounded-t-3xl md:rounded-2xl relative" vid="140">
+                
+                <div class="w-full h-64 md:h-80 relative bg-paper shrink-0" vid="141">
+                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&amp;w=800&amp;auto=format&amp;fit=crop" alt="Event Cover" class="w-full h-full object-cover" vid="142">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" vid="143"></div>
+                    <div class="absolute bottom-6 left-6 text-white" vid="144">
+                        <span class="inline-block bg-terra text-cream text-xs font-bold px-3 py-1 rounded-full mb-3" vid="145">진행중</span>
+                        <h2 class="text-2xl md:text-3xl font-bold font-serif leading-tight" vid="146">여름밤의 필사 모임</h2>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 pb-24 md:pb-8" vid="147">
+                    <div class="flex flex-col gap-3 font-sans text-sm mb-8 border-b border-forest/10 pb-6" vid="148">
+                        <div class="flex items-center gap-3" vid="149">
+                            <i class="ph-fill ph-calendar-blank text-terra text-lg" vid="150"></i>
+                            <span class="text-charcoal/80" vid="151">2026.07.20 ~ 2026.08.10 (매주 화요일)</span>
+                        </div>
+                        <div class="flex items-center gap-3" vid="152">
+                            <i class="ph-fill ph-clock text-terra text-lg" vid="153"></i>
+                            <span class="text-charcoal/80" vid="154">오후 7:30 ~ 9:30</span>
+                        </div>
+                        <div class="flex items-center gap-3" vid="155">
+                            <i class="ph-fill ph-users text-terra text-lg" vid="156"></i>
+                            <span class="text-charcoal/80" vid="157">최대 8명 (현재 3명 신청)</span>
+                        </div>
+                        <div class="flex items-center gap-3" vid="158">
+                            <i class="ph-fill ph-ticket text-terra text-lg" vid="159"></i>
+                            <span class="font-bold text-forest" vid="160">20,000원 <span class="font-normal text-xs text-charcoal/50" vid="161">(음료 1잔 포함)</span></span>
+                        </div>
+                    </div>
+
+                    <h4 class="font-bold text-lg text-forest mb-3" vid="162">어떤 모임인가요?</h4>
+                    <p class="font-sans font-light text-sm text-charcoal/80 leading-relaxed mb-8 break-keep" vid="163">
+                        무더운 여름밤, 시원한 책방에 모여 각자 좋아하는 책의 문장을 필사합니다. 온전히 손글씨에 집중하는 시간은 번잡한 마음을 가라앉히는 데 도움을 줍니다. 1시간의 조용한 필사 후, 가볍게 문장을 나누는 시간을 가집니다.
+                    </p>
+
+                    <h4 class="font-bold text-lg text-forest mb-3" vid="164">참여 안내 및 규칙</h4>
+                    <ul class="list-disc pl-5 font-sans font-light text-sm text-charcoal/80 leading-relaxed space-y-2" vid="165">
+                        <li vid="166">필사할 책과 개인 필기구, 노트를 지참해 주세요.</li>
+                        <li vid="167">타인의 필사 시간에 방해가 되지 않도록 정숙을 유지합니다.</li>
+                        <li vid="168">모임 시작 3일 전까지 취소 시 전액 환불됩니다.</li>
+                    </ul>
+                </div>
+            </div>
+
+            
+            <div class="absolute bottom-0 left-0 w-full bg-cream border-t border-forest/10 p-4 pb-8 md:pb-4 md:static md:border-t-0 md:bg-transparent shrink-0" vid="169">
+                <button class="w-full py-4 bg-forest text-cream font-bold rounded-xl md:rounded-full shadow-lg hover:bg-forest/90 transition-colors active:scale-[0.98]" vid="170">
+                    이벤트 신청하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <div id="request-modal" class="fixed inset-0 z-[100] flex items-end md:items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 modal-backdrop" vid="171">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeRequestModal()" vid="172"></div>
+        
+        <div class="bg-paper w-full md:w-[90%] md:max-w-md h-[90vh] md:h-auto md:max-h-[90vh] relative z-10 rounded-t-3xl md:rounded-2xl transform translate-y-full md:translate-y-10 transition-transform duration-400 flex flex-col shadow-2xl modal-content" vid="173">
+            
+            <div class="w-full flex justify-center py-3 md:hidden absolute top-0 left-0 z-20" vid="174">
+                <div class="w-12 h-1.5 bg-charcoal/20 rounded-full" vid="175"></div>
+            </div>
+            
+            <button onclick="closeRequestModal()" class="absolute top-4 right-4 text-charcoal hover:text-terra transition-colors w-8 h-8 flex items-center justify-center bg-cream rounded-full border border-charcoal/10 z-20" vid="176">
+                <i class="ph ph-x text-lg" vid="177"></i>
+            </button>
+            
+            <div class="p-6 pt-10 md:pt-8 md:p-8 border-b border-forest/10 shrink-0 bg-cream rounded-t-3xl md:rounded-t-2xl" vid="178">
+                <h3 class="text-2xl font-bold text-forest font-serif" vid="179">희망 이벤트 제안하기</h3>
+                <p class="font-sans text-xs text-charcoal/60 mt-2 font-light" vid="180">보내주신 소중한 의견은 책방 운영에 적극 반영됩니다.</p>
+            </div>
+
+            <div class="overflow-y-auto flex-1 p-6 md:p-8 font-sans" vid="181">
+                <form onsubmit="event.preventDefault(); closeRequestModal(); alert('소중한 제안 감사합니다!');" class="space-y-6" vid="182">
+                    
+                    <div vid="183">
+                        <label class="block text-sm font-bold text-forest mb-2" vid="184">제안하는 모임명</label>
+                        <input type="text" placeholder="예) 금요일 퇴근길 단편 소설 모임" required="" class="w-full bg-white border border-forest/20 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra transition-all" vid="185">
+                    </div>
+
+                    <div vid="186">
+                        <label class="block text-sm font-bold text-forest mb-2" vid="187">활동 카테고리</label>
+                        <div class="relative" vid="188">
+                            <select required="" class="w-full bg-white border border-forest/20 rounded-xl px-4 py-3.5 text-sm appearance-none focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra transition-all text-charcoal bg-no-repeat bg-[right_1rem_center]" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232D2D2D%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-size: 0.65rem auto;" vid="189">
+                                <option value="" disabled="" selected="" vid="190">선택해주세요</option>
+                                <option value="reading" vid="191">독서 모임</option>
+                                <option value="midnight" vid="192">심야 책방</option>
+                                <option value="talk" vid="193">작가 토크 / 강연</option>
+                                <option value="class" vid="194">원데이 클래스</option>
+                                <option value="other" vid="195">기타</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div vid="196">
+                        <label class="block text-sm font-bold text-forest mb-2" vid="197">예상 인원</label>
+                        <input type="number" placeholder="명" min="1" class="w-full bg-white border border-forest/20 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra transition-all" vid="198">
+                    </div>
+
+                    <div vid="199">
+                        <label class="block text-sm font-bold text-forest mb-2" vid="200">제안 내용</label>
+                        <textarea placeholder="어떤 모임인지, 왜 하고 싶은지 자세히 적어주시면 큰 도움이 됩니다." rows="4" required="" class="w-full bg-white border border-forest/20 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra transition-all resize-none" vid="201"></textarea>
+                    </div>
+
+                    <div vid="202">
+                        <label class="block text-sm font-bold text-forest mb-2" vid="203">연락처 <span class="text-charcoal/40 font-normal" vid="204">(선택)</span></label>
+                        <input type="tel" placeholder="010-0000-0000" class="w-full bg-white border border-forest/20 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-terra focus:ring-1 focus:ring-terra transition-all" vid="205">
+                        <p class="text-[10px] text-charcoal/50 mt-1.5 font-light" vid="206">제안해주신 이벤트 개설 시 가장 먼저 안내해 드립니다.</p>
+                    </div>
+
+                    <div class="pt-4 pb-8 md:pb-0" vid="207">
+                        <button type="submit" class="w-full py-4 bg-terra text-cream font-bold rounded-xl hover:bg-[#8A5A00] transition-colors active:scale-[0.98] shadow-md" vid="208">
+                            제안하기
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script vid="209">
+        
+        let lastScrollY = window.scrollY;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+            if(currentScrollY > 20) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+            lastScrollY = currentScrollY;
+        }, { passive: true });
+
+
+        
+        function toggleFAQ(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('.faq-icon');
+            const isCurrentlyOpen = content.classList.contains('open');
+
+            
+            document.querySelectorAll('.faq-content').forEach(el => {
+                el.style.maxHeight = null;
+                el.classList.remove('open');
+            });
+            document.querySelectorAll('.faq-icon').forEach(icon => {
+                icon.classList.remove('rotate-180', 'text-terra');
+                icon.classList.add('text-forest/50');
+            });
+
+            
+            if (!isCurrentlyOpen) {
+                content.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.classList.add('rotate-180', 'text-terra');
+                icon.classList.remove('text-forest/50');
+            }
+        }
+
+        
+        const eventModal = document.getElementById('event-modal');
+        const eventContent = eventModal.querySelector('.modal-content');
+        
+        const requestModal = document.getElementById('request-modal');
+        const requestContent = requestModal.querySelector('.modal-content');
+
+        function openEventModal(id) {
+            
+            eventModal.classList.remove('opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                eventContent.classList.remove('translate-y-full', 'md:translate-y-10');
+                eventContent.classList.add('translate-y-0');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEventModal() {
+            eventContent.classList.remove('translate-y-0');
+            eventContent.classList.add('translate-y-full', 'md:translate-y-10');
+            eventModal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = '';
+        }
+
+        function openRequestModal() {
+            requestModal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                requestContent.classList.remove('translate-y-full', 'md:translate-y-10');
+                requestContent.classList.add('translate-y-0');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRequestModal() {
+            requestContent.classList.remove('translate-y-0');
+            requestContent.classList.add('translate-y-full', 'md:translate-y-10');
+            requestModal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = '';
+        }
+        
+        
+        document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+            backdrop.addEventListener('touchmove', function(e) {
+                if(e.target === this) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        });
+
+    </script>
+
+</body></html>

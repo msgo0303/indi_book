@@ -1,0 +1,716 @@
+<html lang="ko" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Store - 오래된 서랍</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
+    
+    <script vid="10">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7',
+                        forest: '#1B4332',
+                        terra: '#A36A00',
+                        charcoal: '#2D2D2D',
+                        paper: '#F5F2EB', 
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif KR"', 'serif'],
+                        sans: ['system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style vid="11">
+        body {
+            font-family: 'Noto Serif KR', serif;
+            background-color: #FDFBF7;
+            color: #2D2D2D;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+            overflow-x: hidden;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        html { scroll-behavior: smooth; }
+
+        #navbar {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+        }
+
+        .stamp-logo {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #A36A00;
+            border-radius: 50%;
+            padding: 8px;
+            color: #A36A00;
+            transform: rotate(-10deg);
+        }
+
+        
+        .grid-transition {
+            transition: opacity 0.5s ease, filter 0.5s ease, transform 0.5s ease;
+        }
+        .grid-hidden {
+            opacity: 0;
+            filter: blur(12px);
+            transform: translateY(15px);
+        }
+
+        
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background-color: #1B4332; 
+            color: #FDFBF7; 
+            border-color: #1B4332;
+        }
+        
+        
+        .wishlist-btn i {
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .wishlist-btn:active i {
+            transform: scale(0.7);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-forest selection:text-cream" vid="12">
+
+    
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-cream/95 backdrop-blur-md border-b border-forest/10 py-4 px-4 md:px-8" vid="13">
+        <div class="max-w-7xl mx-auto flex justify-between items-center" vid="14">
+            
+            <a href="#" class="flex items-center gap-2 group" vid="15">
+                <div class="stamp-logo w-9 h-9 md:w-10 md:h-10 transition-transform group-hover:rotate-0 duration-300" vid="16">
+                    <i class="ph ph-books text-lg md:text-xl" vid="17"></i>
+                </div>
+                <span class="font-bold text-lg md:text-xl tracking-tight text-forest" vid="18">오래된 서랍</span>
+            </a>
+
+            
+            <div class="hidden lg:flex items-center gap-8 text-sm font-medium" vid="19">
+                <a href="#" class="hover:text-terra transition-colors" vid="20">홈</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="21">About</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="22">Event</a>
+                <a href="#" class="hover:text-terra transition-colors" vid="23">커뮤니티</a>
+            </div>
+
+            
+            <div class="hidden lg:flex items-center gap-6 text-sm" vid="24">
+                <a href="#" class="hover:text-forest transition-colors" vid="25">로그인</a>
+                <a href="#" class="px-4 py-2 bg-forest text-cream rounded-full hover:bg-forest/90 transition-colors" vid="26">회원가입</a>
+                <a href="#" class="hover:text-terra transition-colors flex items-center gap-1" vid="27"><i class="ph ph-user text-lg" vid="28"></i> 마이페이지</a>
+            </div>
+
+            
+            <button class="lg:hidden text-charcoal p-2 focus:outline-none" onclick="toggleMobileMenu()" vid="29">
+                <i class="ph ph-list text-2xl" vid="30"></i>
+            </button>
+        </div>
+    </nav>
+
+    
+    <div id="mobile-menu" class="fixed inset-0 bg-cream z-40 transform translate-x-full transition-transform duration-300 pt-24 px-6 lg:hidden" vid="31">
+        <div class="flex flex-col gap-6 text-lg font-medium text-forest" vid="32">
+            <a href="#" class="border-b border-forest/10 pb-4" vid="33">홈</a>
+            <a href="#" class="border-b border-forest/10 pb-4" vid="34">About</a>
+            <a href="#" class="border-b border-forest/10 pb-4" vid="35">Event</a>
+            <a href="#" class="border-b border-forest/10 pb-4" vid="36">커뮤니티</a>
+            <a href="#" class="border-b border-forest/10 pb-4" vid="37">로그인</a>
+            <a href="#" class="border-b border-forest/10 pb-4 text-terra" vid="38">회원가입</a>
+            <a href="#" class="border-b border-forest/10 pb-4" vid="39">마이페이지</a>
+        </div>
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 p-2 text-charcoal" vid="40">
+            <i class="ph ph-x text-2xl" vid="41"></i>
+        </button>
+    </div>
+
+    
+    <header class="pt-32 pb-10 px-4 text-center bg-paper border-b border-forest/5" vid="42">
+        <h1 class="text-3xl md:text-5xl font-bold text-forest mb-3" vid="43">책방의 서가</h1>
+        <p class="text-charcoal/70 font-light text-sm md:text-base font-sans max-w-md mx-auto leading-relaxed" vid="44">
+            마음의 결을 따라 정성스럽게 큐레이션된 도서들을 만나보세요.
+        </p>
+    </header>
+
+    
+    <div class="sticky top-[68px] md:top-[73px] z-30 bg-cream/95 backdrop-blur-md border-b border-forest/10 py-3 shadow-sm" vid="45">
+        <div class="max-w-7xl mx-auto px-4 md:px-8" vid="46">
+            <div class="flex overflow-x-auto hide-scrollbar gap-2 snap-x font-sans" vid="47">
+                <button onclick="switchTab(this, '소설')" class="tab-btn active shrink-0 px-5 py-2 rounded-full text-sm font-medium border border-forest text-forest snap-start" vid="48">소설</button>
+                <button onclick="switchTab(this, '시/수필')" class="tab-btn shrink-0 px-5 py-2 rounded-full text-sm font-medium border border-charcoal/20 text-charcoal/70 hover:border-forest hover:text-forest snap-start" vid="49">시/수필</button>
+                <button onclick="switchTab(this, '인문/사회')" class="tab-btn shrink-0 px-5 py-2 rounded-full text-sm font-medium border border-charcoal/20 text-charcoal/70 hover:border-forest hover:text-forest snap-start" vid="50">인문/사회</button>
+                <button onclick="switchTab(this, '예술/독립잡지')" class="tab-btn shrink-0 px-5 py-2 rounded-full text-sm font-medium border border-charcoal/20 text-charcoal/70 hover:border-forest hover:text-forest snap-start" vid="51">예술/독립잡지</button>
+                <button onclick="switchTab(this, '이벤트 도서')" class="tab-btn shrink-0 px-5 py-2 rounded-full text-sm font-bold border border-terra/40 text-terra bg-terra/5 hover:bg-terra hover:text-cream snap-start" vid="52">이벤트 도서</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <section class="py-10 md:py-16 max-w-7xl mx-auto px-4 md:px-8 min-h-[60vh]" vid="53">
+        <div id="book-grid" class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-10 md:gap-x-8 md:gap-y-16 grid-transition" vid="54">
+            
+            
+            <div class="group flex flex-col h-full book-card" vid="55">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="56">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="57"></div>
+                    <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="58">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="59">
+                        <i class="ph-fill ph-heart text-lg" vid="60"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="61">
+                    <div class="flex-1" vid="62">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="63">참을 수 없는 존재의 가벼움</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="64">15,000원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="65">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="66"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="67">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="68">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="69"></div>
+                    <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="70">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="71">
+                        <i class="ph-fill ph-heart text-lg" vid="72"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="73">
+                    <div class="flex-1" vid="74">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="75">인간 실격</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="76">12,500원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="77">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="78"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="79">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="80">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="81"></div>
+                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="82">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="83">
+                        <i class="ph-fill ph-heart text-lg" vid="84"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="85">
+                    <div class="flex-1" vid="86">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="87">노르웨이의 숲</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="88">14,800원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="89">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="90"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="91">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="92">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="93"></div>
+                    <img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="94">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="95">
+                        <i class="ph-fill ph-heart text-lg" vid="96"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="97">
+                    <div class="flex-1" vid="98">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="99">데미안</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="100">11,000원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="101">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="102"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="103">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="104">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="105"></div>
+                    <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="106">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="107">
+                        <i class="ph-fill ph-heart text-lg" vid="108"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="109">
+                    <div class="flex-1" vid="110">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="111">우리가 빛의 속도로 갈 수 없다면</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="112">14,000원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="113">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="114"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="115">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="116">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="117"></div>
+                    <img src="https://images.unsplash.com/photo-1589998059171-9899ea862502?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="118">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="119">
+                        <i class="ph-fill ph-heart text-lg" vid="120"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="121">
+                    <div class="flex-1" vid="122">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="123">아주 오랜만에 행복하다는 느낌</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="124">13,500원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="125">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="126"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="127">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="128">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="129"></div>
+                    <img src="https://images.unsplash.com/photo-1629196914275-a81d45904fc4?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="130">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="131">
+                        <i class="ph-fill ph-heart text-lg" vid="132"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="133">
+                    <div class="flex-1" vid="134">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="135">소년이 온다</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="136">14,500원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="137">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="138"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="139">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="140">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="141"></div>
+                    <img src="https://images.unsplash.com/photo-1476275466078-4007374efac4?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="142">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="143">
+                        <i class="ph-fill ph-heart text-lg" vid="144"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="145">
+                    <div class="flex-1" vid="146">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="147">침묵의 봄</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="148">18,000원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="149">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="150"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="151">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="152">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="153"></div>
+                    <img src="https://images.unsplash.com/photo-1544716278-e513176f20b5?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="154">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="155">
+                        <i class="ph-fill ph-heart text-lg" vid="156"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="157">
+                    <div class="flex-1" vid="158">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="159">연금술사</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="160">12,000원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="161">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="162"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="163">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="164">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="165"></div>
+                    <img src="https://images.unsplash.com/photo-1456227443183-b7897da7df85?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="166">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="167">
+                        <i class="ph-fill ph-heart text-lg" vid="168"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="169">
+                    <div class="flex-1" vid="170">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="171">호밀밭의 파수꾼</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="172">11,500원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="173">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="174"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="175">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="176">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="177"></div>
+                    <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="178">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="179">
+                        <i class="ph-fill ph-heart text-lg" vid="180"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="181">
+                    <div class="flex-1" vid="182">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="183">모순</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="184">13,000원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="185">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="186"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="187">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="188">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="189"></div>
+                    <img src="https://images.unsplash.com/photo-1511108690759-009324a90311?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="190">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="191">
+                        <i class="ph-fill ph-heart text-lg" vid="192"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="193">
+                    <div class="flex-1" vid="194">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="195">달과 6펜스</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="196">10,500원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="197">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="198"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="199">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="200">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="201"></div>
+                    <img src="https://images.unsplash.com/photo-1629196914275-a81d45904fc4?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="202">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="203">
+                        <i class="ph-fill ph-heart text-lg" vid="204"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="205">
+                    <div class="flex-1" vid="206">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="207">구의 증명</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="208">12,000원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="209">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="210"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="211">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="212">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="213"></div>
+                    <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="214">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="215">
+                        <i class="ph-fill ph-heart text-lg" vid="216"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="217">
+                    <div class="flex-1" vid="218">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="219">아가미</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="220">13,500원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="221">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="222"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="223">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="224">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="225"></div>
+                    <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="226">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="227">
+                        <i class="ph-fill ph-heart text-lg" vid="228"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="229">
+                    <div class="flex-1" vid="230">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="231">지구에서 한아뿐</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="232">14,000원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="233">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="234"></i>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div class="group flex flex-col h-full book-card" vid="235">
+                <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-[2px_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_20px_rgba(0,0,0,0.15)] bg-gray-100" vid="236">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="237"></div>
+                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&amp;w=600&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Book Cover" vid="238">
+                    <button class="wishlist-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-cream/80 backdrop-blur text-charcoal/40 hover:text-terra flex items-center justify-center z-20 shadow-sm" onclick="toggleHeart(this)" vid="239">
+                        <i class="ph-fill ph-heart text-lg" vid="240"></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-start mt-auto gap-2" vid="241">
+                    <div class="flex-1" vid="242">
+                        <h4 class="font-bold text-[15px] md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 title-el" vid="243">우리가 사랑한 내일들</h4>
+                        <p class="font-sans font-semibold text-charcoal text-sm md:text-base price-el" vid="244">15,000원</p>
+                    </div>
+                    <button class="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors" vid="245">
+                        <i class="ph ph-shopping-cart-simple text-lg md:text-xl" vid="246"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    
+    <section class="py-12 md:py-20 px-4 md:px-8 bg-paper border-t border-b border-[#E5E0D5]" vid="247">
+        <div class="max-w-4xl mx-auto bg-forest/5 border border-terra/20 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden shadow-sm" vid="248">
+            
+            <div class="absolute top-0 right-0 w-48 h-48 bg-terra/10 rounded-full blur-[80px] pointer-events-none" vid="249"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-forest/10 rounded-full blur-[80px] pointer-events-none" vid="250"></div>
+            
+            <div class="relative z-10" vid="251">
+                <i class="ph ph-envelope-open text-4xl text-terra mb-4 inline-block" vid="252"></i>
+                <h3 class="text-2xl md:text-3xl font-bold text-forest mb-4" vid="253">찾으시는 책이 없으신가요?</h3>
+                <p class="text-charcoal/80 text-sm md:text-base mb-8 max-w-lg mx-auto font-light leading-relaxed" vid="254">
+                    서점에 아직 입고되지 않은 독립출판물이나 희망 도서가 있다면 신청해 주세요. 책방지기가 정성껏 찾아 전해 드립니다.
+                </p>
+                <button onclick="openRequestModal()" class="w-full md:w-auto inline-flex justify-center items-center gap-2 px-8 py-4 bg-forest text-cream font-bold text-sm md:text-base rounded-full hover:bg-[#153426] transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1" vid="255">
+                    입고되지 않은 도서 신청하기 <i class="ph ph-arrow-right" vid="256"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="bg-forest text-cream pt-16 pb-8 border-t-[6px] border-terra" vid="257">
+        <div class="max-w-7xl mx-auto px-4 md:px-8" vid="258">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12" vid="259">
+                <div class="md:col-span-6 flex flex-col items-start" vid="260">
+                    <div class="stamp-logo w-12 h-12 mb-4 text-cream border-cream" vid="261">
+                        <i class="ph ph-books text-2xl" vid="262"></i>
+                    </div>
+                    <h2 class="text-xl font-bold mb-3" vid="263">오래된 서랍</h2>
+                    <p class="text-cream/70 text-sm leading-relaxed font-light mb-6" vid="264">
+                        바쁜 일상 속, 잠시 멈추어 페이지를 넘기는 소리에 귀 기울여보세요.<br vid="265">
+                        당신의 마음을 다독일 문장들이 서랍 속에서 기다리고 있습니다.
+                    </p>
+                </div>
+
+                <div class="md:col-span-6 grid grid-cols-2 gap-6 text-sm" vid="266">
+                    <div vid="267">
+                        <h3 class="font-bold mb-4 text-terra" vid="268">고객 센터</h3>
+                        <ul class="space-y-3 text-cream/70 font-light" vid="269">
+                            <li vid="270"><a href="#" class="hover:text-cream transition-colors" vid="271">공지사항</a></li>
+                            <li vid="272"><a href="#" class="hover:text-cream transition-colors" vid="273">자주 묻는 질문</a></li>
+                            <li vid="274"><a href="#" class="hover:text-cream transition-colors" vid="275">1:1 문의</a></li>
+                            <li vid="276"><a href="#" class="hover:text-cream transition-colors" vid="277">도서 입고 문의</a></li>
+                        </ul>
+                    </div>
+                    <div vid="278">
+                        <h3 class="font-bold mb-4 text-terra" vid="279">법적 고지</h3>
+                        <ul class="space-y-3 text-cream/70 font-light" vid="280">
+                            <li vid="281"><a href="#" class="hover:text-cream transition-colors" vid="282">이용약관</a></li>
+                            <li vid="283"><a href="#" class="hover:text-cream transition-colors font-medium text-cream" vid="284">개인정보처리방침</a></li>
+                            <li vid="285"><a href="#" class="hover:text-cream transition-colors" vid="286">취소 및 환불 정책</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-cream/10 pt-6 flex flex-col justify-between items-center md:items-start gap-4 text-xs text-cream/50 font-light text-center md:text-left" vid="287">
+                <p vid="288">상호: 독립서점 오래된 서랍 | 대표: 김문장 | 사업자등록번호: 123-45-67890<br vid="289">주소: 서울특별시 종로구 서촌길 12, 1층 | 통신판매업신고: 2023-서울종로-1234</p>
+                <p vid="290">© 2024 Old Drawer Bookstore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    
+    <div id="request-modal" class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4" vid="291">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeRequestModal()" vid="292"></div>
+        <div class="bg-cream rounded-2xl w-full max-w-md p-6 md:p-8 relative z-10 shadow-2xl border border-terra/20 transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="request-modal-content" vid="293">
+            <button onclick="closeRequestModal()" class="absolute top-4 right-4 text-charcoal hover:text-terra transition-colors w-8 h-8 flex items-center justify-center bg-paper rounded-full" vid="294">
+                <i class="ph ph-x text-lg" vid="295"></i>
+            </button>
+            
+            <div class="mb-6" vid="296">
+                <p class="text-terra font-bold text-xs mb-1" vid="297">도서 신청</p>
+                <h3 class="text-xl md:text-2xl font-bold text-forest" vid="298">입고되지 않은 도서 신청하기</h3>
+                <p class="text-xs md:text-sm text-charcoal/60 mt-2 font-light break-keep" vid="299">작성해주신 내용을 꼼꼼히 확인 후, 입고 가능 여부와 일정을 안내해 드립니다.</p>
+            </div>
+
+            <form onsubmit="event.preventDefault(); alert('신청이 완료되었습니다.'); closeRequestModal();" class="space-y-4 font-sans text-sm" vid="300">
+                <div vid="301">
+                    <label class="block font-medium text-charcoal mb-1.5" vid="302">도서명 <span class="text-terra" vid="303">*</span></label>
+                    <input type="text" required="" class="w-full px-4 py-3 bg-paper border border-charcoal/10 rounded-lg focus:outline-none focus:border-terra transition-colors placeholder:text-charcoal/30" placeholder="정확한 도서명을 입력해주세요" vid="304">
+                </div>
+                <div vid="305">
+                    <label class="block font-medium text-charcoal mb-1.5" vid="306">저자 / 출판사</label>
+                    <input type="text" class="w-full px-4 py-3 bg-paper border border-charcoal/10 rounded-lg focus:outline-none focus:border-terra transition-colors placeholder:text-charcoal/30" placeholder="아는 경우 기입해주세요" vid="307">
+                </div>
+                <div vid="308">
+                    <label class="block font-medium text-charcoal mb-1.5" vid="309">신청 사유</label>
+                    <textarea rows="3" class="w-full px-4 py-3 bg-paper border border-charcoal/10 rounded-lg focus:outline-none focus:border-terra transition-colors resize-none placeholder:text-charcoal/30" placeholder="이 책을 추천하시는 이유나 찾으시는 이유를 자유롭게 적어주세요" vid="310"></textarea>
+                </div>
+                <div vid="311">
+                    <label class="block font-medium text-charcoal mb-1.5" vid="312">연락처 (휴대폰 번호) <span class="text-terra" vid="313">*</span></label>
+                    <input type="tel" required="" class="w-full px-4 py-3 bg-paper border border-charcoal/10 rounded-lg focus:outline-none focus:border-terra transition-colors placeholder:text-charcoal/30" placeholder="010-0000-0000" vid="314">
+                </div>
+                <button type="submit" class="w-full py-4 mt-2 bg-terra text-cream font-bold text-base rounded-lg hover:bg-[#8A5A00] transition-colors shadow-md" vid="315">
+                    신청서 제출하기
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script vid="316">
+        
+        let lastScrollY = window.scrollY;
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+            if(currentScrollY > 10) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+            lastScrollY = currentScrollY;
+        }, { passive: true });
+
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.add('translate-x-full');
+                document.body.style.overflow = '';
+            }
+        }
+
+        
+        function toggleHeart(btn) {
+            const icon = btn.querySelector('i');
+            if (icon.classList.contains('text-red-500')) {
+                icon.classList.remove('text-red-500');
+                btn.classList.add('text-charcoal/40');
+            } else {
+                icon.classList.add('text-red-500');
+                btn.classList.remove('text-charcoal/40');
+            }
+        }
+
+        
+        const modal = document.getElementById('request-modal');
+        const modalContent = document.getElementById('request-modal-content');
+        
+        function openRequestModal() {
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeRequestModal() {
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        
+        const genreDataPrefixes = [
+            "새로운 관점의", "고요한 밤의", "다정한 위로의", "날카로운 시선의", "따뜻한 커피와"
+        ];
+        
+        function switchTab(btn, genre) {
+            
+            document.querySelectorAll('.tab-btn').forEach(t => {
+                t.classList.remove('active', 'bg-forest', 'text-cream', 'border-forest', 'bg-terra', 'text-cream');
+                
+                
+                if(t.innerText === '이벤트 도서') {
+                    t.classList.add('border-terra/40', 'text-terra', 'bg-terra/5');
+                } else {
+                    t.classList.add('border-charcoal/20', 'text-charcoal/70');
+                }
+            });
+
+            
+            if(genre === '이벤트 도서') {
+                btn.classList.remove('border-terra/40', 'text-terra', 'bg-terra/5');
+                btn.classList.add('active', 'bg-terra', 'text-cream', 'border-terra');
+            } else {
+                btn.classList.remove('border-charcoal/20', 'text-charcoal/70');
+                btn.classList.add('active', 'bg-forest', 'text-cream', 'border-forest');
+            }
+
+            
+            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+            
+            const grid = document.getElementById('book-grid');
+            grid.classList.add('grid-hidden');
+            
+            setTimeout(() => {
+                
+                const titles = grid.querySelectorAll('.title-el');
+                const prices = grid.querySelectorAll('.price-el');
+                const randomPrefix = genreDataPrefixes[Math.floor(Math.random() * genreDataPrefixes.length)];
+                
+                titles.forEach(t => {
+                    
+                    let baseTitle = t.innerText.replace(/^(새로운 관점의|고요한 밤의|다정한 위로의|날카로운 시선의|따뜻한 커피와)\s/, '');
+                    if(genre !== '소설') {
+                        t.innerText = `${randomPrefix} ${baseTitle}`;
+                    } else {
+                        t.innerText = baseTitle;
+                    }
+                });
+
+                prices.forEach(p => {
+                    let priceBase = Math.floor(Math.random() * 10) + 10;
+                    let priceSub = (Math.floor(Math.random() * 2) === 0) ? '000' : '500';
+                    p.innerText = `${priceBase},${priceSub}원`;
+                });
+
+                
+                grid.classList.remove('grid-hidden');
+            }, 500); 
+        }
+    </script>
+
+</body></html>
