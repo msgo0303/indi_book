@@ -452,6 +452,13 @@
                     <p class="text-xs md:text-sm text-charcoal/70 font-light leading-relaxed" vid="195">완독 시간과 빈도를 추적하는 감성 통계 리포트</p>
                 </div>
             </div>
+
+            <!-- 베타 테스트 신청 CTA -->
+            <div class="text-center mt-12 pb-8">
+                <button onclick="openModal('modal-beta-guide')" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-forest text-cream rounded-full font-bold hover:bg-forest/90 transition-colors shadow-md w-full max-w-sm">
+                    베타 test 신청하기 <i class="ph ph-sparkle"></i>
+                </button>
+            </div>
         </div>
 
     </main>
@@ -577,6 +584,136 @@
             <div id="roadmap-icon" class="w-16 h-16 rounded-full bg-paper border-2 border-forest text-forest text-3xl mx-auto flex items-center justify-center mb-4" vid="287"></div>
             <h4 id="roadmap-title" class="text-xl font-bold text-forest mb-2" vid="288"></h4>
             <p id="roadmap-desc" class="text-sm text-charcoal/70 font-light leading-relaxed" vid="289"></p>
+        </div>
+    </div>
+
+    <!-- modal-beta-guide: 리브레 AI 베타 테스터 가이드 팝업 -->
+    <div id="modal-beta-guide" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeModal('modal-beta-guide')"></div>
+        <div class="modal-panel bg-cream rounded-3xl w-[calc(100%-2rem)] mx-4 max-w-lg relative z-10 shadow-2xl overflow-hidden border border-terra/20 flex flex-col max-h-[90vh]">
+            <button onclick="closeModal('modal-beta-guide')" class="absolute top-4 right-4 z-20 text-charcoal hover:text-terra w-10 h-10 flex items-center justify-center bg-white/50 backdrop-blur rounded-full transition-colors">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+            
+            <div class="h-48 relative shrink-0">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&amp;w=800&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover" alt="Beta testing">
+                <div class="absolute inset-0 bg-gradient-to-t from-cream to-transparent"></div>
+            </div>
+            
+            <div class="px-8 pb-8 pt-0 overflow-y-auto hide-scrollbar">
+                <p class="text-terra font-bold text-sm mb-1">리브레 AI 테스터</p>
+                <h3 class="text-2xl font-bold text-forest mb-4">리브레 AI 베타 테스터 모집</h3>
+                <p class="text-charcoal/80 text-sm leading-relaxed mb-6 font-light">
+                    독서 습관 분석 대시보드와 스마트 AI 아카이빙을 먼저 체험해보세요. 베타 테스트 참여를 통해 지능형 맞춤 독서 도우미를 함께 만들어갈 소중한 테스터를 모집합니다.
+                </p>
+                
+                <div class="bg-paper rounded-xl p-4 mb-6 border border-charcoal/5">
+                    <h5 class="font-bold text-forest mb-3 text-sm border-b border-charcoal/10 pb-2">진행 과정</h5>
+                    <ul class="space-y-3 text-sm text-charcoal/70">
+                        <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-terra"></i> 1단계: 테스터 지원서 양식 제출</li>
+                        <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-terra"></i> 2단계: 대상 선정 및 유선/안내 연락</li>
+                        <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-terra"></i> 3단계: 다운로드 링크 배포 및 정식 등록</li>
+                    </ul>
+                </div>
+
+                <p class="font-bold text-sm text-forest mb-3">베타 테스터 한마디</p>
+                <div class="flex overflow-x-auto snap-x hide-scrollbar gap-4 pb-4 -mx-2 px-2">
+                    <div class="snap-center shrink-0 w-64 bg-white p-4 rounded-xl border border-charcoal/5">
+                        <div class="flex text-terra text-sm mb-2"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
+                        <p class="text-xs text-charcoal/70 line-clamp-2">"평소 독서 요약을 노션에 수동으로 했는데, AI로 자동 수집되니 너무 편해요."</p>
+                    </div>
+                    <div class="snap-center shrink-0 w-64 bg-white p-4 rounded-xl border border-charcoal/5">
+                        <div class="flex text-terra text-sm mb-2"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
+                        <p class="text-xs text-charcoal/70 line-clamp-2">"도서 추적 리포트를 통해 책을 읽는 습관과 속도를 점검하는 데 큰 도움을 받았습니다."</p>
+                    </div>
+                </div>
+
+                <button onclick="closeModal('modal-beta-guide'); openModal('modal-beta-apply');" class="w-full bg-forest text-cream font-bold rounded-xl py-4 hover:bg-forest/90 transition-colors mt-2 shadow-card">
+                    신청하러 가기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal-beta-apply: 베타 테스터 지원 신청 팝업 -->
+    <div id="modal-beta-apply" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeModal('modal-beta-apply')"></div>
+        <div class="modal-panel bg-cream rounded-3xl w-[calc(100%-2rem)] mx-4 max-w-md relative z-10 shadow-2xl p-6 md:p-8 border border-terra/20 flex flex-col max-h-[85vh] overflow-y-auto hide-scrollbar">
+            <button type="button" onclick="closeModal('modal-beta-apply')" class="absolute top-4 right-4 text-charcoal hover:text-terra p-2 bg-cream rounded-full transition-colors z-20">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+            <div class="mb-6">
+                <span class="text-terra font-bold text-xs uppercase tracking-wider block">BETA TEST APPLICATION</span>
+                <h3 class="text-xl font-bold text-forest mt-1">리브레 AI 테스터 지원서</h3>
+                <p class="text-charcoal/60 text-xs mt-1 font-light">베타 테스터에 선발되시면 안내 메시지와 함께 정식 테스터로 등록됩니다.</p>
+            </div>
+            
+            <!-- 안내 사항 카드 -->
+            <div class="mb-6 bg-terra/5 border border-terra/10 rounded-2xl p-4 flex gap-3 items-start">
+                <i class="ph-fill ph-info text-terra text-lg shrink-0 mt-0.5"></i>
+                <div class="text-xs text-charcoal/80 leading-relaxed font-light">
+                    <p class="font-bold text-terra mb-1 text-[13px]">선발 및 등록 안내</p>
+                    지원자분들 중 정밀 분석 대상군을 선정하여 <strong>개별 유선 안내 및 알림 톡</strong>을 전달드립니다. 선정 완료 시 <strong>테스터로 정식 등록</strong>되며, 다운로드 링크 및 가이드가 함께 전송됩니다.
+                </div>
+            </div>
+            
+            <form onsubmit="event.preventDefault(); alert('베타 테스터 신청이 완료되었습니다! 선정 시 개별 안내와 함께 정식 등록됩니다.'); closeModal('modal-beta-apply');" class="flex flex-col gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-forest mb-1">이름</label>
+                    <input type="text" required placeholder="신청자 성함을 입력해주세요" class="w-full bg-paper border border-forest/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-terra transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-forest mb-1">연락처</label>
+                    <input type="tel" required placeholder="010-0000-0000" class="w-full bg-paper border border-forest/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-terra transition-colors">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-forest mb-1">직업</label>
+                    <input type="text" required placeholder="예: 대학생, 직장인, 개발자 등 직업을 기입해주세요" class="w-full bg-paper border border-forest/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-terra transition-colors">
+                </div>
+
+                <!-- 개인정보 수집/이용 동의 체크박스 -->
+                <div class="flex items-center justify-between mt-2">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" required class="w-4 h-4 rounded border-forest/20 text-forest focus:ring-forest focus:ring-offset-cream accent-forest">
+                        <span class="text-xs text-charcoal/70 font-light">개인정보 처리방침에 동의합니다. <span class="text-terra font-bold">(필수)</span></span>
+                    </label>
+                    <button type="button" onclick="openModal('modal-privacy')" class="text-xs text-forest/60 hover:text-terra underline transition-colors">자세히 보기</button>
+                </div>
+                
+                <button type="submit" class="w-full bg-forest text-cream rounded-xl py-4 font-bold mt-2 hover:bg-forest/90 transition-colors shadow-md">테스터 지원서 제출</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- modal-privacy: 개인정보 처리방침 팝업 -->
+    <div id="modal-privacy" class="modal fixed inset-0 z-[110] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeModal('modal-privacy')"></div>
+        <div class="modal-panel bg-cream rounded-3xl w-[calc(100%-2rem)] mx-4 max-w-md relative z-10 shadow-2xl p-6 md:p-8 border border-terra/20 flex flex-col max-h-[70vh]">
+            <button type="button" onclick="closeModal('modal-privacy')" class="absolute top-4 right-4 text-charcoal hover:text-terra p-2 bg-cream rounded-full transition-colors z-20">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+            <div class="mb-4">
+                <h3 class="text-lg font-bold text-forest">개인정보 처리방침</h3>
+                <p class="text-charcoal/60 text-xs mt-1 font-light">비밀 책방 서비스 이용을 위한 동의 사항입니다.</p>
+            </div>
+            
+            <div class="overflow-y-auto bg-paper border border-forest/10 rounded-xl p-4 text-[11px] text-charcoal/70 leading-relaxed font-light flex-1 min-h-[150px] max-h-[300px] hide-scrollbar">
+                <p class="font-bold mb-2 text-forest">1. 개인정보 수집 및 이용 목적</p>
+                <p class="mb-4">보내주신 개인정보는 북 큐레이션 구독 서비스 신청 의사 확인, 독서 성향 분석 키트 배송, 유선 안내 서비스 제공 및 맞춤 도서 추천 서비스 관리에만 한정하여 사용됩니다.</p>
+                
+                <p class="font-bold mb-2 text-forest">2. 수집하는 개인정보 항목</p>
+                <p class="mb-4">이름, 연락처, 배송지 주소, 설문 데이터(독서 성향 및 취향)</p>
+                
+                <p class="font-bold mb-2 text-forest">3. 개인정보 보유 및 이용 기간</p>
+                <p class="mb-4">서비스 신청 철회 시 혹은 서비스 종료 시까지 보유하며, 법적 의무가 없는 한 목적 달성 후 즉시 파기됩니다.</p>
+                
+                <p class="font-bold mb-2 text-forest">4. 동의 거부 권리</p>
+                <p>본 개인정보 수집 및 이용에 대해 동의를 거부하실 수 있으나, 거부 시 큐레이션 키트 발송 및 맞춤 추천 구독 서비스 이용이 제한됩니다.</p>
+            </div>
+            
+            <button type="button" onclick="closeModal('modal-privacy')" class="w-full bg-forest text-cream rounded-xl py-3 font-bold mt-4 hover:bg-forest/90 transition-colors shadow-md text-sm">확인</button>
         </div>
     </div>
 
