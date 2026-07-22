@@ -118,6 +118,17 @@
             pointer-events: auto;
         }
     </style>
+    <!-- Page Transition Effect -->
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out !important;
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+    </style>
+    <script src="transition.js" defer></script>
 </head>
 <body class="antialiased selection:bg-forest selection:text-cream" vid="12">
 

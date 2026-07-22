@@ -105,6 +105,17 @@
             -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
         }
     </style>
+    <!-- Page Transition Effect -->
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out !important;
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+    </style>
+    <script src="transition.js" defer></script>
 </head>
 <body class="selection:bg-forest selection:text-cream" vid="12">
 

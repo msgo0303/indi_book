@@ -83,6 +83,17 @@
             opacity: 1;
         }
     </style>
+    <!-- Page Transition Effect -->
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out !important;
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+    </style>
+    <script src="transition.js" defer></script>
 </head>
 <body class="bg-charcoal flex items-center justify-center min-h-screen relative overflow-hidden text-charcoal" vid="12">
 

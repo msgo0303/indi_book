@@ -174,8 +174,16 @@
         #mobile-overlay.open {
             opacity: 1;
             pointer-events: auto;
+        /* Page Transition Effect */
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out !important;
+        }
+        body.page-loaded {
+            opacity: 1;
         }
     </style>
+    <script src="transition.js" defer></script>
 </head>
 
 <body class="w-full h-full text-charcoal antialiased flex flex-col min-h-screen" vid="9">
