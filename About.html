@@ -1205,6 +1205,21 @@
             }, 300);
         }
 
+        // URL의 tab 파라미터를 감지하여 자동으로 탭 전환 및 스크롤
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            if (tabParam) {
+                setTimeout(() => {
+                    switchTab(tabParam);
+                    const targetTab = document.getElementById(tabParam);
+                    if (targetTab) {
+                        targetTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 400); // transition.js의 페이드 인(300ms) 완료 후 동작하도록 시간차 적용
+            }
+        });
+
         
         function openModal(modalId) {
             document.getElementById(modalId).classList.add('active');
