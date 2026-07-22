@@ -398,7 +398,7 @@
 
                 <div class="group cursor-pointer fade-up-enter fade-up-delay-4 flex flex-col h-full fade-up-enter-active" vid="119">
                     <div class="relative aspect-[3/4] rounded-lg overflow-hidden shadow-cozy mb-4 bg-cream-dark" vid="120">
-                        <img src="https://images.unsplash.com/photo-1629196914948-43d964f4340a?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Book 4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" vid="121">
+                        <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Book 4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" vid="121">
                         <button class="absolute bottom-3 right-3 w-10 h-10 bg-cream rounded-full shadow-md flex items-center justify-center text-charcoal hover:bg-forest hover:text-cream transition-colors z-10 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300" vid="122">
                             <i class="ph ph-shopping-cart-simple text-lg" vid="123"></i>
                         </button>
@@ -449,7 +449,7 @@
 
                 <div class="group cursor-pointer fade-up-enter fade-up-delay-3 flex flex-col h-full fade-up-enter-active" vid="152">
                     <div class="relative aspect-[3/4] rounded-lg overflow-hidden shadow-cozy mb-4 bg-cream-dark" vid="153">
-                        <img src="https://images.unsplash.com/photo-1511108690759-009324a5033d?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Book 7" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" vid="154">
+                        <img src="https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Book 7" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" vid="154">
                         <button class="absolute bottom-3 right-3 w-10 h-10 bg-cream rounded-full shadow-md flex items-center justify-center text-charcoal hover:bg-forest hover:text-cream transition-colors z-10 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300" vid="155">
                             <i class="ph ph-shopping-cart-simple text-lg" vid="156"></i>
                         </button>
@@ -615,21 +615,23 @@
                                 </svg>
                                 당신을 위한 맞춤 도서 2권
                             </h5>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" vid="273">
-                                <div class="flex gap-4 items-center bg-ivory p-3 rounded-lg border border-charcoal/5" vid="274">
+                            <div id="persona-books-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4" vid="273">
+                                <div class="flex gap-4 items-center bg-ivory p-3 rounded-lg border border-charcoal/5 cursor-pointer hover:shadow-sm transition-all duration-300 persona-card" vid="274">
                                     <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&amp;fit=crop&amp;q=80&amp;w=200" alt="Rec Book 1" class="w-16 h-20 object-cover rounded shadow-sm" vid="275">
                                     <div vid="276">
-                                        <p class="font-bold text-sm line-clamp-1" vid="277">당신이 남긴 문장들</p>
-                                        <p class="text-xs text-charcoal/60 mb-1" vid="278">김민철</p>
-                                        <a href="#" class="text-xs text-terracotta font-medium hover:underline" vid="279">자세히 보기</a>
+                                        <p class="font-bold text-sm line-clamp-1 text-charcoal" vid="277">당신이 남긴 문장들</p>
+                                        <p class="text-xs text-charcoal/60" vid="278">김민철</p>
+                                        <p class="text-xs font-bold text-forest mt-0.5 persona-price" vid="278-price">13,500원</p>
+                                        <span class="text-[11px] text-terracotta font-medium hover:underline block mt-1" vid="279">자세히 보기</span>
                                     </div>
                                 </div>
-                                <div class="flex gap-4 items-center bg-ivory p-3 rounded-lg border border-charcoal/5" vid="280">
+                                <div class="flex gap-4 items-center bg-ivory p-3 rounded-lg border border-charcoal/5 cursor-pointer hover:shadow-sm transition-all duration-300 persona-card" vid="280">
                                     <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&amp;fit=crop&amp;q=80&amp;w=200" alt="Rec Book 2" class="w-16 h-20 object-cover rounded shadow-sm" vid="281">
                                     <div vid="282">
-                                        <p class="font-bold text-sm line-clamp-1" vid="283">밤을 걷는 문장들</p>
-                                        <p class="text-xs text-charcoal/60 mb-1" vid="284">무라카미 하루키</p>
-                                        <a href="#" class="text-xs text-terracotta font-medium hover:underline" vid="285">자세히 보기</a>
+                                        <p class="font-bold text-sm line-clamp-1 text-charcoal" vid="283">밤을 걷는 문장들</p>
+                                        <p class="text-xs text-charcoal/60" vid="284">무라카미 하루키</p>
+                                        <p class="text-xs font-bold text-forest mt-0.5 persona-price" vid="284-price">14,200원</p>
+                                        <span class="text-[11px] text-terracotta font-medium hover:underline block mt-1" vid="285">자세히 보기</span>
                                     </div>
                                 </div>
                             </div>
@@ -661,159 +663,267 @@
             <div id="bookshelf-track" class="flex overflow-x-auto gap-4 md:gap-6 scrollbar-hide py-6 pb-10 snap-x snap-mandatory scroll-smooth items-center px-[calc(50vw-130px)]" vid="293">
                 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="294">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="294">
                     <div class="flex items-center gap-2 mb-3" vid="295">
-                        <div class="w-8 h-8 rounded-full bg-[#1B4332] text-white flex items-center justify-center text-xs font-bold" vid="296">A</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="297">@autumn_reader</span>
+                        <div class="w-6 h-6 rounded-full bg-[#1B4332] text-cream flex items-center justify-center text-[10px] font-bold" vid="296">A</div>
+                        <span class="text-xs font-bold text-charcoal" vid="297">@autumn_reader</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="298">
-                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.3]" alt="Used Book 1" vid="299">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="298">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="298a"></div>
+                        <span class="absolute top-2 left-2 bg-[#1B4332] text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="298b">최상 (A급)</span>
+                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.1]" alt="Used Book 1" vid="299">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="300">골목길 산책자 (초판)</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="301">"2년 전 파리 여행에서 함께했던 책입니다. 귀퉁이가 조금 닳았지만 여전히 좋은 문장들이 가득해요."</p>
+                    <div class="flex flex-col pt-1" vid="300-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="300">골목길 산책자 (초판)</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="300-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="300-old">16,000원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="300-new">11,200원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="300-pct">30%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="301">"2년 전 파리 여행에서 함께했던 책입니다. 귀퉁이가 조금 닳았지만 여전히 좋은 문장들이 가득해요."</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="302">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="302">
                     <div class="flex items-center gap-2 mb-3" vid="303">
-                        <div class="w-8 h-8 rounded-full bg-[#D96B43] text-white flex items-center justify-center text-xs font-bold" vid="304">B</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="305">@book_lover_99</span>
+                        <div class="w-6 h-6 rounded-full bg-[#D96B43] text-cream flex items-center justify-center text-[10px] font-bold" vid="304">B</div>
+                        <span class="text-xs font-bold text-charcoal" vid="305">@book_lover_99</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="306">
-                        <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.4]" alt="Used Book 2" vid="307">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="306">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="306a"></div>
+                        <span class="absolute top-2 left-2 bg-[#D96B43] text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="306b">우수 (B급)</span>
+                        <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.2]" alt="Used Book 2" vid="307">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="308">당신을 닮은 고요한 정원</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="309">"우울할 때마다 꺼내 읽었던 책. 34페이지에 제가 남긴 짧은 메모가 누군가에게 위로가 되길 바랍니다."</p>
+                    <div class="flex flex-col pt-1" vid="308-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="308">당신을 닮은 고요한 정원</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="308-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="308-old">14,000원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="308-new">8,400원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="308-pct">40%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="309">"우울할 때마다 꺼내 읽었던 책. 34페이지에 제가 남긴 짧은 메모가 누군가에게 위로가 되길 바랍니다."</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="310">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="310">
                     <div class="flex items-center gap-2 mb-3" vid="311">
-                        <div class="w-8 h-8 rounded-full bg-[#2B2A29] text-white flex items-center justify-center text-xs font-bold" vid="312">C</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="313">@coffee_n_books</span>
+                        <div class="w-6 h-6 rounded-full bg-[#2B2A29] text-cream flex items-center justify-center text-[10px] font-bold" vid="312">C</div>
+                        <span class="text-xs font-bold text-charcoal" vid="313">@coffee_n_books</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="314">
-                        <img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.2]" alt="Used Book 3" vid="315">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="314">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="314a"></div>
+                        <span class="absolute top-2 left-2 bg-[#D96B43] text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="314b">우수 (B급)</span>
+                        <img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.1]" alt="Used Book 3" vid="315">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="316">마음이 흐르는 대로</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="317">"커피 얼룩이 아주 살짝 묻어있어요. 그래서 더 정감이 가는 저만의 애착 책이었습니다. 이제 보내주려구요."</p>
+                    <div class="flex flex-col pt-1" vid="316-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="316">마음이 흐르는 대로</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="316-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="316-old">15,000원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="316-new">9,000원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="316-pct">40%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="317">"커피 얼룩이 아주 살짝 묻어있어요. 그래서 더 정감이 가는 저만의 애착 책이었습니다. 이제 보내주려구요."</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="318">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="318">
                     <div class="flex items-center gap-2 mb-3" vid="319">
-                        <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold" vid="320">D</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="321">@daily_record</span>
+                        <div class="w-6 h-6 rounded-full bg-blue-600 text-cream flex items-center justify-center text-[10px] font-bold" vid="320">D</div>
+                        <span class="text-xs font-bold text-charcoal" vid="321">@daily_record</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="322">
-                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.5]" alt="Used Book 4" vid="323">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="322">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="322a"></div>
+                        <span class="absolute top-2 left-2 bg-[#1B4332] text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="322b">최상 (A급)</span>
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.2]" alt="Used Book 4" vid="323">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="324">나의 작은 별에게</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="325">"아이에게 읽어주던 동화책입니다. 겉표지는 바랬지만 속지는 아주 깨끗해요."</p>
+                    <div class="flex flex-col pt-1" vid="324-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="324">나의 작은 별에게</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="324-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="324-old">13,000원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="324-new">9,100원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="324-pct">30%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="325">"아이에게 읽어주던 동화책입니다. 겉표지는 바랬지만 속지는 아주 깨끗해요."</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="326">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="326">
                     <div class="flex items-center gap-2 mb-3" vid="327">
-                        <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold" vid="328">E</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="329">@evening_sky</span>
+                        <div class="w-6 h-6 rounded-full bg-purple-600 text-cream flex items-center justify-center text-[10px] font-bold" vid="328">E</div>
+                        <span class="text-xs font-bold text-charcoal" vid="329">@evening_sky</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="330">
-                        <img src="https://images.unsplash.com/photo-1455390582262-044cdead27d8?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.3]" alt="Used Book 5" vid="331">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="330">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="330a"></div>
+                        <span class="absolute top-2 left-2 bg-[#D96B43] text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="330b">우수 (B급)</span>
+                        <img src="https://images.unsplash.com/photo-1531988042231-d39a9cc12a9a?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.1]" alt="Used Book 5" vid="331">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="332">시가 되는 일상</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="333">"좋아하는 시구절에 노란색 형광펜으로 밑줄을 쳐두었습니다. 그 문장들이 새 주인을 기쁘게 했으면 해요."</p>
+                    <div class="flex flex-col pt-1" vid="332-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="332">시가 되는 일상</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="332-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="332-old">12,000원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="332-new">7,200원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="332-pct">40%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="333">"좋아하는 시구절에 노란색 형광펜으로 밑줄을 쳐두었습니다. 그 문장들이 새 주인을 기쁘게 했으면 해요."</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="334">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="334">
                     <div class="flex items-center gap-2 mb-3" vid="335">
-                        <div class="w-8 h-8 rounded-full bg-yellow-600 text-white flex items-center justify-center text-xs font-bold" vid="336">F</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="337">@film_maker</span>
+                        <div class="w-6 h-6 rounded-full bg-yellow-600 text-cream flex items-center justify-center text-[10px] font-bold" vid="336">F</div>
+                        <span class="text-xs font-bold text-charcoal" vid="337">@film_maker</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="338">
-                        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.6]" alt="Used Book 6" vid="339">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="338">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="338a"></div>
+                        <span class="absolute top-2 left-2 bg-[#2B2A29]/80 text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="338b">보통 (C급)</span>
+                        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.3]" alt="Used Book 6" vid="339">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="340">필름과 문장</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="341">"절판된 희귀본입니다. 상태는 보통이지만 내용의 가치는 충분합니다."</p>
+                    <div class="flex flex-col pt-1" vid="340-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="340">필름과 문장</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="340-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="340-old">18,000원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="340-new">9,000원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="340-pct">50%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="341">"절판된 희귀본입니다. 상태는 보통이지만 내용의 가치는 충분합니다."</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="342">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="342">
                     <div class="flex items-center gap-2 mb-3" vid="343">
-                        <div class="w-8 h-8 rounded-full bg-teal-600 text-white flex items-center justify-center text-xs font-bold" vid="344">G</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="345">@green_day</span>
+                        <div class="w-6 h-6 rounded-full bg-teal-600 text-cream flex items-center justify-center text-[10px] font-bold" vid="344">G</div>
+                        <span class="text-xs font-bold text-charcoal" vid="345">@green_day</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="346">
-                        <img src="https://images.unsplash.com/photo-1518698186259-246e7f1dfb00?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.3]" alt="Used Book 7" vid="347">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="346">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="346a"></div>
+                        <span class="absolute top-2 left-2 bg-[#D96B43] text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="346b">우수 (B급)</span>
+                        <img src="https://images.unsplash.com/photo-1513001900722-370f803f498d?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.1]" alt="Used Book 7" vid="347">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="348">여름의 맛</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="349">"지난 여름 휴가때 가방에 넣어다니며 읽어 약간 휘었지만, 여름의 향기가 배어있습니다."</p>
+                    <div class="flex flex-col pt-1" vid="348-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="348">여름의 맛</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="348-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="348-old">14,000원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="348-new">8,400원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="348-pct">40%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="349">"지난 여름 휴가때 가방에 넣어다니며 읽어 약간 휘었지만, 여름의 향기가 배어있습니다."</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="350">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="350">
                     <div class="flex items-center gap-2 mb-3" vid="351">
-                        <div class="w-8 h-8 rounded-full bg-pink-600 text-white flex items-center justify-center text-xs font-bold" vid="352">H</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="353">@hello_stranger</span>
+                        <div class="w-6 h-6 rounded-full bg-pink-600 text-cream flex items-center justify-center text-[10px] font-bold" vid="352">H</div>
+                        <span class="text-xs font-bold text-charcoal" vid="353">@hello_stranger</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="354">
-                        <img src="https://images.unsplash.com/photo-1589998059171-989d887dda6e?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.2]" alt="Used Book 8" vid="355">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="354">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="354a"></div>
+                        <span class="absolute top-2 left-2 bg-[#1B4332] text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="354b">최상 (A급)</span>
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.1]" alt="Used Book 8" vid="355">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="356">모르는 사람에게 쓰는 편지</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="357">"책 사이에 제가 직접 압화한 네잎클로버 코팅지가 들어있습니다. 행운을 빕니다!"</p>
+                    <div class="flex flex-col pt-1" vid="356-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="356">모르는 사람에게 쓰는 편지</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="356-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="356-old">15,000원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="356-new">10,500원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="356-pct">30%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="357">"책 사이에 제가 직접 압화한 네잎클로버 코팅지가 들어있습니다. 행운을 빕니다!"</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="358">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="358">
                     <div class="flex items-center gap-2 mb-3" vid="359">
-                        <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold" vid="360">I</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="361">@into_the_unknown</span>
+                        <div class="w-6 h-6 rounded-full bg-indigo-600 text-cream flex items-center justify-center text-[10px] font-bold" vid="360">I</div>
+                        <span class="text-xs font-bold text-charcoal" vid="361">@into_the_unknown</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="362">
-                        <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.4]" alt="Used Book 9" vid="363">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="362">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="362a"></div>
+                        <span class="absolute top-2 left-2 bg-[#2B2A29]/80 text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="362b">보통 (C급)</span>
+                        <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.2]" alt="Used Book 9" vid="363">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="364">어느 날 문득</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="365">"표지가 조금 찢어졌지만 테이프로 예쁘게 붙여두었습니다. 사연 있는 책을 좋아하는 분께."</p>
+                    <div class="flex flex-col pt-1" vid="364-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="364">어느 날 문득</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="364-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="364-old">13,500원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="364-new">6,750원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="364-pct">50%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="365">"표지가 조금 찢어졌지만 테이프로 예쁘게 붙여두었습니다. 사연 있는 책을 좋아하는 분께."</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="366">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="366">
                     <div class="flex items-center gap-2 mb-3" vid="367">
-                        <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center text-xs font-bold" vid="368">J</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="369">@just_read</span>
+                        <div class="w-6 h-6 rounded-full bg-red-600 text-cream flex items-center justify-center text-[10px] font-bold" vid="368">J</div>
+                        <span class="text-xs font-bold text-charcoal" vid="369">@just_read</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="370">
-                        <img src="https://images.unsplash.com/photo-1618666012174-83b441c0bc76?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.3]" alt="Used Book 10" vid="371">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="370">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="370a"></div>
+                        <span class="absolute top-2 left-2 bg-[#1B4332] text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="370b">최상 (A급)</span>
+                        <img src="https://images.unsplash.com/photo-1618666012174-83b441c0bc76?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.1]" alt="Used Book 10" vid="371">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="372">단순하게 사는 법</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="373">"미니멀라이프를 실천하며 책장 정리를 위해 내놓습니다. 거의 새 책이에요."</p>
+                    <div class="flex flex-col pt-1" vid="372-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="372">단순하게 사는 법</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="372-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="372-old">16,000원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="372-new">11,200원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="372-pct">30%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="373">"미니멀라이프를 실천하며 책장 정리를 위해 내놓습니다. 거의 새 책이에요."</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="374">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="374">
                     <div class="flex items-center gap-2 mb-3" vid="375">
-                        <div class="w-8 h-8 rounded-full bg-[#1B4332] text-white flex items-center justify-center text-xs font-bold" vid="376">K</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="377">@keep_going</span>
+                        <div class="w-6 h-6 rounded-full bg-[#1B4332] text-cream flex items-center justify-center text-[10px] font-bold" vid="376">K</div>
+                        <span class="text-xs font-bold text-charcoal" vid="377">@keep_going</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="378">
-                        <img src="https://images.unsplash.com/photo-1511108690759-009324a50331?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.5]" alt="Used Book 11" vid="379">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="378">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="378a"></div>
+                        <span class="absolute top-2 left-2 bg-[#D96B43] text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="378b">우수 (B급)</span>
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.2]" alt="Used Book 11" vid="379">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="380">오늘도 수고했어</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="381">"힘들 때마다 저를 다독여준 책입니다. 다음 분에게도 힘이 되기를."</p>
+                    <div class="flex flex-col pt-1" vid="380-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="380">오늘도 수고했어</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="380-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="380-old">14,500원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="380-new">8,700원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="380-pct">40%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="381">"힘들 때마다 저를 다독여준 책입니다. 다음 분에게도 힘이 되기를."</p>
+                    </div>
                 </div>
 
                 
-                <div class="bookshelf-card min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="382">
+                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0" vid="382">
                     <div class="flex items-center gap-2 mb-3" vid="383">
-                        <div class="w-8 h-8 rounded-full bg-[#D96B43] text-white flex items-center justify-center text-xs font-bold" vid="384">L</div>
-                        <span class="text-xs font-bold text-[#2B2A29]" vid="385">@life_is_journey</span>
+                        <div class="w-6 h-6 rounded-full bg-[#D96B43] text-cream flex items-center justify-center text-[10px] font-bold" vid="384">L</div>
+                        <span class="text-xs font-bold text-charcoal" vid="385">@life_is_journey</span>
                     </div>
-                    <div class="w-full aspect-[4/3] bg-gray-200 mb-3 rounded-lg overflow-hidden vintage-edge" vid="386">
-                        <img src="https://images.unsplash.com/photo-1495640388908-05fa85288e61?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover sepia-[0.2]" alt="Used Book 12" vid="387">
+                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer" vid="386">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply" vid="386a"></div>
+                        <span class="absolute top-2 left-2 bg-[#D96B43] text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20" vid="386b">우수 (B급)</span>
+                        <img src="https://images.unsplash.com/photo-1495640388908-05fa85288e61?auto=format&amp;fit=crop&amp;q=80&amp;w=400&amp;fm=webp" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.1]" alt="Used Book 12" vid="387">
                     </div>
-                    <h4 class="font-bold text-[#2B2A29] text-sm mb-1 truncate" vid="388">지도 없는 여행</h4>
-                    <p class="text-[#2B2A29]/70 text-xs line-clamp-2 leading-relaxed" vid="389">"오래된 책 특유의 종이 냄새가 매력적입니다. 여행지에서 읽기 좋아요."</p>
+                    <div class="flex flex-col pt-1" vid="388-body">
+                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate" vid="388">지도 없는 여행</h4>
+                        <div class="flex items-center gap-1.5 mb-2" vid="388-price">
+                            <span class="line-through text-[11px] text-charcoal/40" vid="388-old">16,500원</span>
+                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="388-new">9,900원</span>
+                            <span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded" vid="388-pct">40%↓</span>
+                        </div>
+                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic" vid="389">"오래된 책 특유의 종이 냄새가 매력적입니다. 여행지에서 읽기 좋아요."</p>
+                    </div>
                 </div>
 
             </div>
@@ -827,16 +937,17 @@
                 <p class="text-charcoal/60 text-base" vid="346">책방지기의 시선이 머문 곳</p>
             </div>
 
-            <div class="flex flex-col md:grid md:grid-cols-2 gap-12 md:gap-8" vid="347">
+            <div id="editor-picks-grid" class="flex flex-col md:grid md:grid-cols-2 gap-12 md:gap-8" vid="347">
                 
                 <div class="flex flex-col gap-6 reveal-item opacity-0 translate-y-10 transition-all duration-700 ease-out" vid="348">
-                    <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-paper" vid="349">
+                    <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-paper cursor-pointer" vid="349">
                         <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Editor Pick 1" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" vid="350">
                     </div>
                     <div vid="351">
                         <span class="text-xs font-bold text-terra mb-2 block" vid="352">문학동네</span>
-                        <h4 class="font-serif text-2xl font-bold text-forest mb-1" vid="353">여름을 삼킨 책</h4>
-                        <p class="text-charcoal/70 text-sm mb-6" vid="354">김여름 지음</p>
+                        <h4 class="font-serif text-2xl font-bold text-forest mb-1 hover:text-terra transition-colors cursor-pointer" vid="353">여름을 삼킨 책</h4>
+                        <p class="text-charcoal/70 text-sm mb-2" vid="354">김여름 지음</p>
+                        <p class="font-sans font-bold text-forest text-base mb-4 editor-price" vid="354-price">15,000원</p>
                         <div class="p-6 bg-paper rounded-2xl border border-forest/10 relative" vid="355">
                             <div class="absolute -top-3 left-6 bg-cream px-2 text-xs font-bold text-forest border border-forest/20 rounded-full" vid="356">책방지기가 이 책을 곁에 두는 이유</div>
                             <p class="text-charcoal leading-relaxed text-sm" vid="357">"습기 찬 여름날, 선풍기 앞에서 읽기 좋은 청량한 단편집입니다. 작가 특유의 섬세한 묘사가 돋보여, 읽는 내내 시원한 레몬에이드를 마시는 기분이었어요. 계절이 바뀌기 전에 꼭 만나보시길 권합니다."</p>
@@ -846,13 +957,14 @@
 
                 
                 <div class="flex flex-col gap-6 reveal-item opacity-0 translate-y-10 transition-all duration-700 ease-out delay-150" vid="358">
-                    <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-paper" vid="359">
+                    <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-paper cursor-pointer" vid="359">
                         <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Editor Pick 2" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" vid="360">
                     </div>
                     <div vid="361">
                         <span class="text-xs font-bold text-terra mb-2 block" vid="362">창비</span>
-                        <h4 class="font-serif text-2xl font-bold text-forest mb-1" vid="363">고요한 시간들</h4>
-                        <p class="text-charcoal/70 text-sm mb-6" vid="364">박고요 지음</p>
+                        <h4 class="font-serif text-2xl font-bold text-forest mb-1 hover:text-terra transition-colors cursor-pointer" vid="363">고요한 시간들</h4>
+                        <p class="text-charcoal/70 text-sm mb-2" vid="364">박고요 지음</p>
+                        <p class="font-sans font-bold text-forest text-base mb-4 editor-price" vid="364-price">14,000원</p>
                         <div class="p-6 bg-paper rounded-2xl border border-forest/10 relative" vid="365">
                             <div class="absolute -top-3 left-6 bg-cream px-2 text-xs font-bold text-forest border border-forest/20 rounded-full" vid="366">책방지기가 이 책을 곁에 두는 이유</div>
                             <p class="text-charcoal leading-relaxed text-sm" vid="367">"현대 사회의 소음 속에서 나만의 고요함을 찾는 방법에 대한 철학적 에세이. 자기 전 스탠드 불빛 아래서 한 챕터씩 아껴 읽고 싶은 마음이 드는 책입니다. 마음이 소란스러울 때마다 꺼내보는 구급상자 같아요."</p>
@@ -862,13 +974,14 @@
 
                 
                 <div class="flex flex-col gap-6 reveal-item opacity-0 translate-y-10 transition-all duration-700 ease-out" vid="368">
-                    <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-paper" vid="369">
+                    <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-paper cursor-pointer" vid="369">
                         <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Editor Pick 3" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" vid="370">
                     </div>
                     <div vid="371">
                         <span class="text-xs font-bold text-terra mb-2 block" vid="372">민음사</span>
-                        <h4 class="font-serif text-2xl font-bold text-forest mb-1" vid="373">먼 곳의 엽서</h4>
-                        <p class="text-charcoal/70 text-sm mb-6" vid="374">이여행 지음</p>
+                        <h4 class="font-serif text-2xl font-bold text-forest mb-1 hover:text-terra transition-colors cursor-pointer" vid="373">먼 곳의 엽서</h4>
+                        <p class="text-charcoal/70 text-sm mb-2" vid="374">이여행 지음</p>
+                        <p class="font-sans font-bold text-forest text-base mb-4 editor-price" vid="374-price">15,500원</p>
                         <div class="p-6 bg-paper rounded-2xl border border-forest/10 relative" vid="375">
                             <div class="absolute -top-3 left-6 bg-cream px-2 text-xs font-bold text-forest border border-forest/20 rounded-full" vid="376">책방지기가 이 책을 곁에 두는 이유</div>
                             <p class="text-charcoal leading-relaxed text-sm" vid="377">"이름 모를 낯선 도시에서 온 편지들을 엮은 듯한 구성이 흥미롭습니다. 팬데믹으로 떠나지 못했던 여행의 갈증을 활자로 완벽하게 채워주는 작품. 이 책과 함께라면 방 안에서도 세계 끝으로 떠날 수 있습니다."</p>
@@ -878,13 +991,14 @@
 
                 
                 <div class="flex flex-col gap-6 reveal-item opacity-0 translate-y-10 transition-all duration-700 ease-out delay-150" vid="378">
-                    <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-paper" vid="379">
-                        <img src="https://images.unsplash.com/photo-1589998059171-989d887dda64?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Editor Pick 4" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" vid="380">
+                    <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-paper cursor-pointer" vid="379">
+                        <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Editor Pick 4" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" vid="380">
                     </div>
                     <div vid="381">
                         <span class="text-xs font-bold text-terra mb-2 block" vid="382">을유문화사</span>
-                        <h4 class="font-serif text-2xl font-bold text-forest mb-1" vid="383">나무의 마음</h4>
-                        <p class="text-charcoal/70 text-sm mb-6" vid="384">정나무 지음</p>
+                        <h4 class="font-serif text-2xl font-bold text-forest mb-1 hover:text-terra transition-colors cursor-pointer" vid="383">나무의 마음</h4>
+                        <p class="text-charcoal/70 text-sm mb-2" vid="384">정나무 지음</p>
+                        <p class="font-sans font-bold text-forest text-base mb-4 editor-price" vid="384-price">16,800원</p>
                         <div class="p-6 bg-paper rounded-2xl border border-forest/10 relative" vid="385">
                             <div class="absolute -top-3 left-6 bg-cream px-2 text-xs font-bold text-forest border border-forest/20 rounded-full" vid="386">책방지기가 이 책을 곁에 두는 이유</div>
                             <p class="text-charcoal leading-relaxed text-sm" vid="387">"수십 년간 숲을 가꾼 노(老) 임업인의 단단하고 따뜻한 회고록. 자연의 섭리를 통해 우리 삶의 태도를 되돌아보게 만드는 힘이 있습니다. 거창한 위로보다 묵묵한 나무 같은 응원이 필요할 때 꼭 추천하고 싶어요."</p>
@@ -978,7 +1092,7 @@
                         <p class="text-charcoal text-sm leading-relaxed mb-4" vid="458">"책갈피 사은품 너무 예뻐요. 선물용으로 샀는데 포장도 완벽합니다."</p>
                     </div>
                     <div class="flex items-center gap-3 border-t border-forest/5 pt-3 mt-auto" vid="459">
-                        <img src="https://images.unsplash.com/photo-1629196914275-373a002ebac6?auto=format&amp;fit=crop&amp;q=80&amp;w=100" class="w-10 h-10 object-cover rounded shadow-sm" alt="Thumbnail" vid="460">
+                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&amp;fit=crop&amp;q=80&amp;w=100" class="w-10 h-10 object-cover rounded shadow-sm" alt="Thumbnail" vid="460">
                         <div class="text-xs" vid="461">
                             <span class="block font-bold text-forest truncate max-w-[150px]" vid="462">밝은 밤</span>
                             <span class="text-charcoal/50" vid="463">구매자 star_light</span>
@@ -1719,6 +1833,162 @@
                 
                 track.scrollLeft = startScrollLeft - walk;
             }, { passive: false });
+            
+            // bookshelf-track 클릭 이벤트 위임 - 각 중고도서 상세페이지(book.html)로 이동
+            track.addEventListener('click', (e) => {
+                // 드래그/스와이프 중이었던 경우 클릭 동작 방지 (미스클릭 방지)
+                if (Math.abs(walk) > 10) return;
+                
+                const card = e.target.closest('.bookshelf-card');
+                if (!card) return;
+                
+                // 표지 이미지 영역 또는 타이틀 영역 클릭 시 작동
+                const coverClickable = e.target.closest('.cursor-pointer');
+                const titleClickable = e.target.closest('h4');
+                
+                if (coverClickable || titleClickable) {
+                    const imgEl = card.querySelector('img');
+                    const titleEl = card.querySelector('h4');
+                    // 판매가격은 new price element에서 추출
+                    const priceEl = card.querySelector('[vid$="-new"]');
+                    const reviewerEl = card.querySelector('span.text-xs.font-bold, span.text-xs');
+                    
+                    if (imgEl && titleEl) {
+                        const title = titleEl.textContent.trim() + " (중고)";
+                        const imgSrc = imgEl.src;
+                        const priceText = priceEl ? priceEl.textContent : '10,000';
+                        const price = priceText.replace(/[^0-9,]/g, '').trim();
+                        
+                        const reviewer = reviewerEl ? reviewerEl.textContent.trim() : '@anonymous';
+                        const subtitle = `${reviewer}님이 남기신 사연이 담긴 책`;
+                        const author = '오래된 서랍 중고 서고';
+                        
+                        const params = new URLSearchParams();
+                        params.set('title', title);
+                        params.set('image', imgSrc);
+                        params.set('price', price);
+                        params.set('author', author);
+                        params.set('subtitle', subtitle);
+                        params.set('badge', '중고 도서');
+                        
+                        window.location.href = 'book.html?' + params.toString();
+                    }
+                }
+            });
+            
+            // best-seller-grid 클릭 이벤트 위임 - 각 베스트셀러 도서 상세페이지(book.html)로 이동
+            const bestsellerGrid = document.getElementById('best-seller-grid');
+            if (bestsellerGrid) {
+                bestsellerGrid.addEventListener('click', (e) => {
+                    // 장바구니 버튼 클릭 시는 페이지 이동에서 제외
+                    if (e.target.closest('button')) return;
+                    
+                    const card = e.target.closest('.group');
+                    if (!card) return;
+                    
+                    const imgEl = card.querySelector('img');
+                    const titleEl = card.querySelector('h3');
+                    const priceEl = card.querySelector('.font-bold');
+                    const authorEl = card.querySelector('p.text-sm');
+                    const categoryEl = card.querySelector('p.text-xs');
+                    
+                    if (imgEl && titleEl) {
+                        const title = titleEl.textContent.trim();
+                        const imgSrc = imgEl.src;
+                        const priceText = priceEl ? priceEl.textContent : '15,000';
+                        const price = priceText.replace(/[^0-9,]/g, '').trim();
+                        
+                        const author = authorEl ? authorEl.textContent.trim() : '책방지기 추천';
+                        const category = categoryEl ? categoryEl.textContent.trim() : '도서';
+                        const subtitle = `이달의 베스트셀러 - ${category}`;
+                        
+                        const params = new URLSearchParams();
+                        params.set('title', title);
+                        params.set('image', imgSrc);
+                        params.set('price', price);
+                        params.set('author', author);
+                        params.set('subtitle', subtitle);
+                        params.set('badge', '7월 베스트 셀러');
+                        
+                        window.location.href = 'book.html?' + params.toString();
+                    }
+                });
+            }
+            
+            // editor-picks-grid 클릭 이벤트 위임 - 각 추천 도서 상세페이지(book.html)로 이동
+            const editorPicksGrid = document.getElementById('editor-picks-grid');
+            if (editorPicksGrid) {
+                editorPicksGrid.addEventListener('click', (e) => {
+                    const card = e.target.closest('.reveal-item');
+                    if (!card) return;
+                    
+                    const coverClickable = e.target.closest('.cursor-pointer');
+                    const titleClickable = e.target.closest('h4');
+                    
+                    if (coverClickable || titleClickable) {
+                        const imgEl = card.querySelector('img');
+                        const titleEl = card.querySelector('h4');
+                        const priceEl = card.querySelector('.editor-price');
+                        const authorEl = card.querySelector('p.text-sm');
+                        const publisherEl = card.querySelector('span.text-xs.font-bold');
+                        
+                        if (imgEl && titleEl) {
+                            const title = titleEl.textContent.trim();
+                            const imgSrc = imgEl.src;
+                            const priceText = priceEl ? priceEl.textContent : '15,000';
+                            const price = priceText.replace(/[^0-9,]/g, '').trim();
+                            
+                            const author = authorEl ? authorEl.textContent.trim() : '책방지기 추천';
+                            const publisher = publisherEl ? publisherEl.textContent.trim() : '출판사';
+                            const subtitle = `${publisher} - 책방지기가 엄선한 추천 도서`;
+                            
+                            const params = new URLSearchParams();
+                            params.set('title', title);
+                            params.set('image', imgSrc);
+                            params.set('price', price);
+                            params.set('author', author);
+                            params.set('subtitle', subtitle);
+                            params.set('badge', "Editor's Recommended");
+                            
+                            window.location.href = 'book.html?' + params.toString();
+                        }
+                    }
+                });
+            }
+            
+            // persona-books-grid 클릭 이벤트 위임 - 각 맞춤 추천 도서 상세페이지(book.html)로 이동
+            const personaBooksGrid = document.getElementById('persona-books-grid');
+            if (personaBooksGrid) {
+                personaBooksGrid.addEventListener('click', (e) => {
+                    const card = e.target.closest('.persona-card');
+                    if (!card) return;
+                    
+                    const imgEl = card.querySelector('img');
+                    const titleEl = card.querySelector('p.font-bold');
+                    const priceEl = card.querySelector('.persona-price');
+                    const authorEl = card.querySelector('p.text-charcoal\\/60, p.text-xs:not(.persona-price)');
+                    
+                    if (imgEl && titleEl) {
+                        const title = titleEl.textContent.trim();
+                        const imgSrc = imgEl.src;
+                        const priceText = priceEl ? priceEl.textContent : '13,500';
+                        const price = priceText.replace(/[^0-9,]/g, '').trim();
+                        
+                        const author = authorEl ? authorEl.textContent.trim() : '페르소나 맞춤 저자';
+                        const subtitle = `독서 페르소나 [새벽의 산책자] 분석 추천 도서`;
+                        
+                        const params = new URLSearchParams();
+                        params.set('title', title);
+                        params.set('image', imgSrc);
+                        params.set('price', price);
+                        params.set('author', author);
+                        params.set('subtitle', subtitle);
+                        params.set('badge', "Persona Pick");
+                        
+                        window.location.href = 'book.html?' + params.toString();
+                    }
+                });
+            }
 
             startAutoSlide();
         })();

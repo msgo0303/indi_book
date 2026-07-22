@@ -750,6 +750,82 @@
             
             buttonEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
+
+        // book-grid 클릭 이벤트 위임 - 각 도서 상세페이지(book.html)로 데이터 전달하며 이동
+        document.getElementById('book-grid').addEventListener('click', (e) => {
+            // 하시의 찜하기 버튼이나 장바구니 담기 버튼을 누른 경우는 이동하지 않도록 제외
+            if (e.target.closest('button')) return;
+            
+            const card = e.target.closest('.group');
+            if (!card) return;
+            
+            // 이미지 또는 타이틀 영역 클릭 시 작동
+            const clickable = e.target.closest('.cursor-pointer');
+            if (!clickable) return;
+            
+            const imgEl = card.querySelector('img');
+            const titleEl = card.querySelector('h4');
+            const priceEl = card.querySelector('p');
+            
+            if (imgEl && titleEl && priceEl) {
+                const title = titleEl.textContent.trim();
+                const imgSrc = imgEl.src;
+                // 가격 기호 제외
+                const price = priceEl.textContent.replace(/[^0-9,]/g, '').trim();
+                
+                // 기존 8종 메인 도서의 고유 저자 및 서브타이틀 매핑 데이터
+                const bookMeta = {
+                    '참을 수 없는 존재의 가벼움': { author: '밀란 쿤데라', subtitle: '생의 가벼움과 무거움 사이' },
+                    '어느 날, 내 마음에 자리 잡은 것들': { author: '피천득', subtitle: '일상의 작은 은혜와 감성 에세이' },
+                    '고요한 우연': { author: '기욤 뮈소', subtitle: '내면 깊은 곳의 평온과의 만남' },
+                    '다정한 매일매일': { author: '김용택', subtitle: '따스하게 건네는 삶의 시선' },
+                    '우리가 빛의 속도로 갈 수 없다면': { author: '김초엽', subtitle: 'SF와 인간의 감성이 어우러지는 수작' },
+                    '아주 오랜만에 행복하다는 느낌': { author: '박완서', subtitle: '잔잔하게 흐르는 삶의 행복 조각' },
+                    '모든 것은 기본에서 시작한다': { author: '손웅정', subtitle: '단순하면서도 흔들리지 않는 뿌리' },
+                    '숲속의 자본주의자': { author: '박혜윤', subtitle: '숲에서 배운 삶의 새로운 방식' }
+                };
+                
+                let author = '오래된 서랍 지음';
+                let subtitle = '바쁜 현대인을 위한 처방 도서';
+                
+                if (bookMeta[title]) {
+                    author = bookMeta[title].author;
+                    subtitle = bookMeta[title].subtitle;
+                } else {
+                    // 카테고리별 저자 정보 자동 설정
+                    if (title.includes('시/수필')) {
+                        author = '이해인 지음';
+                        subtitle = '마음을 적시는 시의 온기';
+                    } else if (title.includes('인문/사회')) {
+                        author = '유발 하라리 지음';
+                        subtitle = '역사와 사회에 대한 깊이 있는 통찰';
+                    } else if (title.includes('독립잡지/예술')) {
+                        author = '어라운드 편집부';
+                        subtitle = '아날로그 감성을 공유하는 매거진';
+                    } else if (title.includes('이벤트')) {
+                        author = '책방지기 특별 추천';
+                        subtitle = '지금 시즌에 놓쳐선 안 될 아름다운 문장들';
+                    }
+                }
+                
+                // hue-rotate 필터 값 추출
+                let hue = '';
+                const match = imgEl.style.filter.match(/hue-rotate\((\d+)deg\)/);
+                if (match) {
+                    hue = match[1];
+                }
+                
+                const params = new URLSearchParams();
+                params.set('title', title);
+                params.set('image', imgSrc);
+                params.set('price', price);
+                params.set('author', author);
+                params.set('subtitle', subtitle);
+                if (hue) params.set('hue', hue);
+                
+                window.location.href = 'book.html?' + params.toString();
+            }
+        });
     </script>
 
 </body></html>
