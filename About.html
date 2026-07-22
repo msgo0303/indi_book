@@ -18,6 +18,7 @@
                         terra: '#A36A00',
                         charcoal: '#2D2D2D',
                         paper: '#F5F2EB', 
+                        ivory: '#FBF9F6',
                     },
                     fontFamily: {
                         serif: ['"Noto Serif KR"', 'serif'],
@@ -226,43 +227,105 @@
                 top: 50px;
             }
         }
+        /* Mobile Drawer Style */
+        #mobile-drawer {
+            transform: translateY(-100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #mobile-drawer.open {
+            transform: translateY(0);
+        }
+        #mobile-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #mobile-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-forest selection:text-cream" vid="12">
 
     
-    <nav id="navbar" class="fixed top-0 w-full z-50 bg-cream/95 backdrop-blur-md border-b border-forest/10 py-4 px-4 md:px-8" vid="13">
-        <div class="max-w-7xl mx-auto flex justify-between items-center" vid="14">
-            <a href="#" class="flex items-center gap-2 group" vid="15">
-                <div class="stamp-logo w-9 h-9 md:w-10 md:h-10 transition-transform group-hover:rotate-0 duration-300" vid="16">
-                    <i class="ph ph-books text-lg md:text-xl" vid="17"></i>
-                </div>
-                <span class="font-bold text-lg md:text-xl tracking-tight text-forest" vid="18">오래된 서랍</span>
+    <nav id="navbar"
+        style="transform: translateY(-100%);"
+        class="fixed top-0 left-0 w-full z-50 bg-ivory/95 backdrop-blur-md border-b border-charcoal/5 transition-transform duration-300"
+        vid="10">
+        <div class="max-w-[1440px] mx-auto px-4 md:px-8 h-16 md:h-20 flex items-center justify-between" vid="11">
+
+            <a href="#"
+                class="font-serif text-xl md:text-2xl font-bold tracking-tight text-forest flex items-center gap-2"
+                vid="12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" vid="13">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                        vid="14"></path>
+                </svg>
+                돌고 돌아 책방
             </a>
 
-            
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium" vid="19">
-                <a href="#" class="hover:text-terra transition-colors" vid="20">홈</a>
-                <a href="#" class="text-terra transition-colors" vid="21">About</a>
-                <a href="#" class="hover:text-terra transition-colors" vid="22">Event</a>
-                <a href="#" class="hover:text-terra transition-colors" vid="23">커뮤니티</a>
-            </div>
 
-            <div class="hidden md:flex items-center gap-6 text-sm" vid="24">
-                <a href="#" class="hover:text-forest transition-colors" vid="25">로그인</a>
-                <a href="#" class="px-4 py-2 bg-forest text-cream rounded-full hover:bg-forest/90 transition-colors" vid="26">회원가입</a>
-                <a href="#" class="hover:text-terra transition-colors" aria-label="마이페이지" vid="27"><i class="ph ph-user text-lg" vid="28"></i></a>
-            </div>
+            <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-charcoal focus:outline-none" aria-label="Menu" vid="15">
+                <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 transition-transform duration-300" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" vid="16">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"
+                        vid="17"></path>
+                </svg>
+                <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 hidden transition-transform duration-300" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
 
-            
-            <div class="md:hidden flex items-center gap-4" vid="29">
-                <a href="#" class="text-charcoal hover:text-terra transition-colors" vid="30"><i class="ph ph-user text-xl" vid="31"></i></a>
-                <button class="text-charcoal p-1" vid="32">
-                    <i class="ph ph-list text-2xl" vid="33"></i>
-                </button>
+
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm" vid="18">
+                <a href="index.html" class="hover:text-terracotta transition-colors" vid="19">홈</a>
+                <a href="About.html" class="text-terracotta font-semibold transition-colors" vid="20">About</a>
+                <a href="library.html" class="hover:text-terracotta transition-colors">Library</a>
+                <a href="events.html" class="hover:text-terracotta transition-colors" vid="21">Event</a>
+                <a href="community.html" class="hover:text-terracotta transition-colors" vid="22">커뮤니티</a>
+                <div class="w-[1px] h-4 bg-charcoal/20" vid="23"></div>
+                <div class="flex items-center gap-4 text-sm" vid="24">
+                    <a href="login.html" class="hover:text-terracotta transition-colors" vid="25">로그인</a>
+                    <a href="#" class="px-4 py-2 bg-forest text-ivory rounded-full hover:bg-forest/90 transition-colors"
+                        vid="26">회원가입</a>
+                </div>
             </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-charcoal/40 z-30 md:hidden backdrop-blur-sm"></div>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobile-drawer" class="fixed top-0 left-0 w-full bg-ivory z-40 md:hidden border-b border-charcoal/10 shadow-lg pt-16">
+        <div class="px-6 py-6 flex flex-col gap-1">
+            <!-- Nav Links -->
+            <a href="About.html" onclick="toggleMobileMenu()" class="flex items-center justify-between py-4 border-b border-charcoal/5 text-base font-semibold tracking-wide text-terracotta transition-colors">
+                ABOUT <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-charcoal/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+            <a href="library.html" onclick="toggleMobileMenu()" class="flex items-center justify-between py-4 border-b border-charcoal/5 text-base font-semibold tracking-wide hover:text-terracotta transition-colors">
+                LIBRARY <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-charcoal/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+            <a href="events.html" onclick="toggleMobileMenu()" class="flex items-center justify-between py-4 border-b border-charcoal/5 text-base font-semibold tracking-wide hover:text-terracotta transition-colors">
+                EVENTS <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-charcoal/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+            <a href="community.html" onclick="toggleMobileMenu()" class="flex items-center justify-between py-4 border-b border-charcoal/10 text-base font-semibold tracking-wide hover:text-terracotta transition-colors">
+                COMMUNITY <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-charcoal/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+
+            <!-- Auth Links -->
+            <div class="flex gap-3 mt-5">
+                <a href="login.html" class="flex-1 py-3 text-center border border-forest text-forest rounded-full font-medium text-sm hover:bg-forest hover:text-ivory transition-colors">로그인</a>
+                <a href="login.html" class="flex-1 py-3 text-center bg-forest text-ivory rounded-full font-medium text-sm hover:bg-forest/90 transition-colors">마이페이지</a>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
 
     
     <div id="hero-trigger" vid="31"></div>
@@ -390,7 +453,7 @@
                         <p class="text-charcoal/70 leading-relaxed font-light mb-8 break-keep" vid="105">
                             독서 취향을 추적하고, 완독률과 독서 습관을 정밀 분석하는 리브레 AI 솔루션을 연구하고 개발합니다.
                         </p>
-                        <button onclick="switchTab('tab4'); window.scrollTo(0, 0);" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-paper text-forest rounded-full font-medium hover:bg-terra/10 transition-colors mx-auto md:mx-0 w-max" vid="106">
+                        <button onclick="switchTab('tab4'); window.scrollTo(0, 0);" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-paper text-forest rounded-full font-medium hover:bg-terra/10 transition-colors mx-auto md:mx-0 w-max mb-[50px]" vid="106">
                             리브레 AI 살펴보기 <i class="ph ph-sparkle" vid="107"></i>
                         </button>
                     </div>
@@ -675,40 +738,36 @@
     </section>
 
     
-    <footer class="bg-forest text-cream pt-16 pb-8 border-t-[4px] md:border-t-[8px] border-terra" vid="206">
-        <div class="max-w-7xl mx-auto px-6 md:px-8" vid="207">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12" vid="208">
-                <div class="flex flex-col items-start" vid="209">
-                    <div class="stamp-logo w-12 h-12 mb-4 text-cream border-cream" vid="210">
-                        <i class="ph ph-books text-xl" vid="211"></i>
-                    </div>
-                    <h2 class="text-xl font-bold mb-2" vid="212">오래된 서랍</h2>
-                    <p class="text-cream/70 text-xs md:text-sm font-light" vid="213">당신의 마음을 다독일 문장들이 서랍 속에서 기다리고 있습니다.</p>
-                </div>
-                
-                <div class="flex gap-4" vid="214">
-                    <a href="#" class="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center hover:bg-cream hover:text-forest transition-colors" vid="215"><i class="ph ph-instagram-logo text-lg" vid="216"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center hover:bg-cream hover:text-forest transition-colors" vid="217"><i class="ph ph-twitter-logo text-lg" vid="218"></i></a>
-                </div>
+    <footer class="bg-charcoal text-ivory pt-12 pb-8 border-t border-charcoal/20" vid="519">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-start gap-8 mb-8" vid="520">
+            <div class="flex flex-col" vid="521">
+                <a href="#" class="font-serif text-xl font-bold tracking-tight text-ivory flex items-center gap-2 mb-4 opacity-90" vid="522">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    돌고 돌아 책방
+                </a>
+                <p class="text-ivory/50 text-xs leading-relaxed max-w-sm" vid="525">
+                    종이 냄새 가득한 공간에서 잊혀진 이야기들을 다시 만납니다. 누군가의 서재에서 출발한 책이 당신에게 닿기까지의 다정한 여정을 함께합니다.
+                </p>
             </div>
+            
+            <div class="flex flex-col md:items-end gap-3 text-xs text-ivory/40" vid="557">
+                <p>서울특별시 마포구 독막로 123, 1층 돌고 돌아 책방</p>
+                <p>대표번호 : 02-1234-5678 | 이메일 : hello@archivebook.kr</p>
+                <p>사업자등록번호 : 123-45-67890</p>
+            </div>
+        </div>
 
-            <div class="border-t border-cream/10 pt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px] md:text-xs text-cream/50 font-light" vid="219">
-                <div vid="220">
-                    <ul class="flex flex-wrap gap-x-4 gap-y-2 mb-4 text-cream/80" vid="221">
-                        <li vid="222"><a href="#" class="hover:text-cream" vid="223">이용약관</a></li>
-                        <li vid="224"><a href="#" class="font-medium text-cream" vid="225">개인정보처리방침</a></li>
-                        <li vid="226"><a href="#" class="hover:text-cream" vid="227">공지사항</a></li>
-                        <li vid="228"><a href="#" class="hover:text-cream" vid="229">제휴문의</a></li>
-                    </ul>
-                    <p class="break-keep leading-relaxed" vid="230">
-                        상호: 독립서점 오래된 서랍 | 대표: 김문장 | 사업자등록번호: 123-45-67890<br vid="231">
-                        주소: 서울특별시 종로구 서촌길 12, 1층 | 통신판매업신고: 2023-서울종로-1234
-                    </p>
-                </div>
-                <div class="md:text-right mt-2 md:mt-auto" vid="232">
-                    <p vid="233">© 2024 Old Drawer Bookstore. All rights reserved.</p>
-                </div>
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 pt-6 border-t border-ivory/10 flex flex-col md:flex-row justify-between items-center text-ivory/30 text-[11px]" vid="561">
+            <div class="flex gap-4 mb-3 md:mb-0">
+                <a href="About.html" class="hover:text-ivory transition-colors">ABOUT</a>
+                <a href="library.html" class="hover:text-ivory transition-colors">LIBRARY</a>
+                <a href="events.html" class="hover:text-ivory transition-colors">EVENTS</a>
+                <a href="community.html" class="hover:text-ivory transition-colors">COMMUNITY</a>
+                <a href="#" class="hover:text-ivory transition-colors font-medium">개인정보처리방침</a>
             </div>
+            <p vid="562">© 2024 돌고 돌아 책방 (Cozy &amp; Warm Archive). All rights reserved.</p>
         </div>
     </footer>
 
@@ -1079,12 +1138,14 @@
         
         window.addEventListener('scroll', () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                
-                navbar.style.transform = 'translateY(-100%)';
+            if (currentScrollY > 50) {
+                if (currentScrollY > lastScrollY) {
+                    navbar.style.transform = 'translateY(-100%)';
+                } else {
+                    navbar.style.transform = 'translateY(0)';
+                }
             } else {
-                
-                navbar.style.transform = 'translateY(0)';
+                navbar.style.transform = 'translateY(-100%)';
             }
             
             if(currentScrollY > 50) {
@@ -1203,6 +1264,24 @@
                 wrapper.classList.add('hidden');
                 input.required = false;
                 input.value = '';
+            }
+        }
+
+        /* ---- Mobile Menu ---- */
+        let mobileMenuOpen = false;
+        function toggleMobileMenu() {
+            mobileMenuOpen = !mobileMenuOpen;
+            const drawer = document.getElementById('mobile-drawer');
+            const overlay = document.getElementById('mobile-overlay');
+            const iconOpen = document.getElementById('menu-icon-open');
+            const iconClose = document.getElementById('menu-icon-close');
+            
+            if (drawer && overlay && iconOpen && iconClose) {
+                drawer.classList.toggle('open', mobileMenuOpen);
+                overlay.classList.toggle('open', mobileMenuOpen);
+                iconOpen.classList.toggle('hidden', mobileMenuOpen);
+                iconClose.classList.toggle('hidden', !mobileMenuOpen);
+                document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
             }
         }
 

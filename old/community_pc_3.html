@@ -176,7 +176,7 @@
             
             <div id="tab-indicator" class="absolute top-1.5 bottom-1.5 w-[calc(33.333%-4px)] bg-forest rounded-full shadow-sm transition-transform duration-300 ease-out z-0 left-1.5" vid="36"></div>
             
-            <button class="relative z-10 flex-1 py-3 text-[13px] md:text-sm font-bold text-cream transition-colors tab-btn" onclick="switchTab('notice', 0)" vid="37">공지사항</button>
+            <button class="relative z-10 flex-1 py-3 text-[13px] md:text-sm font-bold text-white transition-colors tab-btn" onclick="switchTab('notice', 0)" vid="37">공지사항</button>
             <button class="relative z-10 flex-1 py-3 text-[13px] md:text-sm font-bold text-charcoal/60 hover:text-forest transition-colors tab-btn" onclick="switchTab('faq', 1)" vid="38">FAQ</button>
             <button class="relative z-10 flex-1 py-3 text-[13px] md:text-sm font-bold text-charcoal/60 hover:text-forest transition-colors tab-btn" onclick="switchTab('qna', 2)" vid="39">QnA</button>
         </div>
@@ -636,10 +636,10 @@
             tabBtns.forEach((btn, i) => {
                 if(i === index) {
                     btn.classList.remove('text-charcoal/60');
-                    btn.classList.add('text-cream');
+                    btn.classList.add('text-white');
                 } else {
                     btn.classList.add('text-charcoal/60');
-                    btn.classList.remove('text-cream');
+                    btn.classList.remove('text-white');
                 }
             });
 
