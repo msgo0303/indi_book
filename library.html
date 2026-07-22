@@ -648,13 +648,10 @@
                 } else {
                     navbar.style.transform = 'translateY(0)';
                 }
-            } else {
-                navbar.style.transform = 'translateY(-100%)';
-            }
-            if(currentScrollY > 50) {
                 navbar.classList.add('shadow-md');
                 navbar.classList.replace('bg-ivory/95', 'bg-ivory');
             } else {
+                navbar.style.transform = 'translateY(0)';
                 navbar.classList.remove('shadow-md');
                 navbar.classList.replace('bg-ivory', 'bg-ivory/95');
             }
