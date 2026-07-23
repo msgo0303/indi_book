@@ -1248,30 +1248,12 @@
         document.addEventListener("DOMContentLoaded", () => {
             checkAdminAuth();
             
-            // ISBN 입력 시 도서 표지 URL 자동 변환 및 프리뷰 갱신
-            const isbnInput = document.getElementById('book-isbn');
-            if (isbnInput) {
-                isbnInput.addEventListener('input', (e) => {
-                    const isbn = e.target.value.trim().replace(/[^0-9]/g, '');
-                    if (isbn.length === 13) {
-                        const coverUrl = `https://www.aladin.co.kr/shop/book/wbook_download.aspx?ISBN=${isbn}&ISBNType=1`;
-                        document.getElementById('book-cover-url').value = coverUrl;
-                        document.getElementById('book-cover-preview').src = coverUrl;
-                    }
-                });
-            }
-            
-            // 표지 URL 수동 입력 시 실시간 프리뷰 갱신 (만약 13자리 ISBN이 들어오면 자동으로 이미지 다운로드 링크로 변환)
+
+            // 표지 URL 수동 입력 시 실시간 프리뷰 갱신
             const coverInput = document.getElementById('book-cover-url');
             if (coverInput) {
                 coverInput.addEventListener('input', (e) => {
-                    let val = e.target.value.trim();
-                    const cleanNum = val.replace(/[^0-9]/g, '');
-                    if (cleanNum.length === 13 && val === cleanNum) {
-                        const coverUrl = `https://www.aladin.co.kr/shop/book/wbook_download.aspx?ISBN=${cleanNum}&ISBNType=1`;
-                        e.target.value = coverUrl;
-                        val = coverUrl;
-                    }
+                    const val = e.target.value.trim();
                     document.getElementById('book-cover-preview').src = val || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
                 });
             }
