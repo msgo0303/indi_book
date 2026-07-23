@@ -2485,7 +2485,93 @@
             }
 
             startAutoSlide();
+            
+            // Supabase 연동 - 진열 도서 동적 렌더링
+            await loadMainCurations();
         })();
+
+        async function loadMainCurations() {
+            if (!window.supabaseClient) return;
+
+            try {
+                // curated_slots 테이블에서 배정된 도서 및 코멘트 정보 가져오기
+                const { data: slots, error } = await window.supabaseClient
+                    .from('curated_slots')
+                    .select('*, books:book_id(*)')
+                    .order('slot_index', { ascending: true });
+
+                if (error) throw error;
+                if (!slots || slots.length === 0) return;
+
+                // 1. 베스트셀러 렌더링
+                const bestsellerSlots = slots.filter(s => s.slot_type === 'bestseller');
+                const bestsellerGrid = document.getElementById('best-seller-grid');
+                if (bestsellerGrid && bestsellerSlots.length > 0) {
+                    let html = '';
+                    bestsellerSlots.forEach(slot => {
+                        const book = slot.books;
+                        if (!book) return;
+
+                        html += `
+                        <div class="group cursor-pointer flex flex-col h-full" data-book-id="${book.id}">
+                            <div class="relative aspect-[3/4] rounded-lg overflow-hidden shadow-cozy mb-4 bg-cream-dark">
+                                <img referrerpolicy="no-referrer" src="${book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'}"
+                                    alt="${book.title}"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <button class="absolute bottom-3 right-3 w-10 h-10 bg-cream rounded-full shadow-md flex items-center justify-center text-charcoal hover:bg-forest hover:text-cream transition-colors z-10 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300">
+                                    <i class="ph ph-shopping-cart-simple text-lg"></i>
+                                </button>
+                            </div>
+                            <div class="flex-grow flex flex-col justify-between">
+                                <div>
+                                    <p class="text-xs text-terra font-bold mb-1">${book.genre || '도서'}</p>
+                                    <h3 class="font-serif font-bold text-lg leading-tight mb-1 group-hover:text-forest transition-colors line-clamp-2">${book.title}</h3>
+                                    <p class="text-sm text-charcoal/70 mb-2">${book.author} 지음</p>
+                                </div>
+                                <p class="font-bold">${book.price.toLocaleString()}원</p>
+                            </div>
+                        </div>`;
+                    });
+                    if (html) bestsellerGrid.innerHTML = html;
+                }
+
+                // 2. 추천 도서 (에디터 추천) 렌더링
+                const editorSlots = slots.filter(s => s.slot_type === 'editor_pick');
+                const editorGrid = document.getElementById('editor-picks-grid');
+                if (editorGrid && editorSlots.length > 0) {
+                    let html = '';
+                    editorSlots.forEach((slot, idx) => {
+                        const book = slot.books;
+                        if (!book) return;
+
+                        const comment = slot.comment || '책방지기가 추천하는 도서입니다.';
+                        const delayClass = idx % 2 === 1 ? 'delay-150' : '';
+
+                        html += `
+                        <div class="flex flex-col gap-6 reveal-item opacity-100 translate-y-0 transition-all duration-700 ease-out ${delayClass}">
+                            <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-paper cursor-pointer">
+                                <img referrerpolicy="no-referrer" src="${book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=800'}"
+                                    alt="${book.title}"
+                                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-terra mb-2 block">${book.publisher || '출판사'}</span>
+                                <h4 class="font-serif text-2xl font-bold text-forest mb-1 hover:text-terra transition-colors cursor-pointer">${book.title}</h4>
+                                <p class="text-charcoal/70 text-sm mb-2">${book.author} 지음</p>
+                                <p class="font-sans font-bold text-forest text-base mb-4 editor-price">${book.price.toLocaleString()}원</p>
+                                <div class="p-6 bg-paper rounded-2xl border border-forest/10 relative">
+                                    <div class="absolute -top-3 left-6 bg-cream px-2 text-xs font-bold text-forest border border-forest/20 rounded-full">책방지기가 이 책을 곁에 두는 이유</div>
+                                    <p class="text-charcoal leading-relaxed text-sm">"${comment}"</p>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                    if (html) editorGrid.innerHTML = html;
+                }
+            } catch (e) {
+                console.error("Error loading curated slots:", e);
+            }
+        }
     </script>
 
 </body>
