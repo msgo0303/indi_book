@@ -615,16 +615,16 @@
         
         let lastScrollY = window.scrollY;
         const navbar = document.getElementById('navbar');
+
+        navbar.style.transform = 'translateY(0)';
+        navbar.style.transition = 'transform 0.3s ease';
+
         window.addEventListener('scroll', () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY > 50) {
-                if (currentScrollY > lastScrollY) {
-                    navbar.style.transform = 'translateY(-100%)';
-                } else {
-                    navbar.style.transform = 'translateY(0)';
-                }
-            } else {
+            if (currentScrollY > lastScrollY && currentScrollY > 60) {
                 navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
             }
             if(currentScrollY > 50) {
                 navbar.classList.add('shadow-md');

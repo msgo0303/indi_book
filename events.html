@@ -598,20 +598,14 @@
         let lastScrollY = window.scrollY;
         const navbar = document.getElementById('navbar');
 
-        navbar.style.transform = 'translateY(-100%)';
+        navbar.style.transform = 'translateY(0)';
         navbar.style.transition = 'transform 0.3s ease';
 
         window.addEventListener('scroll', () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY === 0) {
-                if (lastScrollY > 0) {
-                    navbar.style.transform = 'translateY(0)';
-                } else {
-                    navbar.style.transform = 'translateY(-100%)';
-                }
-            } else if (currentScrollY > lastScrollY) {
+            if (currentScrollY > lastScrollY && currentScrollY > 60) {
                 navbar.style.transform = 'translateY(-100%)';
-            } else if (currentScrollY < lastScrollY) {
+            } else {
                 navbar.style.transform = 'translateY(0)';
             }
 
