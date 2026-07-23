@@ -183,7 +183,7 @@
 <body class="w-full h-full text-charcoal antialiased flex flex-col min-h-screen" vid="9">
 
 
-    <nav id="navbar"
+    <nav id="navbar" style="transform: translateY(-100%);"
         class="fixed top-0 left-0 w-full z-50 bg-ivory/95 backdrop-blur-md border-b border-charcoal/5 transition-transform duration-300"
         vid="10">
         <div class="max-w-[1440px] mx-auto px-4 md:px-8 h-16 md:h-20 flex items-center justify-between" vid="11">
@@ -1671,17 +1671,20 @@
         const navbar = document.getElementById('navbar');
         let lastScrollY = window.scrollY;
 
+        navbar.style.transform = 'translateY(-100%)';
+        navbar.style.transition = 'transform 0.3s ease';
+
         window.addEventListener('scroll', () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY > 50) {
-                if (currentScrollY > lastScrollY) {
-
-                    navbar.style.transform = 'translateY(-100%)';
-                } else {
-
+            if (currentScrollY === 0) {
+                if (lastScrollY > 0) {
                     navbar.style.transform = 'translateY(0)';
+                } else {
+                    navbar.style.transform = 'translateY(-100%)';
                 }
-            } else {
+            } else if (currentScrollY > lastScrollY) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else if (currentScrollY < lastScrollY) {
                 navbar.style.transform = 'translateY(0)';
             }
             lastScrollY = currentScrollY;

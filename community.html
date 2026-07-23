@@ -626,17 +626,22 @@
         
         let lastScrollY = window.scrollY;
         const navbar = document.getElementById('navbar');
+
+        navbar.style.transform = 'translateY(-100%)';
+        navbar.style.transition = 'transform 0.3s ease';
         
         window.addEventListener('scroll', () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY > 50) {
-                if (currentScrollY > lastScrollY) {
-                    navbar.style.transform = 'translateY(-100%)';
-                } else {
+            if (currentScrollY === 0) {
+                if (lastScrollY > 0) {
                     navbar.style.transform = 'translateY(0)';
+                } else {
+                    navbar.style.transform = 'translateY(-100%)';
                 }
-            } else {
+            } else if (currentScrollY > lastScrollY) {
                 navbar.style.transform = 'translateY(-100%)';
+            } else if (currentScrollY < lastScrollY) {
+                navbar.style.transform = 'translateY(0)';
             }
             
             if(currentScrollY > 50) {
