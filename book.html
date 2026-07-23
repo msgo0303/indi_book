@@ -88,6 +88,18 @@
             width: 0;
             transition: width 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
+
+        /* 책 소개 첫 글자 드롭 캡 */
+        .book-intro-drop-cap::first-letter {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.8em;
+            font-weight: 700;
+            line-height: 0.78;
+            float: left;
+            margin-right: 0.1em;
+            margin-top: 0.06em;
+            color: #1A1A1A;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans text-charcoal w-full h-full antialiased selection:bg-charcoal selection:text-ivory" vid="9">
@@ -930,7 +942,9 @@
                     btn.querySelector('.tab-indicator').classList.replace('opacity-0', 'opacity-100');
                     
                     let contentHtml = tab.content;
-                    if (tab.id === 'intro' || tab.id === 'toc') {
+                    if (tab.id === 'intro') {
+                        contentHtml = `<div class="book-intro-drop-cap font-sans text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">${tab.content}</div>`;
+                    } else if (tab.id === 'toc') {
                         contentHtml = `<div class="font-sans text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">${tab.content}</div>`;
                     }
                     tabContent.innerHTML = `<div class="fade-in">${contentHtml}</div>`;
@@ -940,7 +954,9 @@
             });
 
             let initialContent = tabs[0].content;
-            if (tabs[0].id === 'intro' || tabs[0].id === 'toc') {
+            if (tabs[0].id === 'intro') {
+                initialContent = `<div class="book-intro-drop-cap font-sans text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">${tabs[0].content}</div>`;
+            } else if (tabs[0].id === 'toc') {
                 initialContent = `<div class="font-sans text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">${tabs[0].content}</div>`;
             }
             tabContent.innerHTML = `<div class="fade-in">${initialContent}</div>`;
