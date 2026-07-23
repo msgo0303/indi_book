@@ -1997,7 +1997,26 @@
                 listEl.innerHTML = `<p class="text-center text-[#A33A3A] text-sm py-8">리뷰 로드 실패: ${err.message}</p>`;
             }
         }
-
+        async function deleteReview(reviewId) {
+            if (!confirm('정말로 이 리뷰를 삭제하시겠습니까?')) return;
+            if (!window.supabaseClient) return;
+            
+            try {
+                const { error } = await window.supabaseClient
+                    .from('book_reviews')
+                    .delete()
+                    .eq('id', reviewId);
+                    
+                if (error) throw error;
+                
+                showToast('리뷰가 성공적으로 삭제되었습니다.');
+                if (activeReviewBookId) {
+                    await loadAdminReviewsList(activeReviewBookId);
+                }
+            } catch (err) {
+                console.error("Error deleting review:", err);
+                showToast('리뷰 삭제 실패: ' + err.message, false);
+            }
         }
 
         // --- 메인 진열 도서 관리 스크립트 ---
