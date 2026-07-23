@@ -4,6 +4,8 @@
     <title vid="4">About - 오래된 서랍</title>
     <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
@@ -251,7 +253,7 @@
     
     <nav id="navbar"
         style="transform: translateY(-100%);"
-        class="fixed top-0 left-0 w-full z-50 bg-ivory/95 backdrop-blur-md border-b border-charcoal/5 transition-transform duration-300"
+        class="fixed top-0 left-0 w-full z-[100] bg-ivory/95 backdrop-blur-md border-b border-charcoal/5 transition-transform duration-300"
         vid="10">
         <div class="max-w-[1440px] mx-auto px-4 md:px-8 h-16 md:h-20 flex items-center justify-between" vid="11">
 
@@ -298,10 +300,10 @@
     </nav>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-charcoal/40 z-30 md:hidden backdrop-blur-sm"></div>
+    <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-charcoal/40 z-[80] md:hidden backdrop-blur-sm"></div>
 
     <!-- Mobile Menu Drawer -->
-    <div id="mobile-drawer" class="fixed top-0 left-0 w-full bg-ivory z-40 md:hidden border-b border-charcoal/10 shadow-lg pt-16">
+    <div id="mobile-drawer" class="fixed top-0 left-0 w-full bg-ivory z-[90] md:hidden border-b border-charcoal/10 shadow-lg pt-16">
         <div class="px-6 py-6 flex flex-col gap-1">
             <!-- Nav Links -->
             <a href="About.html" onclick="toggleMobileMenu()" class="flex items-center justify-between py-4 border-b border-charcoal/5 text-base font-semibold tracking-wide text-terracotta transition-colors">
@@ -661,9 +663,9 @@
                 <p class="text-charcoal/70 leading-relaxed font-light mb-8 max-w-xl mx-auto break-keep text-sm">
                     매달 받아보는 구독 서비스와는 달리, 단 한 번 전문가의 집중적이고 다각적인 독서 성향 스캐닝을 통해 당신의 영혼에 완벽하게 맞닿는 한 권의 책과 심층 인지 분석 서적 리포트를 전달해 드리는 단독 특별 프로그램입니다.
                 </p>
-                <button onclick="openModal('modal-onetime-curation')" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-forest text-cream rounded-full font-bold hover:bg-forest/90 transition-colors shadow-md w-full max-w-sm">
+                <a href="form.html" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-forest text-cream rounded-full font-bold hover:bg-forest/90 transition-colors shadow-md w-full max-w-sm">
                     심층 분석 큐레이션 신청하기 <i class="ph ph-arrow-right"></i>
-                </button>
+                </a>
             </div>
         </div>
 

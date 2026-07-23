@@ -4,6 +4,8 @@
     <title vid="4">오래된 서랍 - 북 큐레이션 신청</title>
     <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
@@ -625,11 +627,12 @@
             e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
         });
 
-        function submitForm() {
-            const contact = document.getElementById('contact-input');
-            if(contact.value.length < 12) { 
+        async function submitForm() {
+            const contactInput = document.getElementById('contact-input');
+            const contact = contactInput.value;
+            if(contact.length < 12) { 
                 showError('올바른 연락처를 입력해주세요.');
-                contact.focus();
+                contactInput.focus();
                 return;
             }
 
@@ -638,11 +641,66 @@
             btn.innerHTML = '<i class="ph ph-spinner animate-spin text-2xl"></i> 처리중...';
             btn.classList.add('opacity-80', 'pointer-events-none');
 
-            setTimeout(() => {
-                btn.innerHTML = originalContent;
-                btn.classList.remove('opacity-80', 'pointer-events-none');
-                goToStep(11);
-            }, 1200);
+            // 설문 응답 값들 파싱
+            const referralChecked = document.querySelector('input[name="referral"]:checked');
+            let referral = referralChecked ? referralChecked.value : '';
+            if (referral === '기타') {
+                const referralCustom = document.querySelector('input[name="referral_custom"]').value.trim();
+                referral = referralCustom ? `기타: ${referralCustom}` : '기타';
+            }
+
+            const preferenceChecked = document.querySelector('input[name="preference"]:checked');
+            const preference = preferenceChecked ? preferenceChecked.value : '';
+
+            const environment = document.getElementById('environment-input').value.trim();
+            const name = document.getElementById('name-input').value.trim();
+
+            const ageChecked = document.querySelector('input[name="age"]:checked');
+            let age = ageChecked ? ageChecked.value : '';
+            if (age === '기타') {
+                const ageCustom = document.querySelector('input[name="age_custom"]').value.trim();
+                age = ageCustom ? `${ageCustom}세` : '기타';
+            }
+
+            const address = document.getElementById('address-input').value.trim();
+
+            // Supabase DB 저장
+            let userId = null;
+            if (window.supabaseClient) {
+                try {
+                    const { data: { session } } = await window.supabaseClient.auth.getSession();
+                    if (session) {
+                        userId = session.user.id;
+                    }
+                    
+                    const { error } = await window.supabaseClient
+                        .from('curations')
+                        .insert({
+                            user_id: userId,
+                            name: name,
+                            contact: contact,
+                            address: address,
+                            age_info: age,
+                            preference: preference,
+                            environment: environment,
+                            referral: referral,
+                            status: 'PENDING'
+                        });
+
+                    if (error) {
+                        showError('신청 실패: ' + error.message);
+                        btn.innerHTML = originalContent;
+                        btn.classList.remove('opacity-80', 'pointer-events-none');
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Supabase insert error", e);
+                }
+            }
+
+            btn.innerHTML = originalContent;
+            btn.classList.remove('opacity-80', 'pointer-events-none');
+            goToStep(11);
         }
         
         updateHeader(1);

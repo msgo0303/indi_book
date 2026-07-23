@@ -4,6 +4,8 @@
     <title vid="4">오래된 서랍 - 로그인 및 회원가입</title>
     <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
@@ -425,6 +427,53 @@
 
             </div>
 
+            <!-- Mypage View -->
+            <div id="mypage-view" class="auth-view hidden-view flex flex-col w-full">
+                <div class="text-center mb-6 relative">
+                    <h1 class="text-2xl md:text-[28px] font-bold text-forest mb-2 tracking-tight">나의 서랍</h1>
+                    <p class="text-charcoal/60 text-sm font-light">신청하신 소모임과 구매하신 도서 내역입니다.</p>
+                </div>
+
+                <!-- User Info Info Card -->
+                <div class="bg-paper p-5 rounded-2xl border border-charcoal/10 mb-6 flex flex-col gap-1 shadow-inner-soft">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-bold text-forest" id="mypage-user-name">...</span>
+                        <span class="text-xs px-2 py-0.5 bg-terra/10 text-terra rounded border border-terra/20 font-bold" id="mypage-user-role">일반 회원</span>
+                    </div>
+                    <span class="text-xs text-charcoal/50 font-sans" id="mypage-user-email">...</span>
+                </div>
+
+                <!-- Tabs/Section: Applications -->
+                <div class="space-y-4 mb-6">
+                    <h3 class="text-base font-bold text-forest border-b border-charcoal/10 pb-2 flex items-center gap-1.5">
+                        <i class="ph ph-calendar-check text-terra"></i> 소모임 신청 현황
+                    </h3>
+                    <div id="mypage-applications-list" class="space-y-3 max-h-[220px] overflow-y-auto pr-1 hide-scrollbar">
+                        <p class="text-xs text-charcoal/40 py-4 text-center font-light">신청한 소모임이 없습니다.</p>
+                    </div>
+                </div>
+
+                <!-- Tabs/Section: Orders -->
+                <div class="space-y-4 mb-8">
+                    <h3 class="text-base font-bold text-forest border-b border-charcoal/10 pb-2 flex items-center gap-1.5">
+                        <i class="ph ph-receipt text-terra"></i> 도서 구매 내역
+                    </h3>
+                    <div id="mypage-orders-list" class="space-y-3 max-h-[220px] overflow-y-auto pr-1 hide-scrollbar">
+                        <p class="text-xs text-charcoal/40 py-4 text-center font-light">구매한 도서가 없습니다.</p>
+                    </div>
+                </div>
+
+                <!-- Logout and Admin Hub Button -->
+                <div class="flex flex-col gap-3">
+                    <a id="mypage-admin-btn" href="Admin_1.html" class="hidden w-full h-12 bg-terra text-cream rounded-full font-bold text-sm hover:bg-terra/90 flex items-center justify-center gap-1.5 transition-all">
+                        <i class="ph ph-shield-check text-lg"></i> 관리자 페이지로 이동
+                    </a>
+                    <button onclick="handleLogout()" class="w-full h-12 border border-charcoal/20 text-charcoal rounded-full font-bold text-sm hover:bg-charcoal hover:text-cream transition-colors">
+                        로그아웃
+                    </button>
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -462,29 +511,28 @@
         </div>
     </footer>
 
-    
     <script vid="164">
-        
         function switchView(viewName) {
             const loginView = document.getElementById('login-view');
             const signupView = document.getElementById('signup-view');
+            const mypageView = document.getElementById('mypage-view');
 
-            if (viewName === 'signup') {
-                loginView.classList.replace('active-view', 'hidden-view');
-                setTimeout(() => {
+            loginView.classList.replace('active-view', 'hidden-view');
+            signupView.classList.replace('active-view', 'hidden-view');
+            mypageView.classList.replace('active-view', 'hidden-view');
+
+            setTimeout(() => {
+                if (viewName === 'signup') {
                     signupView.classList.replace('hidden-view', 'active-view');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 300); 
-            } else {
-                signupView.classList.replace('active-view', 'hidden-view');
-                setTimeout(() => {
+                } else if (viewName === 'mypage') {
+                    mypageView.classList.replace('hidden-view', 'active-view');
+                } else {
                     loginView.classList.replace('hidden-view', 'active-view');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 300);
-            }
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 300);
         }
 
-        
         const checkAll = document.getElementById('check-all');
         const termChecks = document.querySelectorAll('.term-check');
 
@@ -498,7 +546,6 @@
             const allChecked = Array.from(termChecks).every(c => c.checked);
             checkAll.checked = allChecked;
         }
-        
         
         /* ---- Mobile Menu ---- */
         let mobileMenuOpen = false;
@@ -556,13 +603,29 @@
         }
 
         /* ---- Auth Handlers ---- */
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
+            if (!window.supabaseClient) {
+                showToast('Supabase 클라이언트가 설정되지 않았습니다.', false);
+                return;
+            }
             const email = document.getElementById('login-email').value;
-            showToast(email + ' 계정으로 로그인 성공! 잠시 후 메인 페이지로 이동합니다.');
+            const password = document.getElementById('login-password').value;
+
+            const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            if (error) {
+                showToast('로그인 실패: ' + error.message, false);
+                return;
+            }
+
+            showToast('로그인 성공! 잠시 후 메인 페이지로 이동합니다.', true);
             setTimeout(() => {
                 window.location.href = 'index.html';
-            }, 1800);
+            }, 1500);
         }
 
         function togglePasswordVisibility(id, btn) {
@@ -577,7 +640,7 @@
             }
         }
 
-        function handleForgotPassword(e) {
+        async function handleForgotPassword(e) {
             e.preventDefault();
             const emailInput = document.getElementById('login-email');
             if (!emailInput.value) {
@@ -585,28 +648,71 @@
                 emailInput.focus();
                 return;
             }
-            showToast(emailInput.value + ' 주소로 비밀번호 재설정 링크를 전송했습니다.');
+            
+            const { error } = await window.supabaseClient.auth.resetPasswordForEmail(emailInput.value, {
+                redirectTo: window.location.origin + '/login.html'
+            });
+            
+            if (error) {
+                showToast('오류 발생: ' + error.message, false);
+            } else {
+                showToast(emailInput.value + ' 주소로 비밀번호 재설정 링크를 전송했습니다.');
+            }
         }
 
-        function handleSocialLogin(platform) {
-            showToast(platform + ' 간편 로그인 진행 중... 잠시 후 이동합니다.');
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1800);
+        async function handleSocialLogin(platform) {
+            if (!window.supabaseClient) return;
+            let provider = '';
+            if (platform === 'Google') provider = 'google';
+            else if (platform === '카카오톡') provider = 'kakao';
+            else if (platform === '네이버') provider = 'naver';
+            
+            if (!provider) {
+                showToast(platform + ' 소셜 로그인은 지원 예정입니다.', false);
+                return;
+            }
+            
+            const { error } = await window.supabaseClient.auth.signInWithOAuth({
+                provider: provider,
+                options: {
+                    redirectTo: window.location.origin + '/index.html'
+                }
+            });
+            
+            if (error) {
+                showToast('로그인 시도 실패: ' + error.message, false);
+            }
         }
 
-        function checkDuplicate() {
+        async function checkDuplicate() {
             const emailInput = document.getElementById('reg-email');
             if (!emailInput.value || !emailInput.checkValidity()) {
                 showToast('올바른 이메일 주소를 입력해 주세요.', false);
                 emailInput.focus();
                 return;
             }
-            showToast('사용 가능한 이메일 주소입니다.');
+            
+            const { data, error } = await window.supabaseClient
+                .from('profiles')
+                .select('email')
+                .eq('email', emailInput.value);
+                
+            if (error) {
+                showToast('중복 확인 실패: ' + error.message, false);
+                return;
+            }
+            
+            if (data && data.length > 0) {
+                showToast('이미 등록된 이메일 주소입니다.', false);
+            } else {
+                showToast('사용 가능한 이메일 주소입니다.', true);
+            }
         }
 
-        function handleSignup(e) {
+        async function handleSignup(e) {
             e.preventDefault();
+            if (!window.supabaseClient) return;
+            const email = document.getElementById('reg-email').value;
             const pw = document.getElementById('reg-password').value;
             const pwConfirm = document.getElementById('reg-password-confirm').value;
             const name = document.getElementById('reg-name').value;
@@ -617,18 +723,175 @@
                 return;
             }
 
-            // 필수 약관 동의 체크 여부 확인
             const requiredChecks = document.querySelectorAll('.term-check');
             if (!requiredChecks[0].checked || !requiredChecks[1].checked) {
                 showToast('필수 약관에 동의해 주셔야 가입이 진행됩니다.', false);
                 return;
             }
 
-            showToast(name + ' 독자님, 회원가입이 성공했습니다! 로그인해 주세요.');
-            setTimeout(() => {
-                switchView('login');
-            }, 1500);
-        }
-    </script>
+            const { data, error } = await window.supabaseClient.auth.signUp({
+                email: email,
+                password: pw,
+                options: {
+                    data: {
+                        name: name,
+                        role: 'USER'
+                    }
+                }
+            });
 
+            if (error) {
+                showToast('회원가입 실패: ' + error.message, false);
+                return;
+            }
+
+            if (data.user) {
+                if (data.session) {
+                    showToast(name + ' 독자님, 회원가입 및 로그인이 완료되었습니다!', true);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    showToast(name + ' 독자님, 가입 인증 이메일이 발송되었습니다. 메일함을 확인해주세요!', true);
+                    setTimeout(() => {
+                        switchView('login');
+                    }, 2500);
+                }
+            }
+        }
+
+        // 마이페이지 데이터 렌더링
+        async function loadMypageData(user) {
+            const nameEl = document.getElementById('mypage-user-name');
+            const emailEl = document.getElementById('mypage-user-email');
+            const roleEl = document.getElementById('mypage-user-role');
+            const adminBtn = document.getElementById('mypage-admin-btn');
+            
+            emailEl.textContent = user.email;
+            
+            const { data: profile } = await window.supabaseClient
+                .from('profiles')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+            
+            if (profile) {
+                nameEl.textContent = profile.name + ' 독자님';
+                roleEl.textContent = profile.role === 'ADMIN' ? '관리자' : '일반 회원';
+                if (profile.role === 'ADMIN') {
+                    adminBtn.classList.remove('hidden');
+                } else {
+                    adminBtn.classList.add('hidden');
+                }
+            } else {
+                nameEl.textContent = (user.user_metadata?.name || '독자') + ' 독자님';
+            }
+
+            const appList = document.getElementById('mypage-applications-list');
+            appList.innerHTML = '<div class="text-xs text-charcoal/40 text-center py-4">로딩 중...</div>';
+            
+            const { data: apps, error: appsErr } = await window.supabaseClient
+                .from('event_applications')
+                .select('*, events(title, date_info)')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false });
+                
+            if (appsErr) {
+                appList.innerHTML = `<div class="text-xs text-[#A33A3A] text-center py-4">데이터 로드 실패: ${appsErr.message}</div>`;
+            } else if (!apps || apps.length === 0) {
+                appList.innerHTML = '<p class="text-xs text-charcoal/40 py-4 text-center font-light">신청한 소모임이 없습니다.</p>';
+            } else {
+                appList.innerHTML = apps.map(app => {
+                    let statusBadge = '';
+                    if (app.status === 'APPROVED') {
+                        statusBadge = '<span class="text-[10px] px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded font-bold">승인됨</span>';
+                    } else if (app.status === 'REJECTED') {
+                        statusBadge = '<span class="text-[10px] px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded font-bold">반려됨</span>';
+                    } else {
+                        statusBadge = '<span class="text-[10px] px-2 py-0.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded font-bold">대기중</span>';
+                    }
+                    
+                    const commentHtml = app.admin_comment 
+                        ? `<div class="mt-2 text-xs bg-cream p-2.5 rounded-lg border border-[#E5E0D5] font-light text-charcoal/70">
+                             <span class="font-bold text-forest block mb-0.5">관리자 답변</span>
+                             ${app.admin_comment}
+                           </div>`
+                        : '';
+                        
+                    return `
+                        <div class="bg-white p-4 rounded-xl border border-charcoal/5 shadow-sm">
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="text-sm font-bold text-forest leading-tight">${app.events?.title || '로딩되지 않은 이벤트'}</h4>
+                                ${statusBadge}
+                            </div>
+                            <p class="text-[11px] text-charcoal/40 font-sans mb-1 flex items-center gap-1">
+                                <i class="ph ph-calendar-blank"></i> ${app.events?.date_info || '일정 정보 없음'}
+                            </p>
+                            <p class="text-[11px] text-charcoal/60 font-sans">
+                                신청 인원: ${app.seats}명 | 연락처: ${app.contact}
+                            </p>
+                            ${commentHtml}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const orderList = document.getElementById('mypage-orders-list');
+            orderList.innerHTML = '<div class="text-xs text-charcoal/40 text-center py-4">로딩 중...</div>';
+            
+            const { data: orders, error: ordersErr } = await window.supabaseClient
+                .from('book_orders')
+                .select('*, books(title, author)')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false });
+                
+            if (ordersErr) {
+                orderList.innerHTML = `<div class="text-xs text-[#A33A3A] text-center py-4">데이터 로드 실패: ${ordersErr.message}</div>`;
+            } else if (!orders || orders.length === 0) {
+                orderList.innerHTML = '<p class="text-xs text-charcoal/40 py-4 text-center font-light">구매한 도서가 없습니다.</p>';
+            } else {
+                orderList.innerHTML = orders.map(ord => {
+                    let statusBadge = '';
+                    if (ord.status === 'COMPLETED') {
+                        statusBadge = '<span class="text-[10px] px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded font-bold">결제완료</span>';
+                    } else if (ord.status === 'CANCELLED') {
+                        statusBadge = '<span class="text-[10px] px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded font-bold">취소됨</span>';
+                    } else {
+                        statusBadge = '<span class="text-[10px] px-2 py-0.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded font-bold">결제대기</span>';
+                    }
+                    return `
+                        <div class="bg-white p-4 rounded-xl border border-charcoal/5 shadow-sm">
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="text-sm font-bold text-forest leading-tight">${ord.books?.title || '로딩되지 않은 도서'}</h4>
+                                ${statusBadge}
+                            </div>
+                            <p class="text-[11px] text-charcoal/40 font-sans mb-1">
+                                수량: ${ord.quantity}개 | 총 금액: ${ord.total_price.toLocaleString()}원
+                            </p>
+                            <p class="text-[11px] text-charcoal/60 font-sans">
+                                배송지: ${ord.shipping_address || '주소 정보 없음'}
+                            </p>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!window.supabaseClient) return;
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            
+            if (session) {
+                switchView('mypage');
+                loadMypageData(session.user);
+            } else {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('view') === 'signup') {
+                    switchView('signup');
+                } else {
+                    switchView('login');
+                }
+            }
+        });
+    </script>
 </body></html>

@@ -4,6 +4,8 @@
     <title vid="4">책방 이벤트 - 오래된 서랍</title>
     <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
@@ -484,16 +486,16 @@
                 <form class="space-y-4" onsubmit="submitApply(event)">
                     <div>
                         <label class="block text-sm font-bold text-forest mb-1.5">이름 <span class="text-terra">*</span></label>
-                        <input type="text" required placeholder="홍길동" class="w-full p-3.5 bg-paper border border-[#E5E0D5] rounded-xl text-sm text-charcoal placeholder:text-charcoal/30 focus:outline-none focus:border-forest/40 transition-colors">
+                        <input type="text" id="apply-name" required placeholder="홍길동" class="w-full p-3.5 bg-paper border border-[#E5E0D5] rounded-xl text-sm text-charcoal placeholder:text-charcoal/30 focus:outline-none focus:border-forest/40 transition-colors">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-forest mb-1.5">연락처 <span class="text-terra">*</span></label>
-                        <input type="text" required placeholder="010-0000-0000 또는 이메일" class="w-full p-3.5 bg-paper border border-[#E5E0D5] rounded-xl text-sm text-charcoal placeholder:text-charcoal/30 focus:outline-none focus:border-forest/40 transition-colors">
+                        <input type="text" id="apply-contact" required placeholder="010-0000-0000 또는 이메일" class="w-full p-3.5 bg-paper border border-[#E5E0D5] rounded-xl text-sm text-charcoal placeholder:text-charcoal/30 focus:outline-none focus:border-forest/40 transition-colors">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-forest mb-1.5">인원 수</label>
                         <div class="relative">
-                            <select class="w-full p-3.5 bg-paper border border-[#E5E0D5] rounded-xl text-sm text-charcoal appearance-none focus:outline-none focus:border-forest/40 transition-colors">
+                            <select id="apply-seats" class="w-full p-3.5 bg-paper border border-[#E5E0D5] rounded-xl text-sm text-charcoal appearance-none focus:outline-none focus:border-forest/40 transition-colors">
                                 <option>1명</option>
                                 <option>2명</option>
                                 <option>3명</option>
@@ -504,7 +506,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-forest mb-1.5">전달 사항 <span class="text-charcoal/40 font-normal text-xs">(선택)</span></label>
-                        <textarea rows="3" placeholder="알레르기, 특이사항 등 자유롭게 남겨주세요." class="w-full p-3.5 bg-paper border border-[#E5E0D5] rounded-xl text-sm text-charcoal placeholder:text-charcoal/30 resize-none focus:outline-none focus:border-forest/40 transition-colors"></textarea>
+                        <textarea id="apply-notes" rows="3" placeholder="알레르기, 특이사항 등 자유롭게 남겨주세요." class="w-full p-3.5 bg-paper border border-[#E5E0D5] rounded-xl text-sm text-charcoal placeholder:text-charcoal/30 resize-none focus:outline-none focus:border-forest/40 transition-colors"></textarea>
                     </div>
                     <div class="pt-2">
                         <button type="submit" class="w-full py-4 bg-forest text-cream font-bold rounded-xl hover:bg-forest/90 transition-colors active:scale-[0.98] transform shadow-md">
@@ -647,54 +649,121 @@
         }
 
         
-        const eventData = {
-            'event1': {
+        let fetchedEvents = {};
+        let activeEventId = null;
+
+        const fallbackEvents = [
+            {
+                id: 1,
                 title: '여름밤의 필사 모임',
-                date: '2026.07.20 ~ 2026.08.10 (매주 목 19:30)',
-                img: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=800&auto=format&fit=crop',
-                desc: '매미 소리가 잦아드는 늦은 저녁, 시원한 차 한 잔과 함께 온전히 문장에 집중하는 시간을 가집니다. 좋아하는 책의 구절을 손으로 꾹꾹 눌러 쓰며 하루의 피로를 씻어보세요. 서로의 필사 노트를 공유하며 잔잔한 대화도 나눕니다.',
-                rules: ['지정 도서 없음 (평소 좋아하는 책 지참)', '필기구 개별 지참 권장 (서점 내 기본 펜 제공)', '모임 5분 전까지 착석 부탁드립니다.']
+                date_info: '2026.07.20 ~ 2026.08.10 (매주 목 19:30)',
+                image_url: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=800&auto=format&fit=crop',
+                description: '매미 소리가 잦아드는 늦은 저녁, 시원한 차 한 잔과 함께 온전히 문장에 집중하는 시간을 가집니다. 좋아하는 책의 구절을 손으로 꾹꾹 눌러 쓰며 하루의 피로를 씻어보세요. 서로의 필사 노트를 공유하며 잔잔한 대화도 나눕니다.',
+                max_seats: 15
             },
-            'event2': {
+            {
+                id: 2,
                 title: '나만을 위한 심야 책방',
-                date: '매주 금요일 22:00 ~ 익일 02:00',
-                img: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=800&auto=format&fit=crop',
-                desc: '모두가 잠든 시간, 불이 꺼지지 않는 책방에서 온전한 고독을 즐겨보세요. 백색소음과 은은한 조명 아래서 책을 읽거나 밀린 다이어리를 씁니다. 입장 시 따뜻한 드립 커피 1잔이 제공됩니다.',
-                rules: ['사전 예약제 (당일 20시 마감)', '조용한 분위기 유지를 위해 대화는 자제해 주세요.', '타인의 독서를 방해하는 행동 시 퇴실 조치될 수 있습니다.']
+                date_info: '매주 금요일 22:00 ~ 익일 02:00',
+                image_url: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=800&auto=format&fit=crop',
+                description: '모두가 잠든 시간, 불이 꺼지지 않는 책방에서 온전한 고독을 즐겨보세요. 백색소음과 은은한 조명 아래서 책을 읽거나 밀린 다이어리를 씁니다. 입장 시 따뜻한 드립 커피 1잔이 제공됩니다.',
+                max_seats: 10
             },
-            'event3': {
+            {
+                id: 3,
                 title: '이달의 작가 북토크',
-                date: '2026.08.15 (토) 15:00 ~ 17:00',
-                img: 'https://images.unsplash.com/photo-1544928147-79a2dbc1f389?q=80&w=800&auto=format&fit=crop',
-                desc: '베스트셀러 <어느 날, 내 마음에 자리 잡은 것들>의 김하나 작가님을 모시고 이야기를 나눕니다. 책이 쓰이게 된 배경, 집필 과정의 비하인드 스토리, 그리고 독자들과의 Q&A 시간이 준비되어 있습니다. 종료 후 사인회가 이어집니다.',
-                rules: ['참가비 15,000원 (도서 구매 시 10,000원)', '질문은 사전 온라인 접수 및 현장 접수', '사인회는 현장에서 번호표 배부 순으로 진행됩니다.']
+                date_info: '2026.08.15 (토) 15:00 ~ 17:00',
+                image_url: 'https://images.unsplash.com/photo-1544928147-79a2dbc1f389?q=80&w=800&auto=format&fit=crop',
+                description: '베스트셀러 <어느 날, 내 마음에 자리 잡은 것들>의 김하나 작가님을 모시고 이야기를 나눕니다. 책이 쓰이게 된 배경, 집필 과정의 비하인드 스토리, 그리고 독자들과의 Q&A 시간이 준비되어 있습니다. 종료 후 사인회가 이어집니다.',
+                max_seats: 30
             },
-            'event4': {
+            {
+                id: 4,
                 title: '독립출판 워크숍 1기',
-                date: '2026.09.01 ~ 2026.10.20 (총 8주 과정)',
-                img: 'https://images.unsplash.com/photo-1463320726281-696a485928c7?q=80&w=800&auto=format&fit=crop',
-                desc: '나만의 글을 한 권의 책으로 엮어내는 전 과정을 함께합니다. 기획부터 원고 작성, 인디자인 기초, 가제본 제작, 그리고 독립서점 입고 방법까지. 책방지기와 외부 전문가가 밀착 코칭합니다. 나만의 이야기를 세상에 꺼내어보세요.',
-                rules: ['노트북 개별 지참 필수', '과제 수행이 필수적인 실습형 워크숍입니다.', '결석 2회 이상 시 수료증 발급 불가']
+                date_info: '2026.09.01 ~ 2026.10.20 (총 8주 과정)',
+                image_url: 'https://images.unsplash.com/photo-1463320726281-696a485928c7?q=80&w=800&auto=format&fit=crop',
+                description: '나만의 글을 한 권의 책으로 엮어내는 전 과정을 함께합니다. 기획부터 원고 작성, 인디자인 기초, 가제본 제작, 그리고 독립서점 입고 방법까지. 책방지기와 외부 전문가가 밀착 코칭합니다. 나만의 이야기를 세상에 꺼내어보세요.',
+                max_seats: 8
             }
-        };
+        ];
+
+        async function loadEvents() {
+            const carousel = document.getElementById('event-carousel');
+            carousel.innerHTML = '<div class="text-charcoal/60 text-sm py-8 text-center w-full">이벤트를 불러오는 중입니다...</div>';
+            
+            let events = [];
+            let error = null;
+            
+            try {
+                if (window.supabaseClient) {
+                    const res = await window.supabaseClient
+                        .from('events')
+                        .select('*')
+                        .order('id', { ascending: true });
+                    events = res.data;
+                    error = res.error;
+                } else {
+                    error = new Error("Supabase Client is not defined");
+                }
+            } catch (err) {
+                error = err;
+            }
+                
+            if (error || !events || events.length === 0) {
+                console.warn("Supabase 데이터 조회 실패 또는 비어있음 -> 로컬 Mock 데이터를 노출합니다.", error);
+                events = fallbackEvents;
+            }
+            
+            carousel.innerHTML = '';
+            fetchedEvents = {};
+            
+            events.forEach(event => {
+                fetchedEvents[event.id] = event;
+                
+                const card = document.createElement('div');
+                card.className = 'snap-center shrink-0 w-[280px] md:w-[320px] bg-cream rounded-2xl shadow-card border border-[#E5E0D5] overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-all active:scale-95';
+                card.onclick = () => openEventModal(event.id);
+                
+                card.innerHTML = `
+                    <div class="relative h-44 overflow-hidden">
+                        <img src="${event.image_url || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=600'}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Event Image">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                        <span class="absolute top-4 left-4 bg-terra text-cream font-sans text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-cream animate-pulse"></span> 진행중
+                        </span>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-bold text-forest text-lg mb-2 leading-tight">${event.title}</h3>
+                        <p class="font-sans text-xs text-charcoal/60 flex items-center gap-1.5">
+                            <i class="ph ph-calendar-blank"></i> ${event.date_info}
+                        </p>
+                    </div>
+                `;
+                carousel.appendChild(card);
+            });
+            
+            const spacer = document.createElement('div');
+            spacer.className = 'snap-center shrink-0 w-4 md:hidden';
+            carousel.appendChild(spacer);
+        }
 
         const eventModal = document.getElementById('event-modal');
         
         function openEventModal(eventId) {
-            const data = eventData[eventId];
+            const data = fetchedEvents[eventId];
             if(data) {
-                document.getElementById('modal-event-img').src = data.img;
+                activeEventId = eventId;
+                document.getElementById('modal-event-img').src = data.image_url || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=800';
                 document.getElementById('modal-event-title').textContent = data.title;
-                document.getElementById('modal-event-date').textContent = data.date;
-                document.getElementById('modal-event-desc').textContent = data.desc;
+                document.getElementById('modal-event-date').textContent = data.date_info;
+                document.getElementById('modal-event-desc').textContent = data.description || '';
                 
                 const rulesContainer = document.getElementById('modal-event-rules');
-                rulesContainer.innerHTML = '';
-                data.rules.forEach(rule => {
-                    const li = document.createElement('li');
-                    li.textContent = rule;
-                    rulesContainer.appendChild(li);
-                });
+                rulesContainer.innerHTML = `
+                    <li>정원: 최대 ${data.max_seats || 10}명</li>
+                    <li>모임 시작 5분 전까지 착석 부탁드립니다.</li>
+                    <li>자세한 유의사항은 신청 완료 후 개별 연락처로 안내드립니다.</li>
+                `;
             }
 
             eventModal.classList.add('active');
@@ -709,12 +778,34 @@
         /* ---- Apply Modal ---- */
         const applyModal = document.getElementById('apply-modal');
 
-        function openApplyModal() {
-            // 현재 열린 이벤트 팝업의 제목을 신청 팝업에 연동
+        async function openApplyModal() {
+            if (!window.supabaseClient) return;
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (!session) {
+                showToast('로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.', false);
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+                return;
+            }
+
             const title = document.getElementById('modal-event-title').textContent;
             document.getElementById('apply-event-title').textContent = title;
 
-            // 이벤트 팝업은 닫지 않고 신청 팝업만 위에 쌓기
+            // 신청 폼 사전 입력 처리
+            const nameInput = document.getElementById('apply-name');
+            const contactInput = document.getElementById('apply-contact');
+            
+            // profiles 테이블 조회하여 유저 실명 자동 매핑
+            const { data: profile } = await window.supabaseClient
+                .from('profiles')
+                .select('name')
+                .eq('id', session.user.id)
+                .single();
+                
+            nameInput.value = profile ? profile.name : (session.user.user_metadata?.name || '');
+            contactInput.value = session.user.email || '';
+
             applyModal.classList.add('active');
         }
 
@@ -722,28 +813,50 @@
             applyModal.classList.remove('active');
         }
 
-        function submitApply(e) {
+        async function submitApply(e) {
             e.preventDefault();
+            if (!window.supabaseClient) return;
+            
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (!session) {
+                showToast('로그인이 필요합니다.', false);
+                return;
+            }
+
+            const name = document.getElementById('apply-name').value;
+            const contact = document.getElementById('apply-contact').value;
+            const seatsText = document.getElementById('apply-seats').value;
+            const seats = parseInt(seatsText.replace(/[^0-9]/g, '')) || 1;
+            const notes = document.getElementById('apply-notes').value;
+
+            if (!activeEventId) {
+                showToast('올바르지 않은 이벤트 정보입니다.', false);
+                return;
+            }
+
+            // Supabase DB에 신청 내역 저장
+            const { error } = await window.supabaseClient
+                .from('event_applications')
+                .insert({
+                    user_id: session.user.id,
+                    event_id: activeEventId,
+                    name: name,
+                    contact: contact,
+                    seats: seats,
+                    notes: notes,
+                    status: 'PENDING'
+                });
+
+            if (error) {
+                showToast('신청 실패: ' + error.message, false);
+                return;
+            }
+
             closeApplyModal();
             closeEventModal();
-            // 성공 토스트 메시지
-            const toast = document.createElement('div');
-            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] bg-forest text-cream font-sans text-sm font-bold px-6 py-3.5 rounded-full shadow-xl flex items-center gap-2 transition-all opacity-0 translate-y-4';
-            toast.innerHTML = '<i class="ph-fill ph-check-circle text-lg"></i> 신청이 완료되었습니다!';
-            document.body.appendChild(toast);
-            requestAnimationFrame(() => {
-                toast.style.transition = 'all 0.3s ease';
-                toast.style.opacity = '1';
-                toast.style.transform = 'translateX(-50%) translateY(0)';
-            });
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(-50%) translateY(16px)';
-                setTimeout(() => toast.remove(), 400);
-            }, 2800);
+            showToast('소모임 신청이 완료되었습니다!', true);
         }
 
-        
         const suggestModal = document.getElementById('suggest-modal');
         
         function openSuggestModal() {
@@ -773,6 +886,11 @@
                 document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
             }
         }
+
+        // 페이지 로드 완료 시 이벤트 목록 호출
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEvents();
+        });
 
     </script>
 

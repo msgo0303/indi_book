@@ -3,6 +3,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
     <title vid="4">Book Detail - Minimalist Editorial</title>
     <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet" vid="6">
     
     <script vid="7">
@@ -189,11 +191,146 @@
                 </button>
                 
                 
-                <button class="flex-1 h-12 rounded-full bg-charcoal text-white font-medium text-sm tracking-wide shadow-md hover:bg-black transition-colors active:scale-[0.98]" vid="79">
+                <button onclick="openPurchaseModal()" class="flex-1 h-12 rounded-full bg-charcoal text-white font-medium text-sm tracking-wide shadow-md hover:bg-black transition-colors active:scale-[0.98]" vid="79">
                     바로 구매
                 </button>
             </div>
         </div>
+
+    </main>
+
+    <!-- modal-purchase: 바로 구매 주문/결제 팝업 -->
+    <div id="modal-purchase" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" onclick="closePurchaseModal()"></div>
+        <div class="bg-ivory rounded-3xl w-full max-w-[440px] relative z-10 shadow-2xl overflow-hidden border border-borderLight flex flex-col max-h-[90vh] scale-95 transition-transform duration-300">
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-borderLight flex justify-between items-center bg-white">
+                <h3 class="font-serif text-lg font-bold text-charcoal">주문 / 결제</h3>
+                <button onclick="closePurchaseModal()" class="w-8 h-8 flex items-center justify-center text-muted hover:text-charcoal transition-colors">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <!-- Body (Scrollable) -->
+            <div class="p-6 overflow-y-auto space-y-6 text-sm">
+                <!-- Product summary -->
+                <div class="flex gap-4 bg-white p-4 rounded-2xl border border-borderLight shadow-sm">
+                    <img id="purchase-book-cover" src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=200" class="w-16 h-24 object-cover rounded shadow-sm bg-surface">
+                    <div class="flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 id="purchase-book-title" class="font-serif font-bold text-charcoal text-base">The Art of Stillness</h4>
+                            <p id="purchase-book-author" class="text-xs text-muted">Pico Iyer</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <!-- Qty counter -->
+                            <div class="flex items-center border border-borderLight rounded-full bg-surface px-1">
+                                <button onclick="changePurchaseQty(-1)" class="w-6 h-6 flex items-center justify-center text-charcoal active:scale-90 transition-transform font-bold">-</button>
+                                <span id="purchase-qty" class="w-8 text-center text-xs font-bold">1</span>
+                                <button onclick="changePurchaseQty(1)" class="w-6 h-6 flex items-center justify-center text-charcoal active:scale-90 transition-transform font-bold">+</button>
+                            </div>
+                            <span class="font-bold text-charcoal text-sm"><span id="purchase-price-unit">16,800</span>원</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Address Form -->
+                <div class="space-y-3">
+                    <h5 class="font-bold text-charcoal border-b border-borderLight pb-1.5 flex items-center gap-1.5">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        배송 정보
+                    </h5>
+                    <div class="space-y-2">
+                        <input type="text" id="buyer-name" required placeholder="받는 사람 이름" class="w-full bg-white border border-borderLight rounded-xl px-4 py-2.5 outline-none focus:border-charcoal transition-colors">
+                        <input type="tel" id="buyer-phone" required placeholder="연락처 (010-0000-0000)" class="w-full bg-white border border-borderLight rounded-xl px-4 py-2.5 outline-none focus:border-charcoal transition-colors">
+                        <input type="text" id="buyer-address" required placeholder="배송지 주소를 입력하세요" class="w-full bg-white border border-borderLight rounded-xl px-4 py-2.5 outline-none focus:border-charcoal transition-colors">
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="space-y-3">
+                    <h5 class="font-bold text-charcoal border-b border-borderLight pb-1.5 flex items-center gap-1.5">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                        결제 수단
+                    </h5>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="pay-method" value="card" checked class="sr-only peer">
+                            <div class="py-2.5 text-center text-xs font-medium rounded-xl border border-borderLight peer-checked:border-charcoal peer-checked:bg-charcoal peer-checked:text-white transition-all bg-white">신용카드</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="pay-method" value="toss" class="sr-only peer">
+                            <div class="py-2.5 text-center text-xs font-medium rounded-xl border border-borderLight peer-checked:border-charcoal peer-checked:bg-charcoal peer-checked:text-white transition-all bg-white">토스페이</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="pay-method" value="kakao" class="sr-only peer">
+                            <div class="py-2.5 text-center text-xs font-medium rounded-xl border border-borderLight peer-checked:border-charcoal peer-checked:bg-charcoal peer-checked:text-white transition-all bg-white">카카오페이</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Price details -->
+                <div class="bg-surface rounded-2xl p-4 border border-borderLight space-y-2">
+                    <div class="flex justify-between text-xs text-muted">
+                        <span>상품 합계</span>
+                        <span><span id="summary-prod-price">16,800</span>원</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-muted">
+                        <span>배송비</span>
+                        <span><span id="summary-shipping-price">3,000</span>원</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-charcoal border-t border-borderLight pt-2 text-sm">
+                        <span>최종 결제 금액</span>
+                        <span><span id="summary-total-price">19,800</span>원</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Buttons -->
+            <div class="px-6 py-4 border-t border-borderLight bg-white shrink-0">
+                <button onclick="submitPurchase()" class="w-full bg-charcoal text-white font-medium rounded-full py-4 hover:bg-black transition-colors shadow-md text-sm active:scale-[0.98]">
+                    <span id="total-pay-btn-label">19,800</span>원 결제하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal-processing: 결제 중 애니메이션 스피너 -->
+    <div id="modal-processing" class="fixed inset-0 z-[110] flex flex-col items-center justify-center p-4 bg-charcoal/80 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="w-12 h-12 rounded-full border-4 border-borderLight border-t-white animate-spin mb-4"></div>
+        <p class="text-white font-medium text-sm tracking-wide">안전하게 결제를 요청하고 있습니다...</p>
+    </div>
+
+    <!-- modal-success: 주문 완료 팝업 -->
+    <div id="modal-success" class="fixed inset-0 z-[120] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" onclick="closeSuccessModal()"></div>
+        <div class="bg-ivory rounded-3xl w-full max-w-[380px] p-8 text-center relative z-10 shadow-2xl border border-borderLight flex flex-col items-center scale-95 transition-transform duration-300">
+            <!-- Icon -->
+            <div class="w-16 h-16 rounded-full bg-green-50 text-green-600 flex items-center justify-center mb-6 shadow-sm">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-charcoal mb-2">주문 완료!</h3>
+            <p class="text-xs text-muted mb-6 leading-relaxed">소중한 주문이 정상적으로 접수되었습니다.<br>배송 현황은 이메일과 알림톡으로 발송해 드립니다.</p>
+            
+            <div class="w-full bg-white rounded-2xl border border-borderLight p-4 mb-6 space-y-2.5 text-left text-xs">
+                <div class="flex justify-between">
+                    <span class="text-muted">주문 번호</span>
+                    <span id="success-order-id" class="font-bold text-charcoal"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-muted">상품명</span>
+                    <span id="success-product-name" class="text-charcoal font-medium">The Art of Stillness</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-muted">총 결제액</span>
+                    <span class="text-charcoal font-bold"><span id="success-total-price"></span>원</span>
+                </div>
+            </div>
+            
+            <button onclick="closeSuccessModal()" class="w-full bg-charcoal text-white font-medium rounded-full py-3.5 hover:bg-black transition-colors shadow-md text-sm active:scale-[0.98]">
+                확인
+            </button>
+        </div>
+    </div>
 
     </main>
 
@@ -481,6 +618,172 @@
             }, { passive: true });
 
         });
+
+        // 바로구매 및 결제 처리 스크립트
+        let purchaseQty = 1;
+        const bookPriceRaw = 16800;
+        
+        function openPurchaseModal() {
+            purchaseQty = 1;
+            document.getElementById('purchase-qty').textContent = purchaseQty;
+            updatePurchasePrices();
+            
+            // Populate cover info dynamically
+            const coverEl = document.getElementById('hero-cover');
+            const titleEl = document.getElementById('hero-title');
+            const authorEl = document.getElementById('hero-author');
+            
+            if (coverEl) {
+                document.getElementById('purchase-book-cover').src = coverEl.src;
+                document.getElementById('purchase-book-cover').style.filter = coverEl.style.filter;
+            }
+            if (titleEl) document.getElementById('purchase-book-title').textContent = titleEl.textContent;
+            if (authorEl) document.getElementById('purchase-book-author').textContent = authorEl.textContent;
+
+            const modal = document.getElementById('modal-purchase');
+            modal.classList.remove('pointer-events-none');
+            modal.classList.add('opacity-100');
+            modal.querySelector('.bg-ivory').classList.remove('scale-95');
+            modal.querySelector('.bg-ivory').classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closePurchaseModal() {
+            const modal = document.getElementById('modal-purchase');
+            modal.classList.add('pointer-events-none');
+            modal.classList.remove('opacity-100');
+            modal.querySelector('.bg-ivory').classList.remove('scale-100');
+            modal.querySelector('.bg-ivory').classList.add('scale-95');
+            document.body.style.overflow = '';
+        }
+        
+        function changePurchaseQty(delta) {
+            purchaseQty = Math.max(1, purchaseQty + delta);
+            document.getElementById('purchase-qty').textContent = purchaseQty;
+            updatePurchasePrices();
+        }
+        
+        function updatePurchasePrices() {
+            const priceText = document.getElementById('hero-price') ? document.getElementById('hero-price').textContent : "16,800";
+            const priceVal = parseInt(priceText.replace(/[^0-9]/g, '')) || bookPriceRaw;
+            const prodSum = priceVal * purchaseQty;
+            const shipping = prodSum >= 50000 ? 0 : 3000;
+            const total = prodSum + shipping;
+            
+            document.getElementById('purchase-price-unit').textContent = priceVal.toLocaleString();
+            document.getElementById('summary-prod-price').textContent = prodSum.toLocaleString();
+            document.getElementById('summary-shipping-price').textContent = shipping.toLocaleString();
+            document.getElementById('summary-total-price').textContent = total.toLocaleString();
+            document.getElementById('total-pay-btn-label').textContent = total.toLocaleString();
+        }
+        
+        async function submitPurchase() {
+            const buyerName = document.getElementById('buyer-name').value.trim();
+            const buyerPhone = document.getElementById('buyer-phone').value.trim();
+            const buyerAddress = document.getElementById('buyer-address').value.trim();
+            
+            if (!buyerName || !buyerPhone || !buyerAddress) {
+                alert('배송 정보를 모두 입력해주세요.');
+                return;
+            }
+
+            const payMethodEl = document.querySelector('input[name="pay-method"]:checked');
+            const payMethod = payMethodEl ? payMethodEl.value : 'card';
+            
+            // Close purchase modal
+            closePurchaseModal();
+            
+            // Show processing spinner
+            const procModal = document.getElementById('modal-processing');
+            procModal.classList.remove('pointer-events-none');
+            procModal.classList.add('opacity-100');
+            
+            // DB Write
+            let userId = null;
+            let bookId = null;
+            const priceText = document.getElementById('hero-price') ? document.getElementById('hero-price').textContent : "16,800";
+            const priceVal = parseInt(priceText.replace(/[^0-9]/g, '')) || bookPriceRaw;
+            const prodSum = priceVal * purchaseQty;
+            const shipping = prodSum >= 50000 ? 0 : 3000;
+            const total = prodSum + shipping;
+
+            if (window.supabaseClient) {
+                try {
+                    const { data: { session } } = await window.supabaseClient.auth.getSession();
+                    if (session) userId = session.user.id;
+                    
+                    // Find book ID by title
+                    const { data: book } = await window.supabaseClient
+                        .from('books')
+                        .select('id')
+                        .eq('title', bookData.title)
+                        .limit(1)
+                        .maybeSingle();
+                        
+                    if (book) {
+                        bookId = book.id;
+                    }
+                    
+                    // Insert order
+                    const { data: order, error } = await window.supabaseClient
+                        .from('book_orders')
+                        .insert({
+                            user_id: userId,
+                            book_id: bookId,
+                            quantity: purchaseQty,
+                            total_price: total,
+                            payment_method: payMethod === 'card' ? '카드' : payMethod === 'toss' ? '토스페이' : '카카오페이',
+                            status: 'COMPLETED',
+                            shipping_address: buyerAddress,
+                            buyer_name: buyerName,
+                            buyer_phone: buyerPhone
+                        })
+                        .select()
+                        .single();
+                        
+                    if (error) {
+                        console.error("Order save error:", error);
+                    } else if (order && bookId) {
+                        // Update stock
+                        const { data: bData } = await window.supabaseClient.from('books').select('stock').eq('id', bookId).single();
+                        if (bData) {
+                            const newStock = Math.max(0, bData.stock - purchaseQty);
+                            await window.supabaseClient.from('books').update({ stock: newStock }).eq('id', bookId);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Purchase processing exception:", e);
+                }
+            }
+            
+            setTimeout(() => {
+                // Hide processing spinner
+                procModal.classList.add('pointer-events-none');
+                procModal.classList.remove('opacity-100');
+                
+                // Show success modal
+                const orderId = 'ORD' + Date.now().toString().slice(-8);
+                
+                document.getElementById('success-order-id').textContent = orderId;
+                document.getElementById('success-product-name').textContent = bookData.title;
+                document.getElementById('success-total-price').textContent = total.toLocaleString();
+                
+                const successModal = document.getElementById('modal-success');
+                successModal.classList.remove('pointer-events-none');
+                successModal.classList.add('opacity-100');
+                successModal.querySelector('.bg-ivory').classList.remove('scale-95');
+                successModal.querySelector('.bg-ivory').classList.add('scale-100');
+            }, 1000);
+        }
+        
+        function closeSuccessModal() {
+            const modal = document.getElementById('modal-success');
+            modal.classList.add('pointer-events-none');
+            modal.classList.remove('opacity-100');
+            modal.querySelector('.bg-ivory').classList.remove('scale-100');
+            modal.querySelector('.bg-ivory').classList.add('scale-95');
+            document.body.style.overflow = '';
+        }
     </script>
 
 </body></html>

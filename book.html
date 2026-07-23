@@ -3,6 +3,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
     <title vid="4">Book Detail - Minimalist Editorial</title>
     <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet" vid="6">
     
     <script vid="7">
@@ -752,7 +754,7 @@
             document.getElementById('total-pay-btn-label').textContent = total.toLocaleString();
         }
         
-        function submitPurchase() {
+        async function submitPurchase() {
             const buyerName = document.getElementById('buyer-name').value.trim();
             const buyerPhone = document.getElementById('buyer-phone').value.trim();
             const buyerAddress = document.getElementById('buyer-address').value.trim();
@@ -762,6 +764,10 @@
                 return;
             }
             
+            // Selected payment method
+            const payMethodEl = document.querySelector('input[name="pay-method"]:checked');
+            const payMethod = payMethodEl ? payMethodEl.value : 'card';
+            
             // Close purchase modal
             closePurchaseModal();
             
@@ -770,6 +776,62 @@
             procModal.classList.remove('pointer-events-none');
             procModal.classList.add('opacity-100');
             
+            // DB Write
+            let userId = null;
+            let bookId = null;
+            const prodSum = bookPriceRaw * purchaseQty;
+            const shipping = prodSum >= 50000 ? 0 : 3000;
+            const total = prodSum + shipping;
+
+            if (window.supabaseClient) {
+                try {
+                    const { data: { session } } = await window.supabaseClient.auth.getSession();
+                    if (session) userId = session.user.id;
+                    
+                    // Find book ID by title
+                    const { data: book } = await window.supabaseClient
+                        .from('books')
+                        .select('id')
+                        .eq('title', bookData.title)
+                        .limit(1)
+                        .maybeSingle();
+                        
+                    if (book) {
+                        bookId = book.id;
+                    }
+                    
+                    // Insert order
+                    const { data: order, error } = await window.supabaseClient
+                        .from('book_orders')
+                        .insert({
+                            user_id: userId,
+                            book_id: bookId,
+                            quantity: purchaseQty,
+                            total_price: total,
+                            payment_method: payMethod === 'card' ? '카드' : payMethod === 'toss' ? '토스페이' : '카카오페이',
+                            status: 'COMPLETED',
+                            shipping_address: buyerAddress,
+                            buyer_name: buyerName,
+                            buyer_phone: buyerPhone
+                        })
+                        .select()
+                        .single();
+                        
+                    if (error) {
+                        console.error("Order save error:", error);
+                    } else if (order && bookId) {
+                        // Update stock
+                        const { data: bData } = await window.supabaseClient.from('books').select('stock').eq('id', bookId).single();
+                        if (bData) {
+                            const newStock = Math.max(0, bData.stock - purchaseQty);
+                            await window.supabaseClient.from('books').update({ stock: newStock }).eq('id', bookId);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Purchase processing exception:", e);
+                }
+            }
+            
             setTimeout(() => {
                 // Hide processing spinner
                 procModal.classList.add('pointer-events-none');
@@ -777,9 +839,6 @@
                 
                 // Show success modal
                 const orderId = 'ORD' + Date.now().toString().slice(-8);
-                const prodSum = bookPriceRaw * purchaseQty;
-                const shipping = prodSum >= 50000 ? 0 : 3000;
-                const total = prodSum + shipping;
                 
                 document.getElementById('success-order-id').textContent = orderId;
                 document.getElementById('success-total-price').textContent = total.toLocaleString();
@@ -789,7 +848,7 @@
                 successModal.classList.add('opacity-100');
                 successModal.querySelector('.bg-ivory').classList.remove('scale-95');
                 successModal.querySelector('.bg-ivory').classList.add('scale-100');
-            }, 1500);
+            }, 1000);
         }
         
         function closeSuccessModal() {
