@@ -140,7 +140,7 @@
             
             <div class="text-center w-full max-w-sm space-y-3" vid="24">
                 <div id="hero-badge-container" class="hidden justify-center mb-1">
-                    <span id="hero-badge" class="bg-terra text-cream text-[11px] font-bold px-3 py-1 rounded-full shadow-sm"></span>
+                    <span id="hero-badge" class="bg-terra text-ivory text-[11px] font-bold px-3 py-1 rounded-full shadow-sm"></span>
                 </div>
                 <h2 id="hero-title" class="font-serif text-3xl font-bold tracking-tight text-charcoal leading-tight" vid="25"></h2>
                 <h3 id="hero-subtitle" class="font-serif text-lg text-muted italic font-light" vid="26"></h3>
@@ -180,11 +180,11 @@
             <div class="px-6 mb-6 flex items-end justify-between" vid="44">
                 <div vid="45">
                     <h4 class="font-serif text-xl font-bold mb-1" vid="46">Readers' Reviews</h4>
-                    <p class="text-xs text-muted font-medium uppercase tracking-wider" vid="47">92% Highly Recommend</p>
+                    <p id="highly-recommend-text" class="text-xs text-muted font-medium uppercase tracking-wider" vid="47">92% Highly Recommend</p>
                 </div>
                 <div class="text-right flex flex-col items-end gap-1" vid="48">
-                    <div class="text-3xl font-bold tracking-tighter" vid="49">4.8<span class="text-lg text-muted font-normal" vid="50">/5.0</span></div>
-                    <button onclick="openReviewModal()" class="px-3 py-1.5 bg-charcoal text-cream text-[11px] font-medium rounded-full hover:bg-black active:scale-95 transition-all">리뷰 작성하기</button>
+                    <div id="avg-rating-text" class="text-3xl font-bold tracking-tighter" vid="49">4.8<span class="text-lg text-muted font-normal" vid="50">/5.0</span></div>
+                    <button onclick="openReviewModal()" class="px-3 py-1.5 bg-charcoal text-ivory text-[11px] font-medium rounded-full hover:bg-black active:scale-95 transition-all">리뷰 작성하기</button>
                 </div>
             </div>
 
@@ -517,9 +517,9 @@
                 if (badgeContainer && badgeEl) {
                     badgeEl.textContent = paramBadge;
                     if (paramBadge.includes('중고')) {
-                        badgeEl.className = "bg-[#1B4332] text-cream text-[11px] font-bold px-3 py-1 rounded-full shadow-sm";
+                        badgeEl.className = "bg-[#1B4332] text-ivory text-[11px] font-bold px-3 py-1 rounded-full shadow-sm";
                     } else {
-                        badgeEl.className = "bg-terra text-cream text-[11px] font-bold px-3 py-1 rounded-full shadow-sm";
+                        badgeEl.className = "bg-terra text-ivory text-[11px] font-bold px-3 py-1 rounded-full shadow-sm";
                     }
                     badgeContainer.classList.replace('hidden', 'flex');
                 }
@@ -550,75 +550,6 @@
 
             // DB 상세 데이터 로드 및 초기화 실행
             await loadBookDetails();
-
-            
-            const tabs = [
-                { id: 'intro', label: '책 소개', content: bookData.description },
-                { id: 'toc', label: '목차', content: bookData.table_of_contents },
-                { id: 'author', label: '저자 소개', content: bookData.author_intro },
-                { id: 'specs', label: '도서 정보', content: bookData.book_meta_info },
-                { id: 'guide', label: '구매 안내', content: `
-                    <div class="space-y-6 font-sans text-sm">
-                        <div>
-                            <h6 class="font-bold text-charcoal mb-2 flex items-center gap-2"><div class="w-1 h-1 bg-charcoal rounded-full"></div>결제 정보</h6>
-                            <p class="text-gray-600 leading-relaxed pl-3">${bookData.purchase_guide.payment}</p>
-                        </div>
-                        <div>
-                            <h6 class="font-bold text-charcoal mb-2 flex items-center gap-2"><div class="w-1 h-1 bg-charcoal rounded-full"></div>배송 정보</h6>
-                            <p class="text-gray-600 leading-relaxed pl-3">${bookData.purchase_guide.shipping}</p>
-                        </div>
-                        <div>
-                            <h6 class="font-bold text-charcoal mb-2 flex items-center gap-2"><div class="w-1 h-1 bg-charcoal rounded-full"></div>교환 및 반품</h6>
-                            <p class="text-gray-600 leading-relaxed pl-3">${bookData.purchase_guide.return_refund}</p>
-                        </div>
-                    </div>` 
-                }
-            ];
-
-            const tabsNav = document.getElementById('tabs-nav');
-            const tabContent = document.getElementById('tab-content');
-
-            
-            tabs.forEach((tab, index) => {
-                const btn = document.createElement('button');
-                btn.className = `tab-btn flex-1 min-w-fit px-4 py-3.5 text-[14px] font-medium whitespace-nowrap transition-colors relative
-                                ${index === 0 ? 'text-charcoal' : 'text-gray-400'}`;
-                btn.textContent = tab.label;
-                btn.dataset.target = tab.id;
-                
-                
-                const indicator = document.createElement('div');
-                indicator.className = `tab-indicator absolute bottom-0 left-0 w-full h-[2px] bg-charcoal transition-opacity duration-300
-                                     ${index === 0 ? 'opacity-100' : 'opacity-0'}`;
-                btn.appendChild(indicator);
-
-                btn.addEventListener('click', () => switchTab(tab, btn));
-                tabsNav.appendChild(btn);
-            });
-
-            
-            tabContent.innerHTML = `<div class="fade-in">${tabs[0].content}</div>`;
-
-            function switchTab(tabData, clickedBtn) {
-                
-                document.querySelectorAll('.tab-btn').forEach(b => {
-                    b.classList.remove('text-charcoal');
-                    b.classList.add('text-gray-400');
-                    b.querySelector('.tab-indicator').classList.replace('opacity-100', 'opacity-0');
-                });
-                clickedBtn.classList.remove('text-gray-400');
-                clickedBtn.classList.add('text-charcoal');
-                clickedBtn.querySelector('.tab-indicator').classList.replace('opacity-0', 'opacity-100');
-
-                
-                tabContent.innerHTML = `<div class="fade-in">${tabData.content}</div>`;
-                
-                
-                const tabsTop = tabsNav.parentElement.getBoundingClientRect().top;
-                if(tabsTop < 0) {
-                    window.scrollTo({ top: window.scrollY + tabsTop - 60, behavior: 'smooth' });
-                }
-            }
 
             
             const reviewsContainer = document.getElementById('reviews-container');
@@ -997,13 +928,22 @@
                     btn.classList.remove('text-gray-400');
                     btn.classList.add('text-charcoal');
                     btn.querySelector('.tab-indicator').classList.replace('opacity-0', 'opacity-100');
-                    tabContent.innerHTML = `<div class="fade-in">${tab.content}</div>`;
+                    
+                    let contentHtml = tab.content;
+                    if (tab.id === 'intro' || tab.id === 'toc') {
+                        contentHtml = `<div class="font-sans text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">${tab.content}</div>`;
+                    }
+                    tabContent.innerHTML = `<div class="fade-in">${contentHtml}</div>`;
                 });
                 
                 tabsNav.appendChild(btn);
             });
 
-            tabContent.innerHTML = `<div class="fade-in">${tabs[0].content}</div>`;
+            let initialContent = tabs[0].content;
+            if (tabs[0].id === 'intro' || tabs[0].id === 'toc') {
+                initialContent = `<div class="font-sans text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">${tabs[0].content}</div>`;
+            }
+            tabContent.innerHTML = `<div class="fade-in">${initialContent}</div>`;
         }
 
         async function loadReviews() {
@@ -1025,7 +965,33 @@
                         <div class="snap-center flex-shrink-0 w-[280px] bg-white border border-borderLight rounded-2xl p-6 text-center text-charcoal/50 text-xs flex items-center justify-center">
                             작성된 리뷰가 없습니다.<br>첫 리뷰를 남겨보세요!
                         </div>`;
+                    
+                    const avgRatingEl = document.getElementById('avg-rating-text');
+                    if (avgRatingEl) {
+                        avgRatingEl.innerHTML = `5.0<span class="text-lg text-muted font-normal">/5.0</span>`;
+                    }
+                    const highlyRecommendEl = document.getElementById('highly-recommend-text');
+                    if (highlyRecommendEl) {
+                        highlyRecommendEl.textContent = `100% Highly Recommend`;
+                    }
                     return;
+                }
+                
+                // 평점 평균 및 추천 비율 계산
+                const totalRating = reviews.reduce((sum, r) => sum + r.rating, 0);
+                const avgRating = (totalRating / reviews.length).toFixed(1);
+                
+                const highReviews = reviews.filter(r => r.rating >= 4).length;
+                const pctRecommend = Math.round((highReviews / reviews.length) * 100);
+
+                const avgRatingEl = document.getElementById('avg-rating-text');
+                if (avgRatingEl) {
+                    avgRatingEl.innerHTML = `${avgRating}<span class="text-lg text-muted font-normal">/5.0</span>`;
+                }
+
+                const highlyRecommendEl = document.getElementById('highly-recommend-text');
+                if (highlyRecommendEl) {
+                    highlyRecommendEl.textContent = `${pctRecommend}% Highly Recommend`;
                 }
                 
                 reviews.forEach(review => {
