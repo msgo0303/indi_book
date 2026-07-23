@@ -434,9 +434,9 @@
                         
                         <div class="lg:col-span-4" vid="219">
                             <label class="block text-sm font-bold text-charcoal mb-2" vid="220">도서 표지 이미지 URL <span class="text-terra" vid="221">*</span></label>
-                            <input type="text" id="book-cover-url" class="w-full px-4 py-2.5 bg-white border border-forest/20 rounded-md focus:ring-2 focus:ring-forest focus:outline-none text-sm text-charcoal shadow-inner-soft mb-3" placeholder="https://images.unsplash.com/... 또는 빈칸" oninput="document.getElementById('book-cover-preview').src = this.value || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300'">
+                            <input type="text" id="book-cover-url" class="w-full px-4 py-2.5 bg-white border border-forest/20 rounded-md focus:ring-2 focus:ring-forest focus:outline-none text-sm text-charcoal shadow-inner-soft mb-3" placeholder="https://images.unsplash.com/... 또는 빈칸">
                             <div class="border border-forest/10 rounded-xl bg-paper/50 h-[250px] flex items-center justify-center overflow-hidden">
-                                <img id="book-cover-preview" src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300" class="h-full object-cover" alt="Preview">
+                                <img id="book-cover-preview" referrerpolicy="no-referrer" src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300" class="h-full object-cover" alt="Preview">
                             </div>
                         </div>
 
@@ -462,6 +462,8 @@
                                     <option value="에세이" vid="251">에세이</option>
                                     <option value="인문/교양" vid="252">인문/교양</option>
                                     <option value="시/희곡" vid="253">시/희곡</option>
+                                    <option value="예술/독립잡지">예술/독립잡지</option>
+                                    <option value="이벤트 도서">이벤트 도서</option>
                                 </select>
                             </div>
                             <div vid="254">
@@ -506,19 +508,33 @@
                                     <button type="button" class="p-1.5 rounded hover:bg-forest/10 text-charcoal/70" vid="287"><i class="ph ph-list-bullets" vid="288"></i></button>
                                     <button type="button" class="p-1.5 rounded hover:bg-forest/10 text-charcoal/70" vid="289"><i class="ph ph-image" vid="290"></i></button>
                                 </div>
-                                <textarea class="w-full h-40 p-4 text-sm text-charcoal outline-none resize-y" placeholder="출판사 서평 및 도서 상세 소개..." vid="291"></textarea>
+                                <textarea id="book-description" class="w-full h-40 p-4 text-sm text-charcoal outline-none resize-y" placeholder="출판사 서평 및 도서 상세 소개..." vid="291"></textarea>
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6" vid="292">
                             <div vid="293">
                                 <label class="block text-sm font-bold text-charcoal mb-2" vid="294">목차 (Table of Contents)</label>
-                                <textarea class="w-full h-32 px-4 py-3 bg-white border border-forest/20 rounded-md focus:ring-2 focus:ring-forest focus:outline-none text-sm text-charcoal shadow-inner-soft resize-y leading-relaxed" placeholder="1장. 시작하며
-2장. 본문..." vid="295"></textarea>
+                                <textarea id="book-toc" class="w-full h-32 px-4 py-3 bg-white border border-forest/20 rounded-md focus:ring-2 focus:ring-forest focus:outline-none text-sm text-charcoal shadow-inner-soft resize-y leading-relaxed" placeholder="1장. 시작하며&#10;2장. 본문..." vid="295"></textarea>
                             </div>
                             <div vid="296">
                                 <label class="block text-sm font-bold text-charcoal mb-2" vid="297">작가 소개 (Author Intro)</label>
-                                <textarea class="w-full h-32 px-4 py-3 bg-white border border-forest/20 rounded-md focus:ring-2 focus:ring-forest focus:outline-none text-sm text-charcoal shadow-inner-soft resize-y leading-relaxed" placeholder="작가에 대한 간략한 이력 및 소개글..." vid="298"></textarea>
+                                <textarea id="book-author-intro" class="w-full h-32 px-4 py-3 bg-white border border-forest/20 rounded-md focus:ring-2 focus:ring-forest focus:outline-none text-sm text-charcoal shadow-inner-soft resize-y leading-relaxed" placeholder="작가에 대한 간략한 이력 및 소개글..." vid="298"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" vid="extra-metadata-fields">
+                            <div>
+                                <label class="block text-sm font-bold text-charcoal mb-2">발행일 (Publish Date)</label>
+                                <input type="text" id="book-publish-date" class="w-full px-4 py-2.5 bg-white border border-forest/20 rounded-md focus:ring-2 focus:ring-forest focus:outline-none text-sm text-charcoal shadow-inner-soft" placeholder="예: 2023년 10월 25일">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-charcoal mb-2">쪽수 / 무게 (Pages)</label>
+                                <input type="text" id="book-pages" class="w-full px-4 py-2.5 bg-white border border-forest/20 rounded-md focus:ring-2 focus:ring-forest focus:outline-none text-sm text-charcoal shadow-inner-soft" placeholder="예: 212쪽 / 340g">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-charcoal mb-2">ISBN</label>
+                                <input type="text" id="book-isbn" class="w-full px-4 py-2.5 bg-white border border-forest/20 rounded-md focus:ring-2 focus:ring-forest focus:outline-none text-sm text-charcoal shadow-inner-soft" placeholder="ISBN 번호 입력">
                             </div>
                         </div>
                     </div>
@@ -1109,7 +1125,21 @@
             </div>
         </div>
         
-    </main>
+    <!-- modal-admin-reviews: 관리자용 리뷰 리스트 및 삭제 모달 -->
+    <div id="modal-admin-reviews" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeAdminReviewsModal()"></div>
+        <div class="bg-cream rounded-2xl w-full max-w-xl relative z-10 shadow-2xl border border-forest/10 flex flex-col max-h-[80vh] scale-95 transition-transform duration-300">
+            <div class="p-6 border-b border-forest/10 flex justify-between items-center shrink-0">
+                <h4 class="font-serif font-bold text-xl text-forest" id="admin-reviews-title">도서 리뷰 관리</h4>
+                <button onclick="closeAdminReviewsModal()" class="text-charcoal/60 hover:text-terra hover:bg-paper transition-colors w-8 h-8 flex items-center justify-center rounded-full">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto font-sans space-y-4" id="admin-reviews-list">
+                <!-- Reviews populated dynamically -->
+            </div>
+        </div>
+    </div>
 
     <script vid="654">
         let activePage = 'page-dashboard';
@@ -1147,19 +1177,47 @@
             console.log("관리자 인증 성공:", profile.name);
             
             // 사이드바 어드민 정보 바인딩 (김문장 -> 실제 관리자명)
-            const adminNames = document.querySelectorAll('.text-sm.font-bold.text-charcoal');
+            const adminNames = document.querySelectorAll('#sidebar .text-sm.font-bold.text-charcoal');
             adminNames.forEach(el => el.textContent = `${profile.name || '관리자'} 님`);
             
-            const adminAvatars = document.querySelectorAll('.w-10.h-10.rounded-full');
+            const adminAvatars = document.querySelectorAll('#sidebar .w-10.h-10.rounded-full');
             adminAvatars.forEach(el => el.textContent = (profile.name || '관리자').charAt(0));
             
             // 대시보드 데이터 로드
             loadPageData('page-dashboard');
         }
 
-        // DOM 로드 시 인증 검사
+        // DOM 로드 시 인증 검사 및 입력 이벤트 바인딩
         document.addEventListener("DOMContentLoaded", () => {
             checkAdminAuth();
+            
+            // ISBN 입력 시 도서 표지 URL 자동 변환 및 프리뷰 갱신
+            const isbnInput = document.getElementById('book-isbn');
+            if (isbnInput) {
+                isbnInput.addEventListener('input', (e) => {
+                    const isbn = e.target.value.trim().replace(/[^0-9]/g, '');
+                    if (isbn.length === 13) {
+                        const coverUrl = `https://www.aladin.co.kr/shop/book/wbook_download.aspx?ISBN=${isbn}&ISBNType=1`;
+                        document.getElementById('book-cover-url').value = coverUrl;
+                        document.getElementById('book-cover-preview').src = coverUrl;
+                    }
+                });
+            }
+            
+            // 표지 URL 수동 입력 시 실시간 프리뷰 갱신 (만약 13자리 ISBN이 들어오면 자동으로 이미지 다운로드 링크로 변환)
+            const coverInput = document.getElementById('book-cover-url');
+            if (coverInput) {
+                coverInput.addEventListener('input', (e) => {
+                    let val = e.target.value.trim();
+                    const cleanNum = val.replace(/[^0-9]/g, '');
+                    if (cleanNum.length === 13 && val === cleanNum) {
+                        const coverUrl = `https://www.aladin.co.kr/shop/book/wbook_download.aspx?ISBN=${cleanNum}&ISBNType=1`;
+                        e.target.value = coverUrl;
+                        val = coverUrl;
+                    }
+                    document.getElementById('book-cover-preview').src = val || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
+                });
+            }
         });
 
         // 2. 페이지 전환
@@ -1279,7 +1337,7 @@
                     const pct = Math.min(100, Math.round((totalBooks / 100) * 100));
                     progressEl.style.width = `${pct}%`;
                     
-                    const progressLabelEl = document.querySelectorAll('#page-dashboard .text-sm.font-medium.text-charcoal/50')[1];
+                    const progressLabelEl = document.querySelector('#page-dashboard [vid="87"]');
                     if (progressLabelEl) progressLabelEl.textContent = `/ 100 권 (${totalBooks}권 등록)`;
                 }
             } catch (err) {
@@ -1324,7 +1382,7 @@
                     tr.innerHTML = `
                         <td class="p-4 text-center">
                             <div class="w-12 h-16 bg-gray-200 rounded mx-auto overflow-hidden shadow-sm border border-black/5">
-                                <img src="${book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=100'}" class="w-full h-full object-cover" alt="Cover">
+                                <img referrerpolicy="no-referrer" src="${book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=100'}" class="w-full h-full object-cover" alt="Cover">
                             </div>
                         </td>
                         <td class="p-4">
@@ -1336,10 +1394,13 @@
                         <td class="p-4"><span class="px-2 py-1 bg-paper border border-forest/10 rounded text-xs">${book.genre || '도서'}</span></td>
                         <td class="p-4 text-center">${statusBadge}</td>
                         <td class="p-4 text-right whitespace-nowrap">
-                            <button onclick="editBook(${book.id})" class="w-8 h-8 rounded border border-forest/20 text-forest hover:bg-forest hover:text-cream transition-colors inline-flex items-center justify-center mr-1">
+                            <button onclick="openAdminReviewsModal(${book.id}, '${book.title.replace(/'/g, "\\'")}')" class="w-8 h-8 rounded border border-terra/30 text-terra hover:bg-terra hover:text-cream transition-colors inline-flex items-center justify-center mr-1" title="리뷰 관리">
+                                <i class="ph ph-sparkle"></i>
+                            </button>
+                            <button onclick="editBook(${book.id})" class="w-8 h-8 rounded border border-forest/20 text-forest hover:bg-forest hover:text-cream transition-colors inline-flex items-center justify-center mr-1" title="수정">
                                 <i class="ph ph-pencil-simple"></i>
                             </button>
-                            <button onclick="deleteBook(${book.id})" class="w-8 h-8 rounded border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors inline-flex items-center justify-center">
+                            <button onclick="deleteBook(${book.id})" class="w-8 h-8 rounded border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors inline-flex items-center justify-center" title="삭제">
                                 <i class="ph ph-trash"></i>
                             </button>
                         </td>
@@ -1347,7 +1408,7 @@
                     tbody.appendChild(tr);
                 });
                 
-                const label = document.querySelector('#page-books .text-sm.text-charcoal/60');
+                const label = document.querySelector('#page-books .p-4.border-t span');
                 if (label) label.textContent = `총 ${books.length}권의 도서 등록됨`;
             } catch (err) {
                 tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-[#A33A3A]">도서 조회 실패: ${err.message}</td></tr>`;
@@ -1366,8 +1427,12 @@
             document.getElementById('book-cover-url').value = '';
             document.getElementById('book-cover-preview').src = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
             
-            const textareas = document.querySelectorAll('#page-books textarea');
-            textareas.forEach(ta => ta.value = '');
+            document.getElementById('book-description').value = '';
+            document.getElementById('book-toc').value = '';
+            document.getElementById('book-author-intro').value = '';
+            document.getElementById('book-publish-date').value = '';
+            document.getElementById('book-pages').value = '';
+            document.getElementById('book-isbn').value = '';
         }
 
         // 9. 도서 수정 모드 활성화
@@ -1385,8 +1450,15 @@
             document.getElementById('book-cover-url').value = book.cover_image || '';
             document.getElementById('book-cover-preview').src = book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
             
+            document.getElementById('book-description').value = book.description || '';
+            document.getElementById('book-toc').value = book.table_of_contents || '';
+            document.getElementById('book-author-intro').value = book.author_intro || '';
+            document.getElementById('book-publish-date').value = book.publish_date || '';
+            document.getElementById('book-pages').value = book.pages || '';
+            document.getElementById('book-isbn').value = book.isbn || '';
+            
             // 정보 에디터 영역으로 스무스 스크롤 이동
-            document.querySelector('#page-books .bg-white.rounded-xl.border.border-forest\/10.shadow-soft.overflow-hidden').scrollIntoView({ behavior: 'smooth' });
+            document.querySelector('#page-books form').scrollIntoView({ behavior: 'smooth' });
         }
 
         // 10. 도서 등록 및 수정 DB 최종 처리
@@ -1402,6 +1474,13 @@
             const stock = parseInt(document.getElementById('book-stock').value) || 0;
             const coverImage = document.getElementById('book-cover-url').value.trim();
             
+            const description = document.getElementById('book-description').value.trim();
+            const toc = document.getElementById('book-toc').value.trim();
+            const authorIntro = document.getElementById('book-author-intro').value.trim();
+            const publishDate = document.getElementById('book-publish-date').value.trim();
+            const pages = document.getElementById('book-pages').value.trim();
+            const isbn = document.getElementById('book-isbn').value.trim();
+            
             if (!title || !author) {
                 showToast("도서명과 작가명은 필수 입력 항목입니다.", false);
                 return;
@@ -1414,7 +1493,13 @@
                 genre: genre,
                 price: price,
                 stock: stock,
-                cover_image: coverImage || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600'
+                cover_image: coverImage || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600',
+                description: description,
+                table_of_contents: toc,
+                author_intro: authorIntro,
+                publish_date: publishDate,
+                pages: pages,
+                isbn: isbn
             };
             
             try {
@@ -1780,6 +1865,98 @@
                 loadProfiles();
             } catch (err) {
                 showToast("권한 변경 실패: " + err.message, false);
+            }
+        }
+
+        // --- 도서 리뷰 관리 스크립트 ---
+        let activeReviewBookId = null;
+
+        async function openAdminReviewsModal(bookId, bookTitle) {
+            activeReviewBookId = bookId;
+            document.getElementById('admin-reviews-title').textContent = `[${bookTitle}] 리뷰 관리`;
+            
+            const listEl = document.getElementById('admin-reviews-list');
+            listEl.innerHTML = '<p class="text-center text-charcoal/50 text-sm py-8">리뷰를 불러오는 중...</p>';
+            
+            const modal = document.getElementById('modal-admin-reviews');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-cream').classList.remove('scale-95');
+            modal.querySelector('.bg-cream').classList.add('scale-100');
+            
+            await loadAdminReviewsList(bookId);
+        }
+
+        function closeAdminReviewsModal() {
+            const modal = document.getElementById('modal-admin-reviews');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-cream').classList.remove('scale-100');
+            modal.querySelector('.bg-cream').classList.add('scale-95');
+            activeReviewBookId = null;
+        }
+
+        async function loadAdminReviewsList(bookId) {
+            const listEl = document.getElementById('admin-reviews-list');
+            if (!window.supabaseClient) return;
+            
+            try {
+                const { data: reviews, error } = await window.supabaseClient
+                    .from('book_reviews')
+                    .select('*')
+                    .eq('book_id', bookId)
+                    .order('created_at', { ascending: false });
+                    
+                if (error) throw error;
+                
+                if (!reviews || reviews.length === 0) {
+                    listEl.innerHTML = '<p class="text-center text-charcoal/40 text-sm py-8">등록된 리뷰가 없습니다.</p>';
+                    return;
+                }
+                
+                let html = '';
+                reviews.forEach(review => {
+                    const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                    html += `
+                        <div class="p-4 bg-white border border-forest/10 rounded-lg flex justify-between items-start gap-4">
+                            <div class="flex-1 space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-terra font-bold text-xs">${stars}</span>
+                                    <span class="text-charcoal font-bold text-xs">${review.user_name}</span>
+                                    <span class="text-charcoal/30 text-[10px]">${new Date(review.created_at).toLocaleDateString()}</span>
+                                </div>
+                                <p class="text-charcoal text-sm leading-relaxed">${review.review_text}</p>
+                            </div>
+                            <button onclick="deleteReview(${review.id})" class="text-xs text-red-600 hover:text-red-800 border border-red-200 hover:bg-red-50 px-2 py-1 rounded transition-colors shrink-0">
+                                삭제
+                            </button>
+                        </div>
+                    `;
+                });
+                listEl.innerHTML = html;
+            } catch (err) {
+                console.error("Error loading reviews for admin:", err);
+                listEl.innerHTML = `<p class="text-center text-[#A33A3A] text-sm py-8">리뷰 로드 실패: ${err.message}</p>`;
+            }
+        }
+
+        async function deleteReview(reviewId) {
+            if (!confirm('정말로 이 리뷰를 삭제하시겠습니까?')) return;
+            if (!window.supabaseClient) return;
+            
+            try {
+                const { error } = await window.supabaseClient
+                    .from('book_reviews')
+                    .delete()
+                    .eq('id', reviewId);
+                    
+                if (error) throw error;
+                
+                showToast('리뷰가 성공적으로 삭제되었습니다.');
+                if (activeReviewBookId) {
+                    await loadAdminReviewsList(activeReviewBookId);
+                }
+            } catch (err) {
+                console.error("Error deleting review:", err);
+                showToast('리뷰 삭제 실패: ' + err.message, false);
             }
         }
     </script>

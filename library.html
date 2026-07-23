@@ -716,35 +716,79 @@
 
         
         
-        const dummyData = {
-            'poetry': generateDummyBooks('시/수필', 12, '13,000', [10, 50, 100]),
-            'humanities': generateDummyBooks('인문/사회 서적', 16, '18,000', [200, 250, 300]),
-            'art': generateDummyBooks('독립잡지/예술', 8, '15,000', [40, 80, 120]),
-            'event': generateDummyBooks('[이벤트] 특별 도서', 4, '9,900', [320, 340, 360])
-        };
-        
-        
         const gridContainer = document.getElementById('book-grid');
-        const initialFictionHTML = gridContainer.innerHTML;
-        dummyData['fiction'] = initialFictionHTML;
+        let allBooksList = [];
 
-        function generateDummyBooks(titlePrefix, count, price, hueRotates) {
+        // 1. Supabase DB로부터 도서 전체 목록 불러오기
+        async function fetchBooksFromDB() {
+            if (!window.supabaseClient) return;
+            gridContainer.innerHTML = '<div class="col-span-full py-16 text-center text-charcoal/40 font-sans text-sm">도서를 불러오는 중입니다...</div>';
+            
+            try {
+                const { data: books, error } = await window.supabaseClient
+                    .from('books')
+                    .select('*')
+                    .order('id', { ascending: false });
+                    
+                if (error) throw error;
+                allBooksList = books;
+                
+                // 기본 선택 카테고리인 'fiction' (소설) 도서 렌더링
+                renderGenreBooks('fiction');
+            } catch (err) {
+                console.error("도서 조회 실패:", err);
+                gridContainer.innerHTML = `<div class="col-span-full py-16 text-center text-[#A33A3A] font-sans text-sm">도서를 불러오지 못했습니다: ${err.message}</div>`;
+            }
+        }
+
+        // 2. 카테고리 ID를 DB의 genre 필드 값 리스트로 매핑
+        function getGenreDBValues(genreId) {
+            switch (genreId) {
+                case 'fiction':
+                    return ['소설'];
+                case 'poetry':
+                    return ['에세이', '시/희곡'];
+                case 'humanities':
+                    return ['인문/교양'];
+                case 'art':
+                    return ['예술/독립잡지'];
+                case 'event':
+                    return ['이벤트 도서'];
+                default:
+                    return [];
+            }
+        }
+
+        // 3. 특정 장르의 도서만 필터링하여 화면에 렌더링
+        function renderGenreBooks(genreId) {
+            const dbGenres = getGenreDBValues(genreId);
+            const filteredBooks = allBooksList.filter(b => dbGenres.includes(b.genre || '소설'));
+            
+            if (filteredBooks.length === 0) {
+                gridContainer.innerHTML = `<div class="col-span-full py-16 text-center text-charcoal/40 font-sans text-sm">해당 서가에 등록된 도서가 없습니다.</div>`;
+                return;
+            }
+            
             let html = '';
-            for(let i=1; i<=count; i++) {
+            filteredBooks.forEach((book, i) => {
+                // 다양하고 예쁜 색상을 주기 위해 책 표지에 hue-rotate 필터를 순환 적용
+                const hueRotates = [0, 30, 80, 120, 200, 250, 300];
                 const hue = hueRotates[i % hueRotates.length];
+                const filterStyle = book.genre === '이벤트 도서' ? `filter: hue-rotate(45deg) saturate(1.2);` : `filter: hue-rotate(${hue}deg);`;
+                
                 html += `
-                <div class="group flex flex-col h-full">
+                <div class="group flex flex-col h-full" data-book-id="${book.id}">
                     <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer">
                         <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply"></div>
-                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop" alt="Cover" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" style="filter: hue-rotate(${hue}deg);">
+                        <img referrerpolicy="no-referrer" src="${book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600'}" alt="Cover" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" style="${filterStyle}">
                         <button onclick="toggleWishlist(event, this)" class="absolute top-2 right-2 md:top-3 md:right-3 w-8 h-8 bg-cream/95 backdrop-blur-sm text-charcoal/40 rounded-full flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all hover:text-terra shadow-sm z-20">
                             <i class="ph ph-heart text-lg"></i>
                         </button>
                     </div>
                     <div class="flex items-start justify-between gap-2 mt-auto pt-1">
                         <div class="flex-1 cursor-pointer">
-                            <h4 class="font-serif font-bold text-sm md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 break-keep">${titlePrefix} ${i}</h4>
-                            <p class="font-sans font-semibold text-charcoal/90 text-sm">${price}원</p>
+                            <h4 class="font-serif font-bold text-sm md:text-base leading-snug mb-1 group-hover:text-terra transition-colors line-clamp-2 break-keep">${book.title}</h4>
+                            <p class="font-sans font-semibold text-charcoal/90 text-sm">${book.price.toLocaleString()}원</p>
                         </div>
                         <button onclick="addToCart(event)" class="w-8 h-8 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-forest hover:text-cream transition-colors shrink-0 bg-cream">
                             <i class="ph ph-shopping-cart-simple text-lg"></i>
@@ -752,30 +796,25 @@
                     </div>
                 </div>
                 `;
-            }
-            return html;
+            });
+            gridContainer.innerHTML = html;
         }
 
+        // 4. 서재 탭 카테고리 클릭 시 화면 전환
         function switchGenre(genreId, buttonEl) {
-            
             if (buttonEl.classList.contains('active')) return;
 
-            
             const tabs = document.querySelectorAll('.genre-tab');
             tabs.forEach(tab => {
                 tab.classList.remove('active', 'bg-forest', 'text-cream', 'border-forest');
-                
-                
                 if(tab.innerText !== '이벤트 도서') {
                     tab.classList.add('text-charcoal/70', 'border-transparent');
                 } else {
-                    
                     tab.classList.add('text-terra', 'bg-terra/5', 'border-terra/30');
                     tab.classList.remove('hover:bg-terra', 'hover:text-cream', 'bg-terra', 'text-cream');
                 }
             });
 
-            
             buttonEl.classList.add('active');
             if (genreId === 'event') {
                 buttonEl.classList.remove('text-terra', 'bg-terra/5', 'border-terra/30');
@@ -785,104 +824,57 @@
                 buttonEl.classList.add('bg-forest', 'text-cream', 'border-forest');
             }
 
-            
             gridContainer.style.opacity = '0';
             gridContainer.style.filter = 'blur(12px)';
 
             setTimeout(() => {
-                
-                if(genreId === 'fiction') {
-                    gridContainer.innerHTML = dummyData['fiction'];
-                } else {
-                    gridContainer.innerHTML = dummyData[genreId];
-                }
-                
-                
+                renderGenreBooks(genreId);
                 gridContainer.style.opacity = '1';
                 gridContainer.style.filter = 'blur(0px)';
             }, 400); 
             
-            
             buttonEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
 
-        // book-grid 클릭 이벤트 위임 - 각 도서 상세페이지(book.html)로 데이터 전달하며 이동
+        // 5. 도서 그리드 클릭 이벤트 위임 - 상세 페이지(book.html)로 데이터 전달하며 연결
         document.getElementById('book-grid').addEventListener('click', (e) => {
-            // 하시의 찜하기 버튼이나 장바구니 담기 버튼을 누른 경우는 이동하지 않도록 제외
             if (e.target.closest('button')) return;
             
             const card = e.target.closest('.group');
             if (!card) return;
             
-            // 이미지 또는 타이틀 영역 클릭 시 작동
             const clickable = e.target.closest('.cursor-pointer');
             if (!clickable) return;
             
-            const imgEl = card.querySelector('img');
             const titleEl = card.querySelector('h4');
-            const priceEl = card.querySelector('p');
-            
-            if (imgEl && titleEl && priceEl) {
+            if (titleEl) {
                 const title = titleEl.textContent.trim();
-                const imgSrc = imgEl.src;
-                // 가격 기호 제외
-                const price = priceEl.textContent.replace(/[^0-9,]/g, '').trim();
                 
-                // 기존 8종 메인 도서의 고유 저자 및 서브타이틀 매핑 데이터
-                const bookMeta = {
-                    '참을 수 없는 존재의 가벼움': { author: '밀란 쿤데라', subtitle: '생의 가벼움과 무거움 사이' },
-                    '어느 날, 내 마음에 자리 잡은 것들': { author: '피천득', subtitle: '일상의 작은 은혜와 감성 에세이' },
-                    '고요한 우연': { author: '기욤 뮈소', subtitle: '내면 깊은 곳의 평온과의 만남' },
-                    '다정한 매일매일': { author: '김용택', subtitle: '따스하게 건네는 삶의 시선' },
-                    '우리가 빛의 속도로 갈 수 없다면': { author: '김초엽', subtitle: 'SF와 인간의 감성이 어우러지는 수작' },
-                    '아주 오랜만에 행복하다는 느낌': { author: '박완서', subtitle: '잔잔하게 흐르는 삶의 행복 조각' },
-                    '모든 것은 기본에서 시작한다': { author: '손웅정', subtitle: '단순하면서도 흔들리지 않는 뿌리' },
-                    '숲속의 자본주의자': { author: '박혜윤', subtitle: '숲에서 배운 삶의 새로운 방식' }
-                };
-                
-                let author = '오래된 서랍 지음';
-                let subtitle = '바쁜 현대인을 위한 처방 도서';
-                
-                if (bookMeta[title]) {
-                    author = bookMeta[title].author;
-                    subtitle = bookMeta[title].subtitle;
-                } else {
-                    // 카테고리별 저자 정보 자동 설정
-                    if (title.includes('시/수필')) {
-                        author = '이해인 지음';
-                        subtitle = '마음을 적시는 시의 온기';
-                    } else if (title.includes('인문/사회')) {
-                        author = '유발 하라리 지음';
-                        subtitle = '역사와 사회에 대한 깊이 있는 통찰';
-                    } else if (title.includes('독립잡지/예술')) {
-                        author = '어라운드 편집부';
-                        subtitle = '아날로그 감성을 공유하는 매거진';
-                    } else if (title.includes('이벤트')) {
-                        author = '책방지기 특별 추천';
-                        subtitle = '지금 시즌에 놓쳐선 안 될 아름다운 문장들';
+                // 불러온 DB 목록에서 일치하는 도서 검색하여 실제 메타 데이터 획득
+                const book = allBooksList.find(b => b.title === title);
+                if (book) {
+                    const params = new URLSearchParams();
+                    params.set('title', book.title);
+                    params.set('image', book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600');
+                    params.set('price', book.price.toString());
+                    params.set('author', book.author || '오래된 서랍 지음');
+                    params.set('subtitle', book.publisher ? `${book.publisher} 출판` : '오래된 서랍 추천 도서');
+                    
+                    // 표지 색상 필터 전달
+                    const imgEl = card.querySelector('img');
+                    if (imgEl) {
+                        const match = imgEl.style.filter.match(/hue-rotate\((\d+)deg\)/);
+                        if (match) {
+                            params.set('hue', match[1]);
+                        }
                     }
+                    
+                    window.location.href = 'book.html?' + params.toString();
                 }
-                
-                // hue-rotate 필터 값 추출
-                let hue = '';
-                const match = imgEl.style.filter.match(/hue-rotate\((\d+)deg\)/);
-                if (match) {
-                    hue = match[1];
-                }
-                
-                const params = new URLSearchParams();
-                params.set('title', title);
-                params.set('image', imgSrc);
-                params.set('price', price);
-                params.set('author', author);
-                params.set('subtitle', subtitle);
-                if (hue) params.set('hue', hue);
-                
-                window.location.href = 'book.html?' + params.toString();
             }
         });
 
-        /* ---- Mobile Menu ---- */
+        /* ---- 모바일 햄버거 토글 ---- */
         let mobileMenuOpen = false;
         function toggleMobileMenu() {
             mobileMenuOpen = !mobileMenuOpen;
@@ -899,6 +891,12 @@
                 document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
             }
         }
+
+        // 초기화
+        if (typeof updateNavbar === 'function') {
+            updateNavbar();
+        }
+        fetchBooksFromDB();
     </script>
 
 </body></html>
