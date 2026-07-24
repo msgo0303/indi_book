@@ -2681,8 +2681,23 @@
             loadMainCurations();
 
             function initSkeletonLoaders() {
-                // 1. 베스트셀러 그리드 스켈레톤
+                // 최초 1회 원래 하드코딩된 HTML 백업 (데이터베이스 조회 실패 시 Fallback 복원용)
                 const bestsellerGrid = document.getElementById('best-seller-grid');
+                if (bestsellerGrid && typeof window.originalBestsellerHtml === 'undefined') {
+                    window.originalBestsellerHtml = bestsellerGrid.innerHTML;
+                }
+
+                const editorGrid = document.getElementById('editor-picks-grid');
+                if (editorGrid && typeof window.originalEditorPicksHtml === 'undefined') {
+                    window.originalEditorPicksHtml = editorGrid.innerHTML;
+                }
+
+                const bookshelfTrack = document.getElementById('bookshelf-track');
+                if (bookshelfTrack && typeof window.originalUsedBooksHtml === 'undefined') {
+                    window.originalUsedBooksHtml = bookshelfTrack.innerHTML;
+                }
+
+                // 1. 베스트셀러 그리드 스켈레톤
                 if (bestsellerGrid) {
                     bestsellerGrid.classList.add('dynamic-fade', 'fade-in');
                     bestsellerGrid.innerHTML = Array(8).fill(`
@@ -2701,7 +2716,6 @@
                 }
 
                 // 2. 에디터 추천 그리드 스켈레톤
-                const editorGrid = document.getElementById('editor-picks-grid');
                 if (editorGrid) {
                     editorGrid.classList.add('dynamic-fade', 'fade-in');
                     editorGrid.innerHTML = Array(4).fill(`
@@ -2718,7 +2732,6 @@
                 }
 
                 // 3. 중고 도서 슬라이더 스켈레톤
-                const bookshelfTrack = document.getElementById('bookshelf-track');
                 if (bookshelfTrack) {
                     bookshelfTrack.classList.add('dynamic-fade', 'fade-in');
                     bookshelfTrack.innerHTML = Array(6).fill(`
@@ -2798,6 +2811,14 @@
                     });
                 } catch (err) {
                     console.error("Error loading hero slides from DB:", err);
+                    // DB 실패 시 기존 하드코딩된 슬라이드 텍스트 컨테이너 투명도 복원 (Fade-in)
+                    const heroSlides = document.querySelectorAll('.hero-slide');
+                    heroSlides.forEach(slide => {
+                        const contentContainer = slide.querySelector('div');
+                        if (contentContainer) {
+                            contentContainer.classList.add('fade-in');
+                        }
+                    });
                 }
             }
 
@@ -2873,6 +2894,11 @@
                     }
                 } catch (err) {
                     console.error("Error loading used books curation:", err);
+                    if (window.originalUsedBooksHtml) {
+                        track.innerHTML = window.originalUsedBooksHtml;
+                        track.classList.add('fade-in');
+                        initInfiniteBookshelf();
+                    }
                 }
             }
 
@@ -2983,6 +3009,16 @@
                 }
             } catch (e) {
                 console.error("Error loading curated slots:", e);
+                const bestsellerGrid = document.getElementById('best-seller-grid');
+                if (bestsellerGrid && window.originalBestsellerHtml) {
+                    bestsellerGrid.innerHTML = window.originalBestsellerHtml;
+                    bestsellerGrid.classList.add('fade-in');
+                }
+                const editorGrid = document.getElementById('editor-picks-grid');
+                if (editorGrid && window.originalEditorPicksHtml) {
+                    editorGrid.innerHTML = window.originalEditorPicksHtml;
+                    editorGrid.classList.add('fade-in');
+                }
             }
         }
     </script>
