@@ -2787,7 +2787,11 @@
             }
 
         async function loadMainCurations() {
-            if (typeof window.supabaseClient === 'undefined' || !window.supabaseClient) return;
+            console.log("[CurationDebug] loadMainCurations() called.");
+            if (typeof window.supabaseClient === 'undefined' || !window.supabaseClient) {
+                console.warn("[CurationDebug] Supabase client is not initialized yet.");
+                return;
+            }
 
             try {
                 // 1. 모든 도서 정보 로드
@@ -2795,6 +2799,7 @@
                     .from('books')
                     .select('*');
                 if (bookErr) throw bookErr;
+                console.log("[CurationDebug] Successfully fetched books:", books ? books.length : 0);
 
                 // 2. 현재 배정된 슬롯 정보 로드
                 const { data: slots, error: slotErr } = await window.supabaseClient
@@ -2802,8 +2807,12 @@
                     .select('*')
                     .order('slot_index', { ascending: true });
                 if (slotErr) throw slotErr;
+                console.log("[CurationDebug] Successfully fetched curated slots:", slots ? slots.length : 0, slots);
 
-                if (!slots || slots.length === 0 || !books || books.length === 0) return;
+                if (!slots || slots.length === 0 || !books || books.length === 0) {
+                    console.warn("[CurationDebug] slots or books array empty. slots:", slots, "books:", books);
+                    return;
+                }
 
                 // 3. 베스트셀러 렌더링
                 const bestsellerSlots = slots.filter(s => s.slot_type === 'bestseller');
