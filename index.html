@@ -2668,6 +2668,12 @@
                 });
             }
 
+            let hasCachedHero = false;
+            let hasCachedUsed = false;
+            let hasCachedCurations = false;
+
+            applyLocalCaches();
+
             // 초기 스켈레톤 UI 즉시 설정 (하드코딩 깜빡임/튀는 현상 방지)
             initSkeletonLoaders();
 
@@ -2697,8 +2703,8 @@
                     window.originalUsedBooksHtml = bookshelfTrack.innerHTML;
                 }
 
-                // 1. 베스트셀러 그리드 스켈레톤
-                if (bestsellerGrid) {
+                // 1. 베스트셀러 그리드 스켈레톤 (캐시가 없을 때만)
+                if (bestsellerGrid && !hasCachedCurations) {
                     bestsellerGrid.classList.add('dynamic-fade', 'fade-in');
                     bestsellerGrid.innerHTML = Array(8).fill(`
                         <div class="flex flex-col h-full animate-pulse">
@@ -2715,8 +2721,8 @@
                     `).join('');
                 }
 
-                // 2. 에디터 추천 그리드 스켈레톤
-                if (editorGrid) {
+                // 2. 에디터 추천 그리드 스켈레톤 (캐시가 없을 때만)
+                if (editorGrid && !hasCachedCurations) {
                     editorGrid.classList.add('dynamic-fade', 'fade-in');
                     editorGrid.innerHTML = Array(4).fill(`
                         <div class="flex flex-col gap-6 animate-pulse w-full">
@@ -2731,8 +2737,8 @@
                     `).join('');
                 }
 
-                // 3. 중고 도서 슬라이더 스켈레톤
-                if (bookshelfTrack) {
+                // 3. 중고 도서 슬라이더 스켈레톤 (캐시가 없을 때만)
+                if (bookshelfTrack && !hasCachedUsed) {
                     bookshelfTrack.classList.add('dynamic-fade', 'fade-in');
                     bookshelfTrack.innerHTML = Array(6).fill(`
                         <div class="group min-w-[260px] w-[260px] flex-shrink-0 bg-white p-4 rounded-xl border border-gray-100 animate-pulse">
@@ -2750,6 +2756,198 @@
                     `).join('');
                 }
 
+            }
+
+            function applyLocalCaches() {
+                // 1) 히어로 캐시 적용
+                try {
+                    const cached = localStorage.getItem('cached_hero_slides');
+                    if (cached) {
+                        const slides = JSON.parse(cached);
+                        const slideElements = document.querySelectorAll('.hero-slide');
+                        if (slides && slides.length > 0) {
+                            slides.forEach(slide => {
+                                const idx = slide.slide_index;
+                                const el = slideElements[idx];
+                                if (!el) return;
+
+                                const badgeEl = el.querySelector('span.uppercase');
+                                if (badgeEl) badgeEl.textContent = slide.badge;
+
+                                const titleEl = el.querySelector('h2');
+                                if (titleEl) {
+                                    titleEl.innerHTML = slide.title.replace(/\\n|\n/g, '<br>');
+                                }
+
+                                const descEl = el.querySelector('p');
+                                if (descEl) descEl.textContent = slide.description;
+
+                                const btnEl = el.querySelector('a');
+                                if (btnEl) {
+                                    btnEl.textContent = slide.button_text;
+                                    btnEl.href = slide.link_url;
+                                }
+
+                                const imgEl = el.querySelector('img');
+                                if (imgEl) imgEl.src = slide.image_url;
+
+                                const contentContainer = el.querySelector('div');
+                                if (contentContainer) {
+                                    contentContainer.style.opacity = '';
+                                    contentContainer.classList.add('fade-in');
+                                }
+                            });
+                            hasCachedHero = true;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Failed to apply cached hero slides:", e);
+                }
+
+                // 2) 중고 도서 캐시 적용
+                try {
+                    const cached = localStorage.getItem('cached_used_books');
+                    const track = document.getElementById('bookshelf-track');
+                    if (cached && track) {
+                        const usedBooks = JSON.parse(cached);
+                        if (usedBooks && usedBooks.length > 0) {
+                            let html = '';
+                            usedBooks.forEach(book => {
+                                const avatarChar = (book.donor_name || 'A').replace(/^@/, '').charAt(0).toUpperCase();
+                                let qualityBg = 'bg-[#1B4332]';
+                                if (book.quality === '우수 (B급)') {
+                                    qualityBg = 'bg-[#D96B43]';
+                                } else if (book.quality === '보통 (C급)') {
+                                    qualityBg = 'bg-[#2B2A29]/80';
+                                }
+
+                                const charCode = avatarChar.charCodeAt(0);
+                                let avatarBg = 'bg-[#1B4332]';
+                                if (charCode % 4 === 1) avatarBg = 'bg-[#D96B43]';
+                                else if (charCode % 4 === 2) avatarBg = 'bg-blue-600';
+                                else if (charCode % 4 === 3) avatarBg = 'bg-teal-600';
+
+                                const rateBadge = book.discount_rate > 0 
+                                    ? `<span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded">${book.discount_rate}%↓</span>`
+                                    : '';
+
+                                html += `
+                                <div class="bookshelf-card group min-w-[260px] w-[260px] flex-shrink-0 snap-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 transform opacity-60 scale-95 z-0">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <div class="w-6 h-6 rounded-full ${avatarBg} text-cream flex items-center justify-center text-[10px] font-bold">${avatarChar}</div>
+                                        <span class="text-xs font-bold text-charcoal">${book.donor_name}</span>
+                                    </div>
+                                    <div class="relative aspect-[2/3] mb-3 overflow-hidden rounded-r-xl rounded-l-sm shadow-book group-hover:shadow-book-hover transition-all duration-300 transform group-hover:-translate-y-1 bg-paper/50 cursor-pointer">
+                                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-black/10 z-10 mix-blend-multiply"></div>
+                                        <span class="absolute top-2 left-2 ${qualityBg} text-cream text-[10px] font-bold px-2 py-0.5 rounded shadow-sm z-20">${book.quality}</span>
+                                        <img referrerpolicy="no-referrer" src="${book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400&fm=webp'}"
+                                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sepia-[0.1]"
+                                            alt="${book.title}">
+                                    </div>
+                                    <div class="flex flex-col pt-1">
+                                        <h4 class="font-serif font-bold text-sm text-charcoal mb-1 leading-snug group-hover:text-terra transition-colors line-clamp-1 truncate">${book.title}</h4>
+                                        <div class="flex items-center gap-1.5 mb-2">
+                                            <span class="line-through text-[11px] text-charcoal/40">${(book.price || 0).toLocaleString()}원</span>
+                                            <span class="font-sans font-bold text-terra text-xs md:text-sm" vid="used-book-price-new">${(book.discount_price || 0).toLocaleString()}원</span>
+                                            ${rateBadge}
+                                        </div>
+                                        <p class="text-charcoal/70 text-[11px] line-clamp-2 leading-relaxed border-t border-forest/5 pt-2 mt-1 italic">"${book.story || '기부자가 남긴 따뜻한 메시지가 담긴 책입니다.'}"</p>
+                                    </div>
+                                </div>`;
+                            });
+                            track.innerHTML = html;
+                            track.classList.add('fade-in');
+                            initInfiniteBookshelf();
+                            hasCachedUsed = true;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Failed to apply cached used books:", e);
+                }
+
+                // 3) 메인 큐레이션 캐시 적용
+                try {
+                    const cachedSlots = localStorage.getItem('cached_curated_slots');
+                    const cachedBooks = localStorage.getItem('cached_books');
+                    const bestsellerGrid = document.getElementById('best-seller-grid');
+                    const editorGrid = document.getElementById('editor-picks-grid');
+
+                    if (cachedSlots && cachedBooks) {
+                        const slots = JSON.parse(cachedSlots);
+                        const books = JSON.parse(cachedBooks);
+
+                        if (slots && slots.length > 0 && books && books.length > 0) {
+                            // 베스트셀러 렌더링
+                            const bestsellerSlots = slots.filter(s => s.slot_type === 'bestseller');
+                            if (bestsellerGrid && bestsellerSlots.length > 0) {
+                                let html = '';
+                                bestsellerSlots.forEach(slot => {
+                                    const book = books.find(b => b.id === slot.book_id);
+                                    if (!book) return;
+
+                                    html += `
+                                    <div class="group cursor-pointer flex flex-col h-full" data-book-id="${book.id}">
+                                        <div class="relative aspect-[3/4] rounded-lg overflow-hidden shadow-cozy mb-4 bg-cream-dark">
+                                            <img referrerpolicy="no-referrer" src="${book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'}"
+                                                alt="${book.title}"
+                                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                            <button class="absolute bottom-3 right-3 w-10 h-10 bg-cream rounded-full shadow-md flex items-center justify-center text-charcoal hover:bg-forest hover:text-cream transition-colors z-10 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-300">
+                                                <i class="ph ph-shopping-cart-simple text-lg"></i>
+                                            </button>
+                                        </div>
+                                        <div class="flex-grow flex flex-col justify-between">
+                                            <div>
+                                                <p class="text-xs text-terra font-bold mb-1">${book.genre || '도서'}</p>
+                                                <h3 class="font-serif font-bold text-lg leading-tight mb-1 group-hover:text-forest transition-colors line-clamp-2">${book.title}</h3>
+                                                <p class="text-sm text-charcoal/70 mb-2">${book.author} 지음</p>
+                                            </div>
+                                            <p class="font-bold">${(book.price || 0).toLocaleString()}원</p>
+                                        </div>
+                                    </div>`;
+                                });
+                                bestsellerGrid.innerHTML = html;
+                                bestsellerGrid.classList.add('fade-in');
+                            }
+
+                            // 에디터추천 렌더링
+                            const editorSlots = slots.filter(s => s.slot_type === 'editor_pick');
+                            if (editorGrid && editorSlots.length > 0) {
+                                let html = '';
+                                editorSlots.forEach((slot, idx) => {
+                                    const book = books.find(b => b.id === slot.book_id);
+                                    if (!book) return;
+
+                                    const comment = slot.comment || '책방지기가 추천하는 도서입니다.';
+                                    const delayClass = idx % 2 === 1 ? 'delay-150' : '';
+
+                                    html += `
+                                    <div class="flex flex-col gap-6 reveal-item opacity-100 translate-y-0 transition-all duration-700 ease-out ${delayClass}">
+                                        <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg bg-paper cursor-pointer">
+                                            <img referrerpolicy="no-referrer" src="${book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=800'}"
+                                                alt="${book.title}"
+                                                class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+                                        </div>
+                                        <div>
+                                            <span class="text-xs font-bold text-terra mb-2 block">${book.publisher || '출판사'}</span>
+                                            <h4 class="font-serif text-2xl font-bold text-forest mb-1 hover:text-terra transition-colors cursor-pointer">${book.title}</h4>
+                                            <p class="text-charcoal/70 text-sm mb-2">${book.author} 지음</p>
+                                            <p class="font-sans font-bold text-forest text-base mb-4 editor-price">${(book.price || 0).toLocaleString()}원</p>
+                                            <div class="p-6 bg-paper rounded-2xl border border-forest/10 relative">
+                                                <div class="absolute -top-3 left-6 bg-cream px-2 text-xs font-bold text-forest border border-forest/20 rounded-full">책방지기가 이 책을 곁에 두는 이유</div>
+                                                <p class="text-charcoal leading-relaxed text-sm">"${comment}"</p>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                                });
+                                editorGrid.innerHTML = html;
+                                editorGrid.classList.add('fade-in');
+                            }
+                            hasCachedCurations = true;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Failed to apply cached curations:", e);
+                }
             }
 
             async function loadHeroSlides() {
@@ -2820,6 +3018,7 @@
                             }, 50);
                         }
                     });
+                    localStorage.setItem('cached_hero_slides', JSON.stringify(slides));
                 } catch (err) {
                     console.error("Error loading hero slides from DB:", err);
                     // DB 실패 시 기존 하드코딩된 슬라이드 텍스트 컨테이너 투명도 복원 (Fade-in)
@@ -2903,6 +3102,7 @@
                             track.classList.add('fade-in');
                             initInfiniteBookshelf();
                         }, 100);
+                        localStorage.setItem('cached_used_books', JSON.stringify(usedBooks));
                     }
                 } catch (err) {
                     console.error("Error loading used books curation:", err);
@@ -3021,6 +3221,8 @@
                         }, 100);
                     }
                 }
+                localStorage.setItem('cached_curated_slots', JSON.stringify(slots));
+                localStorage.setItem('cached_books', JSON.stringify(books));
             } catch (e) {
                 console.error("Error loading curated slots:", e);
                 restoreMainCurationsFallback();
