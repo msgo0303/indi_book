@@ -813,6 +813,36 @@
                 </div>
             </div>
 
+            <!-- 메인 히어로 배너 관리 섹션 (0~4) -->
+            <div class="bg-white rounded-xl border border-forest/10 shadow-soft p-6 mt-8">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-forest/10">
+                    <div>
+                        <h3 class="font-serif font-bold text-lg text-forest flex items-center gap-2">
+                            <i class="ph ph-presentation-chart text-xl text-terra"></i> 메인 히어로 배너 관리 (0 ~ 4)
+                        </h3>
+                        <p class="text-xs text-charcoal/50 mt-1">index.html 페이지 상단 롤링 배너의 이미지, 텍스트, 버튼, 링크를 실시간으로 제어합니다.</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto hide-scrollbar">
+                    <table class="w-full text-left border-collapse min-w-[900px]">
+                        <thead>
+                            <tr class="bg-paper text-xs uppercase tracking-wider text-charcoal/60 border-b border-forest/10">
+                                <th class="p-4 font-bold w-16 text-center">순서</th>
+                                <th class="p-4 font-bold w-24 text-center">배경 이미지</th>
+                                <th class="p-4 font-bold w-32">뱃지</th>
+                                <th class="p-4 font-bold">슬라이드 타이틀</th>
+                                <th class="p-4 font-bold">이동 링크</th>
+                                <th class="p-4 font-bold text-right w-24">관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hero-slides-list-admin" class="divide-y divide-forest/5 text-sm text-charcoal bg-white">
+                            <!-- JS를 통해 5개 항목 동적 렌더링 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- 이벤트 신청자 관리 섹션 -->
             <div class="bg-white rounded-xl border border-forest/10 shadow-soft overflow-hidden mt-8" vid="event-apps-section">
                 <div class="p-4 border-b border-forest/10 bg-paper/50">
@@ -1504,6 +1534,68 @@
         </div>
     </div>
 
+    <!-- 메인 히어로 배너 슬라이드 편집 모달 -->
+    <div id="modal-hero-slide-editor" class="fixed inset-0 z-[200] flex items-center justify-center bg-charcoal/40 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-cream w-full max-w-lg rounded-2xl border border-forest/10 p-6 shadow-2xl scale-95 transition-all duration-300 flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center pb-3 border-b border-forest/10 shrink-0">
+                <h3 class="font-serif font-bold text-forest text-base flex items-center gap-2">
+                    <i class="ph ph-note-pencil text-terra"></i> <span id="hero-editor-modal-title">히어로 슬라이드 편집</span>
+                </h3>
+                <button onclick="closeHeroSlideEditorModal()" class="text-charcoal/40 hover:text-charcoal/90 transition-colors">
+                    <i class="ph ph-x text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="form-hero-slide-editor" onsubmit="saveHeroSlide(event)" class="space-y-4 py-4 overflow-y-auto hide-scrollbar flex-grow">
+                <input type="hidden" id="hero-editor-index">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">뱃지 텍스트 *</label>
+                        <input type="text" id="hero-editor-badge" required class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">버튼 텍스트 *</label>
+                        <input type="text" id="hero-editor-button-text" required class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-charcoal/70">슬라이드 타이틀 *</label>
+                    <textarea id="hero-editor-title" rows="2" required placeholder="줄바꿈이 필요한 곳에는 \n을 입력해 주세요." class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal resize-none"></textarea>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-charcoal/70">설명 문구 *</label>
+                    <textarea id="hero-editor-desc" rows="3" required class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal resize-none"></textarea>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-charcoal/70">버튼 이동 링크 (URL) *</label>
+                    <input type="text" id="hero-editor-link-url" required placeholder="예: temp.html" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-charcoal/70">배경 이미지 URL *</label>
+                    <input type="text" id="hero-editor-image-url" required class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="block text-[10px] font-bold text-charcoal/50 uppercase tracking-wider">배경 이미지 프리뷰</label>
+                    <div class="w-full h-32 rounded-lg bg-paper border border-forest/10 overflow-hidden flex items-center justify-center">
+                        <img id="hero-editor-image-preview" src="" alt="Hero Image Preview" class="w-full h-full object-cover hidden">
+                        <span id="hero-editor-no-image" class="text-xs text-charcoal/40 font-medium">이미지 주소를 입력하시면 프리뷰가 표시됩니다.</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-forest/10 flex justify-end gap-2 shrink-0">
+                    <button type="button" onclick="closeHeroSlideEditorModal()" class="px-5 py-2 bg-paper border border-forest/20 text-charcoal rounded text-sm font-bold hover:bg-paper/80 transition-colors">취소</button>
+                    <button type="submit" class="px-6 py-2 bg-forest text-cream rounded text-sm font-bold hover:bg-forest/90 transition-colors">저장하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script vid="654">
         let activePage = 'page-dashboard';
         let booksList = [];
@@ -1629,6 +1721,7 @@
                 case 'page-events':
                     loadEventsAdmin();
                     loadMagazineSectionsAdmin();
+                    loadHeroSlidesAdmin();
                     loadEventApplications();
                     break;
                 case 'page-used-books':
@@ -3012,6 +3105,152 @@
                 loadMagazineSectionsAdmin();
             } catch (err) {
                 showToast("저장 실패: " + err.message, false);
+            }
+        }
+
+        // --- 메인 히어로 배너 관리 스크립트 ---
+        let adminHeroSlides = [];
+
+        async function loadHeroSlidesAdmin() {
+            if (!window.supabaseClient) return;
+            const tbody = document.getElementById('hero-slides-list-admin');
+            if (!tbody) return;
+            tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-charcoal/50">히어로 배너 데이터 불러오는 중...</td></tr>';
+
+            try {
+                const { data: slides, error } = await window.supabaseClient
+                    .from('hero_slides')
+                    .select('*')
+                    .order('slide_index', { ascending: true });
+
+                if (error) throw error;
+                
+                adminHeroSlides = slides || [];
+
+                if (adminHeroSlides.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-charcoal/50">등록된 히어로 배너 데이터가 없습니다. (add_hero_slides.sql 구동 필요)</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                adminHeroSlides.forEach(slide => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-forest/5 transition-colors group';
+                    
+                    // 타이틀 줄바꿈 처리 (\n -> <br>)
+                    const formattedTitle = slide.title.replace(/\\n|\n/g, '<br>');
+
+                    tr.innerHTML = `
+                        <td class="p-4 text-center font-mono text-charcoal/50 font-bold">${slide.slide_index + 1}</td>
+                        <td class="p-4 text-center">
+                            <div class="w-16 h-10 rounded bg-paper border border-forest/10 overflow-hidden mx-auto flex items-center justify-center">
+                                <img src="${slide.image_url}" alt="Hero Thumb" class="w-full h-full object-cover">
+                            </div>
+                        </td>
+                        <td class="p-4"><span class="px-2.5 py-1 bg-terra/10 text-terra rounded-full text-xs font-semibold">${slide.badge}</span></td>
+                        <td class="p-4 font-serif font-bold text-charcoal leading-relaxed">${formattedTitle}</td>
+                        <td class="p-4 font-mono text-xs text-charcoal/60"><a href="${slide.link_url}" target="_blank" class="hover:underline text-forest">${slide.link_url}</a></td>
+                        <td class="p-4 text-right">
+                            <button onclick="openHeroSlideEditor(${slide.slide_index})" class="px-3 py-1.5 bg-forest text-cream text-xs font-bold rounded hover:bg-forest/90 transition-colors">
+                                편집
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-[#A33A3A] font-bold">배너 연동 오류: ${err.message}</td></tr>`;
+            }
+        }
+
+        function openHeroSlideEditor(slideIndex) {
+            const slide = adminHeroSlides.find(s => s.slide_index === slideIndex);
+            if (!slide) return;
+
+            const modal = document.getElementById('modal-hero-slide-editor');
+            document.getElementById('hero-editor-index').value = slideIndex;
+            document.getElementById('hero-editor-modal-title').textContent = `슬라이드 #${slideIndex + 1} 배너 편집`;
+
+            document.getElementById('hero-editor-badge').value = slide.badge || '';
+            document.getElementById('hero-editor-button-text').value = slide.button_text || '';
+            document.getElementById('hero-editor-title').value = slide.title || '';
+            document.getElementById('hero-editor-desc').value = slide.description || '';
+            document.getElementById('hero-editor-link-url').value = slide.link_url || '';
+            
+            const imageUrlInput = document.getElementById('hero-editor-image-url');
+            const previewImg = document.getElementById('hero-editor-image-preview');
+            const noImageSpan = document.getElementById('hero-editor-no-image');
+
+            imageUrlInput.value = slide.image_url || '';
+
+            // 프리뷰 업데이트 로직
+            const updatePreview = (url) => {
+                const trimmedUrl = url.trim();
+                if (trimmedUrl) {
+                    previewImg.src = trimmedUrl;
+                    previewImg.classList.remove('hidden');
+                    noImageSpan.classList.add('hidden');
+                } else {
+                    previewImg.src = '';
+                    previewImg.classList.add('hidden');
+                    noImageSpan.classList.remove('hidden');
+                }
+            };
+
+            updatePreview(slide.image_url || '');
+
+            // 인풋 실시간 감지
+            imageUrlInput.oninput = (e) => {
+                updatePreview(e.target.value);
+            };
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-cream').classList.remove('scale-95');
+            modal.querySelector('.bg-cream').classList.add('scale-100');
+        }
+
+        function closeHeroSlideEditorModal() {
+            const modal = document.getElementById('modal-hero-slide-editor');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-cream').classList.remove('scale-100');
+            modal.querySelector('.bg-cream').classList.add('scale-95');
+        }
+
+        async function saveHeroSlide(event) {
+            event.preventDefault();
+            if (!window.supabaseClient) return;
+
+            const slideIndex = parseInt(document.getElementById('hero-editor-index').value);
+            
+            const badge = document.getElementById('hero-editor-badge').value.trim();
+            const buttonText = document.getElementById('hero-editor-button-text').value.trim();
+            const title = document.getElementById('hero-editor-title').value.trim();
+            const description = document.getElementById('hero-editor-desc').value.trim();
+            const linkUrl = document.getElementById('hero-editor-link-url').value.trim();
+            const imageUrl = document.getElementById('hero-editor-image-url').value.trim();
+
+            const slideData = {
+                slide_index: slideIndex,
+                badge,
+                title,
+                description,
+                button_text: buttonText,
+                link_url: linkUrl,
+                image_url: imageUrl,
+                updated_at: new Date().toISOString()
+            };
+
+            try {
+                const { error } = await window.supabaseClient
+                    .from('hero_slides')
+                    .upsert(slideData, { onConflict: 'slide_index' });
+
+                if (error) throw error;
+                showToast(`슬라이드 #${slideIndex + 1} 배너 정보가 성공적으로 변경되었습니다.`);
+                closeHeroSlideEditorModal();
+                loadHeroSlidesAdmin();
+            } catch (err) {
+                showToast("배너 저장 실패: " + err.message, false);
             }
         }
     </script>

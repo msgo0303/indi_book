@@ -2658,6 +2658,9 @@
                 });
             }
 
+            // Supabase 연동 - 히어로 슬라이더 동적 렌더링
+            loadHeroSlides();
+
             startAutoSlide();
             
             // Supabase 연동 - 중고 도서 로딩 후 슬라이더 셋업
@@ -2665,6 +2668,50 @@
             
             // Supabase 연동 - 진열 도서 동적 렌더링
             loadMainCurations();
+
+            async function loadHeroSlides() {
+                if (typeof window.supabaseClient === 'undefined' || !window.supabaseClient) return;
+
+                try {
+                    const { data: slides, error } = await window.supabaseClient
+                        .from('hero_slides')
+                        .select('*')
+                        .order('slide_index', { ascending: true });
+
+                    if (error) throw error;
+                    if (!slides || slides.length === 0) return;
+
+                    const slideElements = document.querySelectorAll('.hero-slide');
+                    slides.forEach(slide => {
+                        const idx = slide.slide_index;
+                        const el = slideElements[idx];
+                        if (!el) return;
+
+                        const badgeEl = el.querySelector('span.uppercase');
+                        if (badgeEl) badgeEl.textContent = slide.badge;
+
+                        const titleEl = el.querySelector('h2');
+                        if (titleEl) {
+                            const formattedTitle = slide.title.replace(/\\n|\n/g, '<br>');
+                            titleEl.innerHTML = formattedTitle;
+                        }
+
+                        const descEl = el.querySelector('p');
+                        if (descEl) descEl.textContent = slide.description;
+
+                        const btnEl = el.querySelector('a');
+                        if (btnEl) {
+                            btnEl.textContent = slide.button_text;
+                            btnEl.href = slide.link_url;
+                        }
+
+                        const imgEl = el.querySelector('img');
+                        if (imgEl) imgEl.src = slide.image_url;
+                    });
+                } catch (err) {
+                    console.error("Error loading hero slides from DB:", err);
+                }
+            }
 
             async function loadUsedBooks() {
                 const track = document.getElementById('bookshelf-track');
