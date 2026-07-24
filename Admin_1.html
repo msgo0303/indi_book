@@ -170,6 +170,9 @@
             <button onclick="switchPage('page-community')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-md text-sm text-charcoal/80 hover:bg-forest/5 transition-colors text-left" vid="47">
                 <i class="ph ph-users-three text-lg" vid="48"></i> 커뮤니티 관리
             </button>
+            <button onclick="switchPage('page-used-books')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-md text-sm text-charcoal/80 hover:bg-forest/5 transition-colors text-left" id="nav-used-books">
+                <i class="ph ph-recycle text-lg text-terra"></i> 돌고 돌아 책장 (중고)
+            </button>
             
             <div class="mt-6 mb-2 px-4" vid="49">
                 <p class="text-xs font-bold text-forest/40 uppercase tracking-wider" vid="50">System Config</p>
@@ -760,120 +763,53 @@
         </div>
 
         
-        <div id="page-events" class="page-section p-6 md:p-10 max-w-7xl mx-auto" vid="402">
-            <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4" vid="403">
-                <div vid="404">
-                    <h1 class="text-3xl font-bold text-forest mb-2" vid="405">이벤트 &amp; 콘텐츠 메트릭스</h1>
-                    <p class="text-charcoal/60" vid="406">오프라인 행사 및 매거진 템플릿 레이아웃을 제어합니다.</p>
+        <div id="page-events" class="page-section p-6 md:p-10 max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-forest mb-2">이벤트 및 모임 관리</h1>
+                    <p class="text-charcoal/60">오프라인 행사 및 북토크, 독서 모임 콘텐츠를 관리합니다.</p>
                 </div>
-                
-                <div class="flex p-1 bg-forest/5 rounded-lg border border-forest/10 self-stretch sm:self-auto" vid="407">
-                    <button class="flex-1 sm:flex-none px-4 py-2 rounded-md bg-white text-forest font-bold shadow-sm text-sm transition-all" vid="408">진행중인 이벤트</button>
-                    <button class="flex-1 sm:flex-none px-4 py-2 rounded-md text-charcoal/60 hover:text-charcoal text-sm font-medium transition-all" vid="409">종료된 이벤트</button>
-                    <button class="flex-1 sm:flex-none px-4 py-2 rounded-md text-charcoal/60 hover:text-charcoal text-sm font-medium transition-all flex items-center gap-1 justify-center" vid="410">
-                        <i class="ph-fill ph-layout" vid="411"></i> 매거진 Temp
-                    </button>
+                <button onclick="openEventEditorModal()" class="px-6 py-2.5 bg-forest text-cream rounded-md text-sm font-bold shadow-md hover:bg-forest/90 transition-colors flex items-center gap-2">
+                    <i class="ph ph-plus-circle text-lg"></i> 신규 이벤트 등록
+                </button>
+            </div>
+
+            <div class="bg-white rounded-xl border border-forest/10 shadow-soft overflow-hidden mb-12">
+                <div class="overflow-x-auto hide-scrollbar">
+                    <table class="w-full text-left border-collapse min-w-[900px]">
+                        <thead>
+                            <tr class="bg-paper text-xs uppercase tracking-wider text-charcoal/60 border-b border-forest/10">
+                                <th class="p-4 font-bold w-24 text-center">대표 이미지</th>
+                                <th class="p-4 font-bold">이벤트명</th>
+                                <th class="p-4 font-bold">일정 정보</th>
+                                <th class="p-4 font-bold text-center w-24">정원 (명)</th>
+                                <th class="p-4 font-bold">상세 내용</th>
+                                <th class="p-4 font-bold text-right w-28">관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="events-list-admin" class="divide-y divide-forest/5 text-sm text-charcoal bg-white">
+                            <!-- JS를 통해 동적으로 로드 -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 border-t border-forest/10 bg-paper/30 flex justify-between items-center text-xs text-charcoal/50">
+                    <span id="events-count-admin">등록된 이벤트가 없습니다.</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" vid="412">
-                
-                <div class="bg-white rounded-xl border border-forest/10 shadow-soft p-6" vid="413">
-                    <div class="flex justify-between items-center mb-6 pb-4 border-b border-forest/10" vid="414">
-                        <h3 class="font-bold text-forest flex items-center gap-2" vid="415"><i class="ph-fill ph-calendar-check text-xl" vid="416"></i> 활성 이벤트 카드 편집</h3>
-                        <div class="flex items-center gap-2" vid="417">
-                            <span class="text-xs font-bold text-charcoal" vid="418">진행 상태</span>
-                            <div class="relative inline-block w-12 align-middle select-none" vid="419">
-                                <input type="checkbox" checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-terra" vid="420">
-                                <label class="toggle-label block overflow-hidden h-5 rounded-full cursor-pointer bg-terra" vid="421"></label>
-                            </div>
-                        </div>
+            <!-- 매거진(Temp) 5대 섹션 콘텐츠 빌더 -->
+            <div class="bg-white rounded-xl border border-forest/10 shadow-soft p-6 mt-8">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-forest/10">
+                    <div>
+                        <h3 class="font-serif font-bold text-lg text-forest flex items-center gap-2">
+                            <i class="ph ph-article-ny-times text-xl text-terra"></i> 매거진 (Temp) 5대 섹션 콘텐츠 관리
+                        </h3>
+                        <p class="text-xs text-charcoal/50 mt-1">temp.html 페이지 내 5가지 탭 영역의 핵심 콘텐츠를 실시간으로 교체합니다.</p>
                     </div>
-                    
-                    <form class="space-y-4" vid="422">
-                        <div vid="423">
-                            <label class="block text-xs font-bold text-charcoal mb-1" vid="424">이벤트 타이틀</label>
-                            <input type="text" class="w-full px-3 py-2 border border-forest/20 rounded bg-paper/50 focus:bg-white focus:ring-1 focus:ring-forest outline-none text-sm font-bold text-forest" value="여름밤 심야 독서 모임" vid="425">
-                        </div>
-                        <div class="grid grid-cols-2 gap-4" vid="426">
-                            <div vid="427">
-                                <label class="block text-xs font-bold text-charcoal mb-1" vid="428">시작일 - 종료일</label>
-                                <input type="text" class="w-full px-3 py-2 border border-forest/20 rounded bg-paper/50 focus:bg-white focus:ring-1 focus:ring-forest outline-none text-sm" value="2024.07.15 - 08.15" vid="429">
-                            </div>
-                            <div vid="430">
-                                <label class="block text-xs font-bold text-charcoal mb-1" vid="431">참가 비용</label>
-                                <input type="text" class="w-full px-3 py-2 border border-forest/20 rounded bg-paper/50 focus:bg-white focus:ring-1 focus:ring-forest outline-none text-sm" value="무료 (음료 별도)" vid="432">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4" vid="433">
-                            <div vid="434">
-                                <label class="block text-xs font-bold text-charcoal mb-1" vid="435">장소</label>
-                                <input type="text" class="w-full px-3 py-2 border border-forest/20 rounded bg-paper/50 focus:bg-white focus:ring-1 focus:ring-forest outline-none text-sm" value="오래된 서랍 안쪽 테이블" vid="436">
-                            </div>
-                            <div vid="437">
-                                <label class="block text-xs font-bold text-charcoal mb-1" vid="438">모집 대상</label>
-                                <input type="text" class="w-full px-3 py-2 border border-forest/20 rounded bg-paper/50 focus:bg-white focus:ring-1 focus:ring-forest outline-none text-sm" value="책을 사랑하는 누구나 (선착순 6명)" vid="439">
-                            </div>
-                        </div>
-                        <div vid="440">
-                            <label class="block text-xs font-bold text-charcoal mb-1" vid="441">안내 및 주의사항</label>
-                            <textarea class="w-full h-24 px-3 py-2 border border-forest/20 rounded bg-paper/50 focus:bg-white focus:ring-1 focus:ring-forest outline-none text-sm resize-none" vid="442">신청 후 노쇼 시 다음 모임 참여가 제한될 수 있습니다.</textarea>
-                        </div>
-                        <button type="button" class="w-full py-2.5 bg-charcoal text-cream rounded font-bold text-sm hover:bg-black transition-colors" vid="443">
-                            이벤트 정보 업데이트
-                        </button>
-                    </form>
                 </div>
 
-                
-                <div class="bg-paper rounded-xl border border-terra/20 shadow-inner-soft p-6 relative" vid="444">
-                    <div class="absolute top-0 right-0 bg-terra text-cream text-[10px] font-bold px-3 py-1 rounded-bl-lg rounded-tr-xl tracking-wider" vid="445">MAGAZINE BUILDER</div>
-                    
-                    <h3 class="font-bold text-terra flex items-center gap-2 mb-6" vid="446"><i class="ph-fill ph-article text-xl" vid="447"></i> 매거진 콘텐츠 에디터</h3>
-                    
-                    <div class="space-y-6" vid="448">
-                        
-                        <div class="bg-white p-4 rounded-lg border border-terra/10 shadow-sm" vid="449">
-                            <label class="block text-xs font-bold text-terra mb-2" vid="450">이달의 대표 서평 픽커</label>
-                            <div class="flex gap-2" vid="451">
-                                <input type="text" class="flex-1 px-3 py-1.5 border border-forest/10 rounded text-sm outline-none focus:border-terra bg-paper/30" placeholder="도서명 또는 서평 ID 검색" vid="452">
-                                <button class="px-3 py-1.5 bg-terra/10 text-terra rounded border border-terra/20 text-sm font-bold hover:bg-terra/20" vid="453">선택</button>
-                            </div>
-                        </div>
-
-                        
-                        <div class="bg-white p-4 rounded-lg border border-terra/10 shadow-sm" vid="454">
-                            <div class="flex justify-between items-center mb-3" vid="455">
-                                <label class="block text-xs font-bold text-terra" vid="456">인터뷰 Q&amp;A 행렬 (단골손님 이야기)</label>
-                                <button class="text-xs text-forest flex items-center gap-1 font-bold hover:underline" vid="457"><i class="ph ph-plus" vid="458"></i> 질문 추가</button>
-                            </div>
-                            
-                            
-                            <div class="mb-4 pb-4 border-b border-forest/5 relative group" vid="459">
-                                <button class="absolute -right-2 -top-2 w-6 h-6 bg-red-100 text-red-600 rounded-full items-center justify-center text-xs hidden group-hover:flex shadow-sm" vid="460"><i class="ph ph-x" vid="461"></i></button>
-                                <input type="text" class="w-full px-2 py-1.5 text-sm font-bold text-forest bg-transparent border-b border-forest/20 focus:border-terra outline-none mb-2" value="Q. 서랍 책방을 처음 찾게 된 계기가 있나요?" vid="462">
-                                <textarea class="w-full h-16 px-2 py-1 text-xs text-charcoal/80 bg-paper/30 rounded border border-transparent focus:border-forest/20 outline-none resize-none" vid="463">A. 우연히 골목을 지나다가 낡은 나무 간판에 이끌려 들어왔어요. 특유의 종이 냄새가 참 좋았습니다.</textarea>
-                            </div>
-                            
-                            
-                            <div class="mb-4 pb-4 border-b border-forest/5 relative group" vid="464">
-                                <button class="absolute -right-2 -top-2 w-6 h-6 bg-red-100 text-red-600 rounded-full items-center justify-center text-xs hidden group-hover:flex shadow-sm" vid="465"><i class="ph ph-x" vid="466"></i></button>
-                                <input type="text" class="w-full px-2 py-1.5 text-sm font-bold text-forest bg-transparent border-b border-forest/20 focus:border-terra outline-none mb-2" value="Q. 여기서 찾은 인생 책 한 권을 꼽자면?" vid="467">
-                                <textarea class="w-full h-16 px-2 py-1 text-xs text-charcoal/80 bg-paper/30 rounded border border-transparent focus:border-forest/20 outline-none resize-none" vid="468">A. 책방지기님이 추천해주신 '보이지 않는 도시들'입니다. 상상력을 자극하는 문장들이 매력적이었어요.</textarea>
-                            </div>
-                            
-                            
-                            <div class="relative group" vid="469">
-                                <button class="absolute -right-2 -top-2 w-6 h-6 bg-red-100 text-red-600 rounded-full items-center justify-center text-xs hidden group-hover:flex shadow-sm" vid="470"><i class="ph ph-x" vid="471"></i></button>
-                                <input type="text" class="w-full px-2 py-1.5 text-sm font-bold text-forest bg-transparent border-b border-forest/20 focus:border-terra outline-none mb-2" placeholder="새로운 질문 입력 (Q.)" vid="472">
-                                <textarea class="w-full h-16 px-2 py-1 text-xs text-charcoal/80 bg-paper/30 rounded border border-transparent focus:border-forest/20 outline-none resize-none" placeholder="답변 입력 (A.)" vid="473"></textarea>
-                            </div>
-                        </div>
-
-                        <button type="button" class="w-full py-2.5 bg-terra text-cream rounded font-bold text-sm hover:bg-[#8A5A00] transition-colors shadow-md flex items-center justify-center gap-2" vid="474">
-                            <i class="ph ph-magic-wand" vid="475"></i> 템플릿 페이지 발행
-                        </button>
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4" id="magazine-sections-container">
+                    <!-- 5개 탭의 카드들을 자바스크립트로 동적 렌더링 -->
                 </div>
             </div>
 
@@ -1209,6 +1145,365 @@
         </div>
     </div>
 
+    <!-- page-used-books: 돌고 돌아 책장 (중고 도서) 관리 -->
+    <div id="page-used-books" class="page-section p-6 md:p-10 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-forest mb-2">돌고 돌아 책장 관리</h1>
+                <p class="text-charcoal/60">기부받은 중고 도서 및 기부자 사연 목록을 관리합니다.</p>
+            </div>
+            <button onclick="openUsedBookModal()" class="px-6 py-2.5 bg-forest text-cream rounded-md text-sm font-bold shadow-md hover:bg-forest/90 transition-colors flex items-center gap-2">
+                <i class="ph ph-plus-circle text-lg"></i> 신규 중고 도서 추가
+            </button>
+        </div>
+
+        <div class="bg-white rounded-xl border border-forest/10 shadow-soft overflow-hidden mb-12">
+            <div class="overflow-x-auto hide-scrollbar">
+                <table class="w-full text-left border-collapse min-w-[900px]">
+                    <thead>
+                        <tr class="bg-paper text-xs uppercase tracking-wider text-charcoal/60 border-b border-forest/10">
+                            <th class="p-4 font-bold w-20 text-center">표지</th>
+                            <th class="p-4 font-bold">도서명</th>
+                            <th class="p-4 font-bold">기부자</th>
+                            <th class="p-4 font-bold">정가</th>
+                            <th class="p-4 font-bold">판매가 (할인율)</th>
+                            <th class="p-4 font-bold">품질 등급</th>
+                            <th class="p-4 font-bold">기부 사연</th>
+                            <th class="p-4 font-bold text-right">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-forest/5 text-sm text-charcoal bg-white">
+                        <!-- JS를 통해 동적으로 로드 -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4 border-t border-forest/10 bg-paper/30 flex justify-between items-center text-xs text-charcoal/50">
+                <span id="used-books-count">등록된 중고 도서가 없습니다.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal-used-book: 중고 도서 추가/수정 모달 -->
+    <div id="modal-used-book" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeUsedBookModal()"></div>
+        <div class="bg-cream rounded-2xl w-full max-w-2xl relative z-10 shadow-2xl border border-forest/10 flex flex-col max-h-[90vh] scale-95 transition-transform duration-300">
+            <div class="p-6 border-b border-forest/10 flex justify-between items-center shrink-0">
+                <h4 class="font-serif font-bold text-xl text-forest" id="used-book-modal-title">신규 중고 도서 등록</h4>
+                <button onclick="closeUsedBookModal()" class="text-charcoal/60 hover:text-terra hover:bg-paper transition-colors w-8 h-8 flex items-center justify-center rounded-full">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
+            <form id="used-book-form" onsubmit="saveUsedBook(event)" class="p-6 overflow-y-auto font-sans space-y-4">
+                <input type="hidden" id="used-book-id">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">도서명 *</label>
+                        <input type="text" id="used-book-title" required class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">기부자 닉네임 * (예: @username)</label>
+                        <input type="text" id="used-book-donor" required class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">정가 (원) *</label>
+                        <input type="number" id="used-book-price" required min="0" oninput="calculateDiscount()" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">판매가 (원) *</label>
+                        <input type="number" id="used-book-discount-price" required min="0" oninput="calculateDiscount()" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">할인율 (%)</label>
+                        <input type="number" id="used-book-discount-rate" readonly class="w-full p-2.5 bg-paper/60 border border-forest/20 rounded text-sm text-charcoal/60 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="col-span-2 space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">표지 이미지 URL</label>
+                        <input type="url" id="used-book-cover-url" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal" placeholder="https://...">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">품질 등급 *</label>
+                        <select id="used-book-quality" required class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal">
+                            <option value="최상 (A급)">최상 (A급)</option>
+                            <option value="우수 (B급)">우수 (B급)</option>
+                            <option value="보통 (C급)">보통 (C급)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 items-start">
+                    <div class="w-24 h-32 bg-paper rounded border border-forest/10 shrink-0 overflow-hidden flex items-center justify-center">
+                        <img id="used-book-cover-preview" src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300" class="w-full h-full object-cover" alt="Preview">
+                    </div>
+                    <div class="flex-grow space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">기부 사연 (코멘트) *</label>
+                        <textarea id="used-book-story" required rows="4" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal resize-none" placeholder="책을 기부하며 남긴 따뜻한 메시지를 입력해주세요."></textarea>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-forest/10 flex justify-end gap-2 shrink-0">
+                    <button type="button" onclick="closeUsedBookModal()" class="px-5 py-2 bg-paper border border-forest/20 text-charcoal rounded text-sm font-bold hover:bg-paper/80 transition-colors">취소</button>
+                    <button type="submit" class="px-6 py-2 bg-forest text-cream rounded text-sm font-bold hover:bg-forest/90 transition-colors">저장하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- modal-event-editor: 이벤트 추가/수정 모달 -->
+    <div id="modal-event-editor" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeEventEditorModal()"></div>
+        <div class="bg-cream rounded-2xl w-full max-w-2xl relative z-10 shadow-2xl border border-forest/10 flex flex-col max-h-[90vh] scale-95 transition-transform duration-300">
+            <div class="p-6 border-b border-forest/10 flex justify-between items-center shrink-0">
+                <h4 class="font-serif font-bold text-xl text-forest" id="event-editor-modal-title">신규 이벤트 등록</h4>
+                <button onclick="closeEventEditorModal()" class="text-charcoal/60 hover:text-terra hover:bg-paper transition-colors w-8 h-8 flex items-center justify-center rounded-full">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
+            <form id="event-editor-form" onsubmit="saveEvent(event)" class="p-6 overflow-y-auto font-sans space-y-4">
+                <input type="hidden" id="event-editor-id">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">이벤트명 *</label>
+                        <input type="text" id="event-editor-title" required class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">일정 정보 * (예: 2026.08.15 (토) 15:00)</label>
+                        <input type="text" id="event-editor-date" required class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="col-span-2 space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">배너 이미지 URL</label>
+                        <input type="url" id="event-editor-image-url" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal" placeholder="https://...">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">최대 정원 (명) *</label>
+                        <input type="number" id="event-editor-seats" required min="1" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal" value="10">
+                    </div>
+                </div>
+
+                <div class="flex gap-4 items-start">
+                    <div class="w-32 h-20 bg-paper rounded border border-forest/10 shrink-0 overflow-hidden flex items-center justify-center">
+                        <img id="event-editor-image-preview" src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=300" class="w-full h-full object-cover" alt="Preview">
+                    </div>
+                    <div class="flex-grow space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">상세 설명 *</label>
+                        <textarea id="event-editor-desc" required rows="4" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal resize-none" placeholder="이벤트의 취지와 주요 활동 내용을 입력해 주세요."></textarea>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- modal-magazine-editor: 매거진 5대 콘텐츠 수정 모달 -->
+    <div id="modal-magazine-editor" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeMagazineEditorModal()"></div>
+        <div class="bg-cream rounded-2xl w-full max-w-2xl relative z-10 shadow-2xl border border-forest/10 flex flex-col max-h-[90vh] scale-95 transition-transform duration-300">
+            <div class="p-6 border-b border-forest/10 flex justify-between items-center shrink-0">
+                <h4 class="font-serif font-bold text-xl text-forest" id="magazine-editor-modal-title">매거진 섹션 편집</h4>
+                <button onclick="closeMagazineEditorModal()" class="text-charcoal/60 hover:text-terra hover:bg-paper transition-colors w-8 h-8 flex items-center justify-center rounded-full">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
+            <form id="magazine-editor-form" onsubmit="saveMagazineContent(event)" class="p-6 overflow-y-auto font-sans space-y-4">
+                <input type="hidden" id="magazine-editor-key">
+
+                <!-- 1. 독서 리뷰 필드 그룹 (key: review) -->
+                <div id="group-review" class="magazine-form-group hidden space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">리뷰어 닉네임 *</label>
+                            <input type="text" id="mag-review-author" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">리뷰어 이니셜 * (한 글자, 아바타용)</label>
+                            <input type="text" id="mag-review-avatar" maxlength="1" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">별점 수 (1~5) *</label>
+                        <input type="number" id="mag-review-stars" min="1" max="5" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">리뷰 한줄 타이틀 *</label>
+                        <input type="text" id="mag-review-title" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">리뷰 상세 본문 *</label>
+                        <textarea id="mag-review-text" rows="5" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal resize-none"></textarea>
+                    </div>
+                </div>
+
+                <!-- 2. 심야 독서회 필드 그룹 (key: midnight_reading) -->
+                <div id="group-midnight" class="magazine-form-group hidden space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">기수 정보 * (예: Vol. 12)</label>
+                            <input type="text" id="mag-mid-vol" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">독서회 제목 *</label>
+                            <input type="text" id="mag-mid-title" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">모임 설명 *</label>
+                        <input type="text" id="mag-mid-desc" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">기간 및 일시 *</label>
+                            <input type="text" id="mag-mid-period" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">모임 장소 *</label>
+                            <input type="text" id="mag-mid-location" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">모집 대상 *</label>
+                            <input type="text" id="mag-mid-target" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">참가 비용 *</label>
+                            <input type="text" id="mag-mid-price" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">배너 이미지 URL</label>
+                        <input type="url" id="mag-mid-image" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">주의사항 *</label>
+                        <textarea id="mag-mid-notice" rows="3" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal resize-none"></textarea>
+                    </div>
+                </div>
+
+                <!-- 3. 인터뷰 필드 그룹 (key: interview) -->
+                <div id="group-interview" class="magazine-form-group hidden space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">작가 및 대상자 이름 *</label>
+                            <input type="text" id="mag-int-name" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">프로필 이미지 URL</label>
+                            <input type="url" id="mag-int-image" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                    </div>
+                    <div class="border-t border-forest/10 pt-3 space-y-3">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-forest">질문 1 *</label>
+                            <input type="text" id="mag-int-q1" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                            <label class="block text-[10px] font-bold text-charcoal/50">답변 1 *</label>
+                            <textarea id="mag-int-a1" rows="3" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-xs text-charcoal resize-none"></textarea>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-forest">질문 2 *</label>
+                            <input type="text" id="mag-int-q2" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                            <label class="block text-[10px] font-bold text-charcoal/50">답변 2 *</label>
+                            <textarea id="mag-int-a2" rows="3" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-xs text-charcoal resize-none"></textarea>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-forest">질문 3 *</label>
+                            <input type="text" id="mag-int-q3" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                            <label class="block text-[10px] font-bold text-charcoal/50">답변 3 *</label>
+                            <textarea id="mag-int-a3" rows="3" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-xs text-charcoal resize-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. 커뮤니티 모임 필드 그룹 (key: community) -->
+                <div id="group-community" class="magazine-form-group hidden space-y-4">
+                    <div class="bg-forest/5 p-4 rounded-xl border border-forest/10 space-y-3">
+                        <span class="text-xs font-bold text-forest">[채널 1 - 온라인]</span>
+                        <div class="space-y-1">
+                            <label class="block text-[10px] font-bold text-charcoal/70">채널명 *</label>
+                            <input type="text" id="mag-comm-on-title" class="w-full p-2 bg-paper border border-forest/20 rounded text-sm">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-[10px] font-bold text-charcoal/70">설명 *</label>
+                            <textarea id="mag-comm-on-desc" rows="2" class="w-full p-2 bg-paper border border-forest/20 rounded text-xs resize-none"></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="space-y-1">
+                                <label class="block text-[10px] font-bold text-charcoal/70">시간/주기 *</label>
+                                <input type="text" id="mag-comm-on-time" class="w-full p-2 bg-paper border border-forest/20 rounded text-xs">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[10px] font-bold text-charcoal/70">대상 *</label>
+                                <input type="text" id="mag-comm-on-target" class="w-full p-2 bg-paper border border-forest/20 rounded text-xs">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-terra/5 p-4 rounded-xl border border-terra/15 space-y-3">
+                        <span class="text-xs font-bold text-terra">[채널 2 - 오프라인]</span>
+                        <div class="space-y-1">
+                            <label class="block text-[10px] font-bold text-charcoal/70">채널명 *</label>
+                            <input type="text" id="mag-comm-off-title" class="w-full p-2 bg-paper border border-forest/20 rounded text-sm">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-[10px] font-bold text-charcoal/70">설명 *</label>
+                            <textarea id="mag-comm-off-desc" rows="2" class="w-full p-2 bg-paper border border-forest/20 rounded text-xs resize-none"></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="space-y-1">
+                                <label class="block text-[10px] font-bold text-charcoal/70">시간/주기 *</label>
+                                <input type="text" id="mag-comm-off-time" class="w-full p-2 bg-paper border border-forest/20 rounded text-xs">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[10px] font-bold text-charcoal/70">장소 *</label>
+                                <input type="text" id="mag-comm-off-location" class="w-full p-2 bg-paper border border-forest/20 rounded text-xs">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. 빈티지 이미지 공모 필드 그룹 (key: contest) -->
+                <div id="group-contest" class="magazine-form-group hidden space-y-4">
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">공모전 제목 *</label>
+                        <input type="text" id="mag-con-title" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">기간/접수 마감일 *</label>
+                            <input type="text" id="mag-con-period" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">참여 대상 *</label>
+                            <input type="text" id="mag-con-target" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">심사 기준 *</label>
+                        <input type="text" id="mag-con-criteria" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">시상 내역 및 혜택 *</label>
+                        <textarea id="mag-con-award" rows="3" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal resize-none"></textarea>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-forest/10 flex justify-end gap-2 shrink-0">
+                    <button type="button" onclick="closeMagazineEditorModal()" class="px-5 py-2 bg-paper border border-forest/20 text-charcoal rounded text-sm font-bold hover:bg-paper/80 transition-colors">취소</button>
+                    <button type="submit" class="px-6 py-2 bg-forest text-cream rounded text-sm font-bold hover:bg-forest/90 transition-colors">저장하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script vid="654">
         let activePage = 'page-dashboard';
         let booksList = [];
@@ -1332,7 +1627,12 @@
                     loadCurations();
                     break;
                 case 'page-events':
+                    loadEventsAdmin();
+                    loadMagazineSectionsAdmin();
                     loadEventApplications();
+                    break;
+                case 'page-used-books':
+                    loadUsedBooksAdmin();
                     break;
                 case 'page-roles':
                     loadProfiles();
@@ -2157,6 +2457,560 @@
                 await loadMainCurationData();
             } catch (err) {
                 console.error("Error saving curation slots:", err);
+                showToast("저장 실패: " + err.message, false);
+            }
+        }
+
+        // --- 중고 도서 관리 스크립트 ---
+        let usedBooksList = [];
+
+        async function loadUsedBooksAdmin() {
+            if (!window.supabaseClient) return;
+            const tbody = document.querySelector('#page-used-books table tbody');
+            tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-charcoal/50">중고 도서 로딩 중...</td></tr>';
+            
+            try {
+                const { data: usedBooks, error } = await window.supabaseClient
+                    .from('used_books')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                    
+                if (error) throw error;
+                usedBooksList = usedBooks || [];
+                
+                const countSpan = document.getElementById('used-books-count');
+                if (countSpan) countSpan.textContent = `총 ${usedBooks.length}권의 중고 도서가 등록되어 있습니다.`;
+
+                if (usedBooks.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-charcoal/50">등록된 중고 도서가 없습니다.</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = '';
+                usedBooks.forEach(book => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-forest/5 transition-colors group';
+                    
+                    const rateBadge = book.discount_rate > 0 
+                        ? `<span class="text-[10px] text-forest font-bold bg-forest/10 px-1 rounded ml-1">${book.discount_rate}%↓</span>`
+                        : '';
+                    
+                    tr.innerHTML = `
+                        <td class="p-4 text-center">
+                            <div class="w-12 h-16 bg-gray-200 rounded mx-auto overflow-hidden shadow-sm border border-black/5">
+                                <img referrerpolicy="no-referrer" src="${book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=100'}" class="w-full h-full object-cover" alt="Cover">
+                            </div>
+                        </td>
+                        <td class="p-4 font-bold text-forest">${book.title}</td>
+                        <td class="p-4">${book.donor_name}</td>
+                        <td class="p-4 text-charcoal/50 text-xs line-through">${book.price.toLocaleString()}원</td>
+                        <td class="p-4 font-medium">${book.discount_price.toLocaleString()}원 ${rateBadge}</td>
+                        <td class="p-4">
+                            <span class="px-2 py-1 bg-paper border border-forest/10 rounded text-xs">${book.quality}</span>
+                        </td>
+                        <td class="p-4 max-w-[200px] truncate" title="${(book.story || '').replace(/"/g, '&quot;')}">${book.story || ''}</td>
+                        <td class="p-4 text-right whitespace-nowrap">
+                            <button onclick="openUsedBookModal(${book.id})" class="w-8 h-8 rounded border border-forest/20 text-forest hover:bg-forest hover:text-cream transition-colors inline-flex items-center justify-center mr-1" title="수정">
+                                <i class="ph ph-pencil-simple"></i>
+                            </button>
+                            <button onclick="deleteUsedBook(${book.id})" class="w-8 h-8 rounded border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors inline-flex items-center justify-center" title="삭제">
+                                <i class="ph ph-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-[#A33A3A]">중고 도서 조회 실패: ${err.message}</td></tr>`;
+            }
+        }
+
+        function calculateDiscount() {
+            const price = parseInt(document.getElementById('used-book-price').value) || 0;
+            const discountPrice = parseInt(document.getElementById('used-book-discount-price').value) || 0;
+            const rateInput = document.getElementById('used-book-discount-rate');
+            
+            if (price > 0 && discountPrice >= 0) {
+                const diff = price - discountPrice;
+                const rate = Math.round((diff / price) * 100);
+                rateInput.value = Math.max(0, rate);
+            } else {
+                rateInput.value = 0;
+            }
+        }
+
+        function openUsedBookModal(bookId = null) {
+            const modal = document.getElementById('modal-used-book');
+            const titleEl = document.getElementById('used-book-modal-title');
+            
+            const coverInput = document.getElementById('used-book-cover-url');
+            if (coverInput && !coverInput.dataset.listenerBound) {
+                coverInput.addEventListener('input', (e) => {
+                    const val = e.target.value.trim();
+                    document.getElementById('used-book-cover-preview').src = val || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
+                });
+                coverInput.dataset.listenerBound = 'true';
+            }
+
+            if (bookId) {
+                const book = usedBooksList.find(b => b.id == bookId);
+                if (!book) return;
+                
+                titleEl.textContent = '중고 도서 정보 수정';
+                document.getElementById('used-book-id').value = book.id;
+                document.getElementById('used-book-title').value = book.title;
+                document.getElementById('used-book-donor').value = book.donor_name;
+                document.getElementById('used-book-price').value = book.price;
+                document.getElementById('used-book-discount-price').value = book.discount_price;
+                document.getElementById('used-book-discount-rate').value = book.discount_rate;
+                document.getElementById('used-book-cover-url').value = book.cover_image || '';
+                document.getElementById('used-book-quality').value = book.quality;
+                document.getElementById('used-book-story').value = book.story || '';
+                document.getElementById('used-book-cover-preview').src = book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
+            } else {
+                titleEl.textContent = '신규 중고 도서 등록';
+                document.getElementById('used-book-id').value = '';
+                document.getElementById('used-book-form').reset();
+                document.getElementById('used-book-cover-preview').src = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
+            }
+            
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-cream').classList.remove('scale-95');
+            modal.querySelector('.bg-cream').classList.add('scale-100');
+        }
+
+        function closeUsedBookModal() {
+            const modal = document.getElementById('modal-used-book');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-cream').classList.remove('scale-100');
+            modal.querySelector('.bg-cream').classList.add('scale-95');
+        }
+
+        async function saveUsedBook(event) {
+            event.preventDefault();
+            if (!window.supabaseClient) return;
+            
+            const id = document.getElementById('used-book-id').value;
+            const title = document.getElementById('used-book-title').value.trim();
+            const donor_name = document.getElementById('used-book-donor').value.trim();
+            const price = parseInt(document.getElementById('used-book-price').value) || 0;
+            const discount_price = parseInt(document.getElementById('used-book-discount-price').value) || 0;
+            const discount_rate = parseInt(document.getElementById('used-book-discount-rate').value) || 0;
+            const cover_image = document.getElementById('used-book-cover-url').value.trim() || null;
+            const quality = document.getElementById('used-book-quality').value;
+            const story = document.getElementById('used-book-story').value.trim();
+            
+            const bookData = {
+                title,
+                donor_name,
+                price,
+                discount_price,
+                discount_rate,
+                cover_image,
+                quality,
+                story
+            };
+            
+            try {
+                if (id) {
+                    const { error } = await window.supabaseClient
+                        .from('used_books')
+                        .update(bookData)
+                        .eq('id', id);
+                    if (error) throw error;
+                    showToast("중고 도서 정보가 수정되었습니다.");
+                } else {
+                    const { error } = await window.supabaseClient
+                        .from('used_books')
+                        .insert(bookData);
+                    if (error) throw error;
+                    showToast("신규 중고 도서가 등록되었습니다.");
+                }
+                
+                closeUsedBookModal();
+                loadUsedBooksAdmin();
+            } catch (err) {
+                showToast("저장 실패: " + err.message, false);
+            }
+        }
+
+        async function deleteUsedBook(id) {
+            if (!confirm("정말 이 중고 도서를 삭제하시겠습니까?")) return;
+            if (!window.supabaseClient) return;
+            
+            try {
+                const { error } = await window.supabaseClient
+                    .from('used_books')
+                    .delete()
+                    .eq('id', id);
+                if (error) throw error;
+                showToast("중고 도서가 삭제되었습니다.");
+                loadUsedBooksAdmin();
+            } catch (err) {
+                showToast("삭제 실패: " + err.message, false);
+            }
+        }
+
+        // --- 이벤트 및 모임 관리 스크립트 ---
+        let adminEventsList = [];
+
+        async function loadEventsAdmin() {
+            if (!window.supabaseClient) return;
+            const tbody = document.getElementById('events-list-admin');
+            if (!tbody) return;
+            tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-charcoal/50">이벤트 목록 로딩 중...</td></tr>';
+
+            try {
+                const { data: events, error } = await window.supabaseClient
+                    .from('events')
+                    .select('*')
+                    .order('id', { ascending: true });
+
+                if (error) throw error;
+                adminEventsList = events || [];
+
+                const countSpan = document.getElementById('events-count-admin');
+                if (countSpan) countSpan.textContent = `총 ${adminEventsList.length}개의 이벤트가 등록되어 있습니다.`;
+
+                if (adminEventsList.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-charcoal/50">등록된 이벤트가 없습니다.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                adminEventsList.forEach(event => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-forest/5 transition-colors group';
+
+                    tr.innerHTML = `
+                        <td class="p-4 text-center">
+                            <div class="w-16 h-10 bg-gray-200 rounded mx-auto overflow-hidden shadow-sm border border-black/5">
+                                <img referrerpolicy="no-referrer" src="${event.image_url || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=100'}" class="w-full h-full object-cover" alt="Cover">
+                            </div>
+                        </td>
+                        <td class="p-4 font-bold text-forest">${event.title}</td>
+                        <td class="p-4">${event.date_info}</td>
+                        <td class="p-4 text-center font-semibold">${event.max_seats || 10}명</td>
+                        <td class="p-4 max-w-[250px] truncate" title="${(event.description || '').replace(/"/g, '&quot;')}">${event.description || ''}</td>
+                        <td class="p-4 text-right whitespace-nowrap">
+                            <button onclick="openEventEditorModal(${event.id})" class="w-8 h-8 rounded border border-forest/20 text-forest hover:bg-forest hover:text-cream transition-colors inline-flex items-center justify-center mr-1" title="수정">
+                                <i class="ph ph-pencil-simple"></i>
+                            </button>
+                            <button onclick="deleteEvent(${event.id})" class="w-8 h-8 rounded border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors inline-flex items-center justify-center" title="삭제">
+                                <i class="ph ph-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-[#A33A3A]">이벤트 조회 실패: ${err.message}</td></tr>`;
+            }
+        }
+
+        function openEventEditorModal(eventId = null) {
+            const modal = document.getElementById('modal-event-editor');
+            const titleEl = document.getElementById('event-editor-modal-title');
+            
+            const imageInput = document.getElementById('event-editor-image-url');
+            if (imageInput && !imageInput.dataset.listenerBound) {
+                imageInput.addEventListener('input', (e) => {
+                    const val = e.target.value.trim();
+                    document.getElementById('event-editor-image-preview').src = val || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=300';
+                });
+                imageInput.dataset.listenerBound = 'true';
+            }
+
+            if (eventId) {
+                const eventData = adminEventsList.find(e => e.id == eventId);
+                if (!eventData) return;
+
+                titleEl.textContent = '이벤트 정보 수정';
+                document.getElementById('event-editor-id').value = eventData.id;
+                document.getElementById('event-editor-title').value = eventData.title;
+                document.getElementById('event-editor-date').value = eventData.date_info;
+                document.getElementById('event-editor-image-url').value = eventData.image_url || '';
+                document.getElementById('event-editor-seats').value = eventData.max_seats || 10;
+                document.getElementById('event-editor-desc').value = eventData.description || '';
+                document.getElementById('event-editor-image-preview').src = eventData.image_url || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=300';
+            } else {
+                titleEl.textContent = '신규 이벤트 등록';
+                document.getElementById('event-editor-id').value = '';
+                document.getElementById('event-editor-form').reset();
+                document.getElementById('event-editor-image-preview').src = 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=300';
+            }
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-cream').classList.remove('scale-95');
+            modal.querySelector('.bg-cream').classList.add('scale-100');
+        }
+
+        function closeEventEditorModal() {
+            const modal = document.getElementById('modal-event-editor');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-cream').classList.remove('scale-100');
+            modal.querySelector('.bg-cream').classList.add('scale-95');
+        }
+
+        async function saveEvent(event) {
+            event.preventDefault();
+            if (!window.supabaseClient) return;
+
+            const id = document.getElementById('event-editor-id').value;
+            const title = document.getElementById('event-editor-title').value.trim();
+            const date_info = document.getElementById('event-editor-date').value.trim();
+            const image_url = document.getElementById('event-editor-image-url').value.trim() || null;
+            const max_seats = parseInt(document.getElementById('event-editor-seats').value) || 10;
+            const description = document.getElementById('event-editor-desc').value.trim();
+
+            const eventData = {
+                title,
+                date_info,
+                image_url,
+                max_seats,
+                description
+            };
+
+            try {
+                if (id) {
+                    const { error } = await window.supabaseClient
+                        .from('events')
+                        .update(eventData)
+                        .eq('id', id);
+                    if (error) throw error;
+                    showToast("이벤트 정보가 수정되었습니다.");
+                } else {
+                    const { error } = await window.supabaseClient
+                        .from('events')
+                        .insert(eventData);
+                    if (error) throw error;
+                    showToast("신규 이벤트가 등록되었습니다.");
+                }
+
+                closeEventEditorModal();
+                loadEventsAdmin();
+            } catch (err) {
+                showToast("저장 실패: " + err.message, false);
+            }
+        }
+
+        async function deleteEvent(id) {
+            if (!confirm("정말 이 이벤트를 삭제하시겠습니까?")) return;
+            if (!window.supabaseClient) return;
+
+            try {
+                const { error } = await window.supabaseClient
+                    .from('events')
+                    .delete()
+                    .eq('id', id);
+                if (error) throw error;
+                showToast("이벤트가 삭제되었습니다.");
+                loadEventsAdmin();
+            } catch (err) {
+                showToast("삭제 실패: " + err.message, false);
+            }
+        }
+
+        // --- 매거진 (Temp) 5대 섹션 관리 스크립트 ---
+        let adminMagazineSections = {};
+
+        const magazineMeta = {
+            'review': { title: '01 독서 리뷰', desc: 'temp.html의 대표 독서 리뷰 영역' },
+            'midnight_reading': { title: '02 심야 독서회', desc: '낭독 모임 상세 스펙 영역' },
+            'interview': { title: '03 인터뷰', desc: '이달의 독립출판인 Q&A 인터뷰' },
+            'community': { title: '04 커뮤니티 모임', desc: '온라인 및 오프라인 정기 소모임 채널' },
+            'contest': { title: '05 빈티지 이미지 공모', desc: '디자인 공모전 기간 및 시상 내역' }
+        };
+
+        async function loadMagazineSectionsAdmin() {
+            if (!window.supabaseClient) return;
+            const container = document.getElementById('magazine-sections-container');
+            if (!container) return;
+            container.innerHTML = '<div class="col-span-full py-8 text-center text-charcoal/50">매거진 데이터 불러오는 중...</div>';
+
+            try {
+                const { data: sections, error } = await window.supabaseClient
+                    .from('magazine_sections')
+                    .select('*');
+
+                if (error) throw error;
+                
+                adminMagazineSections = {};
+                (sections || []).forEach(sec => {
+                    adminMagazineSections[sec.key] = sec.data;
+                });
+
+                container.innerHTML = '';
+                const keys = ['review', 'midnight_reading', 'interview', 'community', 'contest'];
+                keys.forEach(key => {
+                    const info = magazineMeta[key];
+                    const hasData = !!adminMagazineSections[key];
+                    const card = document.createElement('div');
+                    card.className = 'bg-cream rounded-xl p-4 border border-[#E5E0D5] flex flex-col justify-between shadow-sm hover:border-forest/20 transition-all';
+                    
+                    card.innerHTML = `
+                        <div>
+                            <span class="text-[10px] font-bold text-terra uppercase tracking-wider">SECTION KEY: ${key}</span>
+                            <h4 class="font-serif font-bold text-forest text-sm mt-1">${info.title}</h4>
+                            <p class="text-xs text-charcoal/60 mt-1 leading-relaxed">${info.desc}</p>
+                            <div class="mt-3 flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full ${hasData ? 'bg-green-500' : 'bg-red-400'}"></span>
+                                <span class="text-[10px] text-charcoal/40 font-semibold">${hasData ? '동기화 완료 (DB)' : '연동 없음 (Mock)'}</span>
+                            </div>
+                        </div>
+                        <button onclick="openMagazineEditor('${key}')" class="mt-4 w-full py-1.5 bg-forest/5 text-forest text-xs font-bold rounded hover:bg-forest hover:text-cream transition-colors border border-forest/15">
+                            콘텐츠 편집
+                        </button>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                container.innerHTML = `<div class="col-span-full py-8 text-center text-[#A33A3A]">매거진 연동 오류: ${err.message}</div>`;
+            }
+        }
+
+        function openMagazineEditor(key) {
+            const modal = document.getElementById('modal-magazine-editor');
+            document.getElementById('magazine-editor-key').value = key;
+            document.getElementById('magazine-editor-modal-title').textContent = `${magazineMeta[key].title} 편집`;
+
+            // 모든 서브 필드 그룹 감추기
+            document.querySelectorAll('.magazine-form-group').forEach(el => el.classList.add('hidden'));
+
+            // 특정 서브 필드 활성화 및 기존 데이터 바인딩
+            const data = adminMagazineSections[key] || {};
+            const activeGroup = document.getElementById(`group-${key === 'midnight_reading' ? 'midnight' : key}`);
+            if (activeGroup) activeGroup.classList.remove('hidden');
+
+            if (key === 'review') {
+                document.getElementById('mag-review-author').value = data.author || '';
+                document.getElementById('mag-review-avatar').value = data.avatar || '';
+                document.getElementById('mag-review-stars').value = data.stars || 5;
+                document.getElementById('mag-review-title').value = data.title || '';
+                document.getElementById('mag-review-text').value = data.text || '';
+            } else if (key === 'midnight_reading') {
+                document.getElementById('mag-mid-vol').value = data.vol || '';
+                document.getElementById('mag-mid-title').value = data.title || '';
+                document.getElementById('mag-mid-desc').value = data.description || '';
+                document.getElementById('mag-mid-period').value = data.period || '';
+                document.getElementById('mag-mid-location').value = data.location || '';
+                document.getElementById('mag-mid-target').value = data.target || '';
+                document.getElementById('mag-mid-price').value = data.price || '';
+                document.getElementById('mag-mid-image').value = data.image_url || '';
+                document.getElementById('mag-mid-notice').value = data.notice || '';
+            } else if (key === 'interview') {
+                document.getElementById('mag-int-name').value = data.writer_name || '';
+                document.getElementById('mag-int-image').value = data.profile_image || '';
+                document.getElementById('mag-int-q1').value = data.q1 || '';
+                document.getElementById('mag-int-a1').value = data.a1 || '';
+                document.getElementById('mag-int-q2').value = data.q2 || '';
+                document.getElementById('mag-int-a2').value = data.a2 || '';
+                document.getElementById('mag-int-q3').value = data.q3 || '';
+                document.getElementById('mag-int-a3').value = data.a3 || '';
+            } else if (key === 'community') {
+                document.getElementById('mag-comm-on-title').value = data.online_title || '';
+                document.getElementById('mag-comm-on-desc').value = data.online_desc || '';
+                document.getElementById('mag-comm-on-time').value = data.online_time || '';
+                document.getElementById('mag-comm-on-target').value = data.online_target || '';
+                document.getElementById('mag-comm-off-title').value = data.offline_title || '';
+                document.getElementById('mag-comm-off-desc').value = data.offline_desc || '';
+                document.getElementById('mag-comm-off-time').value = data.offline_time || '';
+                document.getElementById('mag-comm-off-location').value = data.offline_location || '';
+            } else if (key === 'contest') {
+                document.getElementById('mag-con-title').value = data.title || '';
+                document.getElementById('mag-con-period').value = data.period || '';
+                document.getElementById('mag-con-target').value = data.target || '';
+                document.getElementById('mag-con-criteria').value = data.criteria || '';
+                document.getElementById('mag-con-award').value = data.award || '';
+            }
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-cream').classList.remove('scale-95');
+            modal.querySelector('.bg-cream').classList.add('scale-100');
+        }
+
+        function closeMagazineEditorModal() {
+            const modal = document.getElementById('modal-magazine-editor');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('.bg-cream').classList.remove('scale-100');
+            modal.querySelector('.bg-cream').classList.add('scale-95');
+        }
+
+        async function saveMagazineContent(event) {
+            event.preventDefault();
+            if (!window.supabaseClient) return;
+
+            const key = document.getElementById('magazine-editor-key').value;
+            let data = {};
+
+            if (key === 'review') {
+                data = {
+                    author: document.getElementById('mag-review-author').value.trim(),
+                    avatar: document.getElementById('mag-review-avatar').value.trim().substring(0, 1),
+                    stars: parseInt(document.getElementById('mag-review-stars').value) || 5,
+                    title: document.getElementById('mag-review-title').value.trim(),
+                    text: document.getElementById('mag-review-text').value.trim()
+                };
+            } else if (key === 'midnight_reading') {
+                data = {
+                    vol: document.getElementById('mag-mid-vol').value.trim(),
+                    title: document.getElementById('mag-mid-title').value.trim(),
+                    description: document.getElementById('mag-mid-desc').value.trim(),
+                    period: document.getElementById('mag-mid-period').value.trim(),
+                    location: document.getElementById('mag-mid-location').value.trim(),
+                    target: document.getElementById('mag-mid-target').value.trim(),
+                    price: document.getElementById('mag-mid-price').value.trim(),
+                    image_url: document.getElementById('mag-mid-image').value.trim() || null,
+                    notice: document.getElementById('mag-mid-notice').value.trim()
+                };
+            } else if (key === 'interview') {
+                data = {
+                    writer_name: document.getElementById('mag-int-name').value.trim(),
+                    profile_image: document.getElementById('mag-int-image').value.trim() || null,
+                    q1: document.getElementById('mag-int-q1').value.trim(),
+                    a1: document.getElementById('mag-int-a1').value.trim(),
+                    q2: document.getElementById('mag-int-q2').value.trim(),
+                    a2: document.getElementById('mag-int-a2').value.trim(),
+                    q3: document.getElementById('mag-int-q3').value.trim(),
+                    a3: document.getElementById('mag-int-a3').value.trim()
+                };
+            } else if (key === 'community') {
+                data = {
+                    online_badge: '온라인 채널',
+                    online_title: document.getElementById('mag-comm-on-title').value.trim(),
+                    online_desc: document.getElementById('mag-comm-on-desc').value.trim(),
+                    online_time: document.getElementById('mag-comm-on-time').value.trim(),
+                    online_target: document.getElementById('mag-comm-on-target').value.trim(),
+                    offline_badge: '오프라인 채널',
+                    offline_title: document.getElementById('mag-comm-off-title').value.trim(),
+                    offline_desc: document.getElementById('mag-comm-off-desc').value.trim(),
+                    offline_time: document.getElementById('mag-comm-off-time').value.trim(),
+                    offline_location: document.getElementById('mag-comm-off-location').value.trim()
+                };
+            } else if (key === 'contest') {
+                data = {
+                    title: document.getElementById('mag-con-title').value.trim(),
+                    period: document.getElementById('mag-con-period').value.trim(),
+                    target: document.getElementById('mag-con-target').value.trim(),
+                    criteria: document.getElementById('mag-con-criteria').value.trim(),
+                    award: document.getElementById('mag-con-award').value.trim()
+                };
+            }
+
+            try {
+                const { error } = await window.supabaseClient
+                    .from('magazine_sections')
+                    .upsert({
+                        key: key,
+                        data: data,
+                        updated_at: new Date().toISOString()
+                    });
+
+                if (error) throw error;
+                showToast(`${magazineMeta[key].title} 콘텐츠가 업데이트되었습니다.`);
+                closeMagazineEditorModal();
+                loadMagazineSectionsAdmin();
+            } catch (err) {
                 showToast("저장 실패: " + err.message, false);
             }
         }

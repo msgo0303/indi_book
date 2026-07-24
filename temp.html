@@ -4,6 +4,8 @@
     <title vid="4">Temp Page - 오래된 서랍</title>
     <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
@@ -910,6 +912,177 @@
                 document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
             }
         }
+
+        // --- 매거진 DB 연동 로직 ---
+        async function loadMagazine() {
+            if (!window.supabaseClient) {
+                console.warn("Supabase Client is not defined. Using default fallback contents.");
+                return;
+            }
+
+            try {
+                const { data: sections, error } = await window.supabaseClient
+                    .from('magazine_sections')
+                    .select('*');
+
+                if (error || !sections || sections.length === 0) {
+                    console.warn("Supabase magazine data load failed. Fallback to static contents.", error);
+                    return;
+                }
+
+                // key-value 객체 매핑
+                const magData = {};
+                sections.forEach(sec => {
+                    magData[sec.key] = sec.data;
+                });
+
+                // 1. 독서 리뷰 바인딩 (review)
+                if (magData.review) {
+                    const r = magData.review;
+                    // 별점
+                    let starsHtml = '';
+                    for (let i = 0; i < 5; i++) {
+                        starsHtml += i < r.stars ? '<i class="ph-fill ph-star"></i>' : '<i class="ph ph-star"></i>';
+                    }
+                    const starsContainer = document.getElementById('featured-stars');
+                    if (starsContainer) starsContainer.innerHTML = starsHtml;
+
+                    const titleContainer = document.getElementById('featured-title');
+                    if (titleContainer) titleContainer.textContent = r.title;
+
+                    const textContainer = document.getElementById('featured-text');
+                    if (textContainer) textContainer.textContent = `"${r.text}"`;
+
+                    const authorContainer = document.getElementById('featured-author');
+                    if (authorContainer) authorContainer.textContent = r.author;
+
+                    const avatarContainer = document.getElementById('featured-avatar');
+                    if (avatarContainer) avatarContainer.textContent = r.avatar;
+                }
+
+                // 2. 심야 독서회 바인딩 (midnight_reading)
+                if (magData.midnight_reading) {
+                    const m = magData.midnight_reading;
+                    // 왼쪽 카드 이미지 및 정보
+                    const midnightTab = document.getElementById('content-2');
+                    if (midnightTab) {
+                        const img = midnightTab.querySelector('img');
+                        if (img && m.image_url) img.src = m.image_url;
+
+                        const vol = midnightTab.querySelector('p.text-terra.font-bold');
+                        if (vol) vol.textContent = m.vol;
+
+                        const title = midnightTab.querySelector('h3.font-serif.font-bold');
+                        if (title) title.textContent = m.title;
+
+                        // 상세 정보 정의 리스트
+                        const dds = midnightTab.querySelectorAll('dd');
+                        if (dds.length >= 5) {
+                            dds[0].textContent = m.description;
+                            dds[1].innerHTML = `${m.period}`;
+                            dds[2].textContent = m.location;
+                            dds[3].textContent = m.target;
+                            dds[4].innerHTML = m.price;
+                        }
+                        
+                        const noticeDd = midnightTab.querySelector('dd.text-sm');
+                        if (noticeDd) noticeDd.textContent = m.notice;
+                    }
+                }
+
+                // 3. 인터뷰 바인딩 (interview)
+                if (magData.interview) {
+                    const it = magData.interview;
+                    const interviewTab = document.getElementById('content-3');
+                    if (interviewTab) {
+                        const img = interviewTab.querySelector('img');
+                        if (img && it.profile_image) img.src = it.profile_image;
+
+                        const name = interviewTab.querySelector('h2.text-2xl.font-serif');
+                        if (name) name.textContent = `이달의 독립출판인 : ${it.writer_name}`;
+
+                        const qas = interviewTab.querySelectorAll('.flex.flex-col.gap-4');
+                        if (qas.length >= 3) {
+                            // QA 1
+                            const q1 = qas[0].querySelector('h3');
+                            const a1 = qas[0].querySelector('p');
+                            if (q1) q1.textContent = it.q1;
+                            if (a1) a1.textContent = `"${it.a1}"`;
+
+                            // QA 2
+                            const q2 = qas[1].querySelector('h3');
+                            const a2 = qas[1].querySelector('p');
+                            if (q2) q2.textContent = it.q2;
+                            if (a2) a2.textContent = `"${it.a2}"`;
+
+                            // QA 3
+                            const q3 = qas[2].querySelector('h3');
+                            const a3 = qas[2].querySelector('p');
+                            if (q3) q3.textContent = it.q3;
+                            if (a3) a3.textContent = `"${it.a3}"`;
+                        }
+                    }
+                }
+
+                // 4. 커뮤니티 모임 바인딩 (community)
+                if (magData.community) {
+                    const c = magData.community;
+                    const commTab = document.getElementById('content-4');
+                    if (commTab) {
+                        const groups = commTab.querySelectorAll('.flex-1.w-full');
+                        if (groups.length >= 2) {
+                            // 온라인
+                            const onTitle = groups[0].querySelector('h3');
+                            const onDesc = groups[0].querySelector('p');
+                            const onSpans = groups[0].querySelectorAll('span');
+                            if (onTitle) onTitle.textContent = c.online_title;
+                            if (onDesc) onDesc.textContent = c.online_desc;
+                            if (onSpans.length >= 3) {
+                                onSpans[1].innerHTML = `<i class="ph-fill ph-clock"></i> ${c.online_time}`;
+                                onSpans[2].innerHTML = `<i class="ph-fill ph-users"></i> ${c.online_target}`;
+                            }
+
+                            // 오프라인
+                            const offTitle = groups[1].querySelector('h3');
+                            const offDesc = groups[1].querySelector('p');
+                            const offSpans = groups[1].querySelectorAll('span');
+                            if (offTitle) offTitle.textContent = c.offline_title;
+                            if (offDesc) offDesc.textContent = c.offline_desc;
+                            if (offSpans.length >= 3) {
+                                offSpans[1].innerHTML = `<i class="ph-fill ph-calendar-blank"></i> ${c.offline_time}`;
+                                offSpans[2].innerHTML = `<i class="ph-fill ph-map-pin"></i> ${c.offline_location}`;
+                            }
+                        }
+                    }
+                }
+
+                // 5. 빈티지 이미지 공모 바인딩 (contest)
+                if (magData.contest) {
+                    const ct = magData.contest;
+                    const contestTab = document.getElementById('content-5');
+                    if (contestTab) {
+                        const title = contestTab.querySelector('h2.text-2xl');
+                        if (title) title.innerHTML = ct.title.replace(/\n|&lt;br&gt;|<br>/g, '<br>');
+
+                        const spans = contestTab.querySelectorAll('span');
+                        // spans 순서: 0(기간 라벨), 1(기간 값), 2(대상 라벨), 3(대상 값), 4(기준 라벨), 5(기준 값), 6(시상 라벨), 7(시상 값)
+                        if (spans.length >= 8) {
+                            spans[1].textContent = ct.period;
+                            spans[3].textContent = ct.target;
+                            spans[5].textContent = ct.criteria;
+                            spans[7].innerHTML = ct.award.replace(/\n|&lt;br&gt;|<br>/g, '<br>');
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error("Error binding magazine contents:", err);
+            }
+        }
+
+        // DOM 로드 완료 시 실행
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMagazine();
+        });
     </script>
 
 </body></html>
