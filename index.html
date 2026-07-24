@@ -4,6 +4,7 @@
     <meta charset="UTF-8" vid="2">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
     <title vid="4">돌고 돌아 책방 - Cozy &amp; Warm Archive</title>
+    <link rel="icon" href="data:,">
     <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" vid="8"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2754,8 +2755,17 @@
                             </div>
                         </div>
                     `).join('');
+                // 4. 히어로 영역의 텍스트 요소들 초기 투명도 설정 (캐시가 없을 때만 숨김 처리하여 낡은 하드코딩 텍스트 노출 방지!)
+                if (!hasCachedHero) {
+                    const heroSlides = document.querySelectorAll('.hero-slide');
+                    heroSlides.forEach(slide => {
+                        const contentContainer = slide.querySelector('div');
+                        if (contentContainer) {
+                            contentContainer.classList.add('dynamic-fade');
+                            contentContainer.style.opacity = '0';
+                        }
+                    });
                 }
-
             }
 
             function applyLocalCaches() {
