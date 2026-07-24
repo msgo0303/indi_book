@@ -2931,6 +2931,7 @@
                                 <p class="font-bold">${(book.price || 0).toLocaleString()}원</p>
                             </div>
                         </div>`;
+                    });
                     if (html) {
                         bestsellerGrid.classList.remove('fade-in');
                         setTimeout(() => {
@@ -2938,6 +2939,7 @@
                             bestsellerGrid.classList.add('fade-in');
                         }, 100);
                     }
+                }
 
                 // 4. 추천 도서 (에디터 추천) 렌더링
                 const editorSlots = slots.filter(s => s.slot_type === 'editor_pick');
@@ -2977,6 +2979,7 @@
                             editorGrid.classList.add('fade-in');
                         }, 100);
                     }
+                }
             } catch (e) {
                 console.error("Error loading curated slots:", e);
             }
