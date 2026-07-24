@@ -2552,7 +2552,6 @@
                     }
                 }
             });
-        };
 
         // best-seller-grid 클릭 이벤트 위임 - 각 베스트셀러 도서 상세페이지(book.html)로 이동
             const bestsellerGrid = document.getElementById('best-seller-grid');
@@ -2740,7 +2739,7 @@
                 // 4. 히어로 영역의 텍스트 요소들 초기 투명도 설정
                 const heroSlides = document.querySelectorAll('.hero-slide');
                 heroSlides.forEach(slide => {
-                    const contentContainer = slide.querySelector('.w-full.md\\:w-1\\/2');
+                    const contentContainer = slide.querySelector('div');
                     if (contentContainer) {
                         contentContainer.classList.add('dynamic-fade');
                         // 첫 번째 슬라이드는 투명하게 가려두어 데이터 연동 전 낡은 하드코딩 텍스트가 노출되지 않도록 제어
@@ -2789,7 +2788,7 @@
                         if (imgEl) imgEl.src = slide.image_url;
 
                         // 텍스트 컨테이너 페이드인 실행
-                        const contentContainer = el.querySelector('.w-full.md\\:w-1\\/2');
+                        const contentContainer = el.querySelector('div');
                         if (contentContainer) {
                             setTimeout(() => {
                                 contentContainer.classList.add('fade-in');
