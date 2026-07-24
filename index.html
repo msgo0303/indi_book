@@ -2793,7 +2793,7 @@
                 // curated_slots 테이블에서 배정된 도서 및 코멘트 정보 가져오기
                 const { data: slots, error } = await window.supabaseClient
                     .from('curated_slots')
-                    .select('*, books:book_id(*)')
+                    .select('*, books(*)')
                     .order('slot_index', { ascending: true });
 
                 if (error) throw error;
@@ -2824,7 +2824,7 @@
                                     <h3 class="font-serif font-bold text-lg leading-tight mb-1 group-hover:text-forest transition-colors line-clamp-2">${book.title}</h3>
                                     <p class="text-sm text-charcoal/70 mb-2">${book.author} 지음</p>
                                 </div>
-                                <p class="font-bold">${book.price.toLocaleString()}원</p>
+                                <p class="font-bold">${(book.price || 0).toLocaleString()}원</p>
                             </div>
                         </div>`;
                     });
@@ -2854,7 +2854,7 @@
                                 <span class="text-xs font-bold text-terra mb-2 block">${book.publisher || '출판사'}</span>
                                 <h4 class="font-serif text-2xl font-bold text-forest mb-1 hover:text-terra transition-colors cursor-pointer">${book.title}</h4>
                                 <p class="text-charcoal/70 text-sm mb-2">${book.author} 지음</p>
-                                <p class="font-sans font-bold text-forest text-base mb-4 editor-price">${book.price.toLocaleString()}원</p>
+                                <p class="font-sans font-bold text-forest text-base mb-4 editor-price">${(book.price || 0).toLocaleString()}원</p>
                                 <div class="p-6 bg-paper rounded-2xl border border-forest/10 relative">
                                     <div class="absolute -top-3 left-6 bg-cream px-2 text-xs font-bold text-forest border border-forest/20 rounded-full">책방지기가 이 책을 곁에 두는 이유</div>
                                     <p class="text-charcoal leading-relaxed text-sm">"${comment}"</p>
