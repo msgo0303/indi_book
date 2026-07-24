@@ -2787,25 +2787,31 @@
             }
 
         async function loadMainCurations() {
-            if (!window.supabaseClient) return;
+            if (typeof window.supabaseClient === 'undefined' || !window.supabaseClient) return;
 
             try {
-                // curated_slots 테이블에서 배정된 도서 및 코멘트 정보 가져오기
-                const { data: slots, error } = await window.supabaseClient
+                // 1. 모든 도서 정보 로드
+                const { data: books, error: bookErr } = await window.supabaseClient
+                    .from('books')
+                    .select('*');
+                if (bookErr) throw bookErr;
+
+                // 2. 현재 배정된 슬롯 정보 로드
+                const { data: slots, error: slotErr } = await window.supabaseClient
                     .from('curated_slots')
-                    .select('*, books(*)')
+                    .select('*')
                     .order('slot_index', { ascending: true });
+                if (slotErr) throw slotErr;
 
-                if (error) throw error;
-                if (!slots || slots.length === 0) return;
+                if (!slots || slots.length === 0 || !books || books.length === 0) return;
 
-                // 1. 베스트셀러 렌더링
+                // 3. 베스트셀러 렌더링
                 const bestsellerSlots = slots.filter(s => s.slot_type === 'bestseller');
                 const bestsellerGrid = document.getElementById('best-seller-grid');
                 if (bestsellerGrid && bestsellerSlots.length > 0) {
                     let html = '';
                     bestsellerSlots.forEach(slot => {
-                        const book = slot.books;
+                        const book = books.find(b => b.id === slot.book_id);
                         if (!book) return;
 
                         html += `
@@ -2831,13 +2837,13 @@
                     if (html) bestsellerGrid.innerHTML = html;
                 }
 
-                // 2. 추천 도서 (에디터 추천) 렌더링
+                // 4. 추천 도서 (에디터 추천) 렌더링
                 const editorSlots = slots.filter(s => s.slot_type === 'editor_pick');
                 const editorGrid = document.getElementById('editor-picks-grid');
                 if (editorGrid && editorSlots.length > 0) {
                     let html = '';
                     editorSlots.forEach((slot, idx) => {
-                        const book = slot.books;
+                        const book = books.find(b => b.id === slot.book_id);
                         if (!book) return;
 
                         const comment = slot.comment || '책방지기가 추천하는 도서입니다.';
