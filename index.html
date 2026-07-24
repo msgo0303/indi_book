@@ -2750,16 +2750,6 @@
                     `).join('');
                 }
 
-                // 4. 히어로 영역의 텍스트 요소들 초기 투명도 설정
-                const heroSlides = document.querySelectorAll('.hero-slide');
-                heroSlides.forEach(slide => {
-                    const contentContainer = slide.querySelector('div');
-                    if (contentContainer) {
-                        contentContainer.classList.add('dynamic-fade');
-                        // 첫 번째 슬라이드는 투명하게 가려두어 데이터 연동 전 낡은 하드코딩 텍스트가 노출되지 않도록 제어
-                        contentContainer.style.opacity = '0';
-                    }
-                });
             }
 
             async function loadHeroSlides() {
