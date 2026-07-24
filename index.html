@@ -2763,7 +2763,16 @@
             }
 
             async function loadHeroSlides() {
-                if (typeof window.supabaseClient === 'undefined' || !window.supabaseClient) return;
+                if (typeof window.supabaseClient === 'undefined' || !window.supabaseClient) {
+                    const heroSlides = document.querySelectorAll('.hero-slide');
+                    heroSlides.forEach(slide => {
+                        const contentContainer = slide.querySelector('div');
+                        if (contentContainer) {
+                            contentContainer.classList.add('fade-in');
+                        }
+                    });
+                    return;
+                }
 
                 try {
                     const { data: slides, error } = await window.supabaseClient
@@ -2772,7 +2781,16 @@
                         .order('slide_index', { ascending: true });
 
                     if (error) throw error;
-                    if (!slides || slides.length === 0) return;
+                    if (!slides || slides.length === 0) {
+                        const heroSlides = document.querySelectorAll('.hero-slide');
+                        heroSlides.forEach(slide => {
+                            const contentContainer = slide.querySelector('div');
+                            if (contentContainer) {
+                                contentContainer.classList.add('fade-in');
+                            }
+                        });
+                        return;
+                    }
 
                     const slideElements = document.querySelectorAll('.hero-slide');
                     slides.forEach(slide => {
@@ -2906,6 +2924,7 @@
             console.log("[CurationDebug] loadMainCurations() called.");
             if (typeof window.supabaseClient === 'undefined' || !window.supabaseClient) {
                 console.warn("[CurationDebug] Supabase client is not initialized yet.");
+                restoreMainCurationsFallback();
                 return;
             }
 
@@ -2927,6 +2946,7 @@
 
                 if (!slots || slots.length === 0 || !books || books.length === 0) {
                     console.warn("[CurationDebug] slots or books array empty. slots:", slots, "books:", books);
+                    restoreMainCurationsFallback();
                     return;
                 }
 
@@ -3009,6 +3029,10 @@
                 }
             } catch (e) {
                 console.error("Error loading curated slots:", e);
+                restoreMainCurationsFallback();
+            }
+
+            function restoreMainCurationsFallback() {
                 const bestsellerGrid = document.getElementById('best-seller-grid');
                 if (bestsellerGrid && window.originalBestsellerHtml) {
                     bestsellerGrid.innerHTML = window.originalBestsellerHtml;
