@@ -101,6 +101,17 @@
             color: #1A1A1A;
         }
     </style>
+    <!-- Page Transition Effect -->
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out !important;
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+    </style>
+    <script src="transition.js" defer></script>
 </head>
 <body class="bg-gray-100 font-sans text-charcoal w-full h-full antialiased selection:bg-charcoal selection:text-ivory" vid="9">
 

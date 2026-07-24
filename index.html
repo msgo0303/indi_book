@@ -176,8 +176,16 @@
         #mobile-overlay.open {
             opacity: 1;
             pointer-events: auto;
+        /* Page Transition Effect */
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out !important;
+        }
+        body.page-loaded {
+            opacity: 1;
         }
     </style>
+    <script src="transition.js" defer></script>
 </head>
 
 <body class="w-full h-full text-charcoal antialiased flex flex-col min-h-screen" vid="9">
@@ -261,16 +269,16 @@
     <main class="flex-grow pt-16 md:pt-20" vid="27">
 
 
-        <section class="relative w-full h-[85vh] md:h-[600px] bg-ivory overflow-hidden" vid="28">
+        <section class="relative w-full h-[85vh] md:h-[600px] bg-ivory overflow-hidden mb-12 md:mb-0" vid="28">
 
             <div id="hero-slider" class="relative w-full h-full max-w-[1440px] mx-auto" vid="29">
 
 
                 <div class="hero-slide absolute inset-0 w-full h-full flex flex-col-reverse md:flex-row opacity-100 z-10 transition-opacity duration-1000 ease-in-out"
                     vid="30">
-                    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 md:px-16 lg:px-24 bg-ivory z-20 md:relative absolute bottom-0"
+                    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 pb-14 md:pb-0 md:px-16 lg:px-24 bg-ivory z-20 md:relative absolute bottom-0"
                         vid="31">
-                        <span class="text-terracotta font-semibold text-sm mb-4 tracking-wider uppercase" vid="32">New
+                        <span class="text-terracotta font-semibold text-sm mt-5 md:mt-0 mb-4 tracking-wider uppercase" vid="32">New
                             Arrival</span>
                         <h2 class="font-serif text-3xl md:text-5xl font-bold leading-tight mb-4 md:mb-6 text-charcoal"
                             vid="33">
@@ -295,9 +303,9 @@
 
                 <div class="hero-slide absolute inset-0 w-full h-full flex flex-col-reverse md:flex-row opacity-0 z-0 transition-opacity duration-1000 ease-in-out"
                     vid="40">
-                    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 md:px-16 lg:px-24 bg-ivory z-20 md:relative absolute bottom-0"
+                    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 pb-14 md:pb-0 md:px-16 lg:px-24 bg-ivory z-20 md:relative absolute bottom-0"
                         vid="41">
-                        <span class="text-terracotta font-semibold text-sm mb-4 tracking-wider uppercase"
+                        <span class="text-terracotta font-semibold text-sm mt-5 md:mt-0 mb-4 tracking-wider uppercase"
                             vid="42">Monthly Picnic</span>
                         <h2 class="font-serif text-3xl md:text-5xl font-bold leading-tight mb-4 md:mb-6 text-charcoal"
                             vid="43">
@@ -322,9 +330,9 @@
 
                 <div class="hero-slide absolute inset-0 w-full h-full flex flex-col-reverse md:flex-row opacity-0 z-0 transition-opacity duration-1000 ease-in-out"
                     vid="50">
-                    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 md:px-16 lg:px-24 bg-ivory z-20 md:relative absolute bottom-0"
+                    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 pb-14 md:pb-0 md:px-16 lg:px-24 bg-ivory z-20 md:relative absolute bottom-0"
                         vid="51">
-                        <span class="text-terracotta font-semibold text-sm mb-4 tracking-wider uppercase"
+                        <span class="text-terracotta font-semibold text-sm mt-5 md:mt-0 mb-4 tracking-wider uppercase"
                             vid="52">Editor's Note</span>
                         <h2 class="font-serif text-3xl md:text-5xl font-bold leading-tight mb-4 md:mb-6 text-charcoal"
                             vid="53">
@@ -349,9 +357,9 @@
 
                 <div class="hero-slide absolute inset-0 w-full h-full flex flex-col-reverse md:flex-row opacity-0 z-0 transition-opacity duration-1000 ease-in-out"
                     vid="60">
-                    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 md:px-16 lg:px-24 bg-ivory z-20 md:relative absolute bottom-0"
+                    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 pb-14 md:pb-0 md:px-16 lg:px-24 bg-ivory z-20 md:relative absolute bottom-0"
                         vid="61">
-                        <span class="text-terracotta font-semibold text-sm mb-4 tracking-wider uppercase"
+                        <span class="text-terracotta font-semibold text-sm mt-5 md:mt-0 mb-4 tracking-wider uppercase"
                             vid="62">Archive</span>
                         <h2 class="font-serif text-3xl md:text-5xl font-bold leading-tight mb-4 md:mb-6 text-charcoal"
                             vid="63">
@@ -376,9 +384,9 @@
 
                 <div class="hero-slide absolute inset-0 w-full h-full flex flex-col-reverse md:flex-row opacity-0 z-0 transition-opacity duration-1000 ease-in-out"
                     vid="70">
-                    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 md:px-16 lg:px-24 bg-ivory z-20 md:relative absolute bottom-0"
+                    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col justify-center px-6 pb-14 md:pb-0 md:px-16 lg:px-24 bg-ivory z-20 md:relative absolute bottom-0"
                         vid="71">
-                        <span class="text-terracotta font-semibold text-sm mb-4 tracking-wider uppercase"
+                        <span class="text-terracotta font-semibold text-sm mt-5 md:mt-0 mb-4 tracking-wider uppercase"
                             vid="72">Interview</span>
                         <h2 class="font-serif text-3xl md:text-5xl font-bold leading-tight mb-4 md:mb-6 text-charcoal"
                             vid="73">
@@ -401,7 +409,7 @@
                 </div>
 
 
-                <div class="absolute bottom-6 md:bottom-12 left-0 w-full md:w-1/2 flex justify-center gap-3 z-30 px-6"
+                <div class="absolute bottom-4 md:bottom-12 left-0 w-full md:w-1/2 flex justify-center gap-3 z-30 px-6"
                     vid="80">
 
                     <button

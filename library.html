@@ -96,6 +96,17 @@
             pointer-events: auto;
         }
     </style>
+    <!-- Page Transition Effect -->
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out !important;
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+    </style>
+    <script src="transition.js" defer></script>
 </head>
 <body class="antialiased selection:bg-forest selection:text-cream" vid="12">
 
@@ -637,16 +648,16 @@
 
         window.addEventListener('scroll', () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY > lastScrollY && currentScrollY > 60) {
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                navbar.style.transform = 'translateY(0)';
-            }
-
             if (currentScrollY > 50) {
+                if (currentScrollY > lastScrollY) {
+                    navbar.style.transform = 'translateY(-100%)';
+                } else {
+                    navbar.style.transform = 'translateY(0)';
+                }
                 navbar.classList.add('shadow-md');
                 navbar.classList.replace('bg-ivory/95', 'bg-ivory');
             } else {
+                navbar.style.transform = 'translateY(0)';
                 navbar.classList.remove('shadow-md');
                 navbar.classList.replace('bg-ivory', 'bg-ivory/95');
             }

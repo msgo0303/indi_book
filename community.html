@@ -130,6 +130,17 @@
             pointer-events: auto;
         }
     </style>
+    <!-- Page Transition Effect -->
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out !important;
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+    </style>
+    <script src="transition.js" defer></script>
 </head>
 <body class="antialiased selection:bg-forest selection:text-cream" vid="12">
 
@@ -409,13 +420,6 @@
                 
                 <div id="tab-qna" class="tab-content w-full" vid="142">
                     
-                    <div class="mb-8 md:mb-10 text-right" vid="143">
-                        <button onclick="openQnaModal()" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-forest text-cream px-8 py-3.5 rounded-full font-bold hover:bg-forest/90 transition-all shadow-md active:scale-95" vid="144">
-                            <i class="ph ph-pencil-simple text-lg" vid="145"></i> 1:1 문의 작성하기
-                        </button>
-                    </div>
-
-                    
                     <div class="bg-cream border border-forest/10 rounded-2xl overflow-hidden shadow-sm" vid="146">
                         <ul class="divide-y divide-forest/5" vid="147">
                             
@@ -491,6 +495,12 @@
                         <button id="pg-3" onclick="goToQnaPage(3)" class="w-8 h-8 rounded-full border border-forest/20 text-forest hover:bg-paper flex items-center justify-center transition-colors" vid="193">3</button>
                         <button id="pg-next" onclick="goToQnaPage(2)" class="w-8 h-8 rounded-full border border-forest/20 text-forest flex items-center justify-center hover:bg-paper transition-colors" vid="194">
                             <i class="ph ph-caret-right" vid="195"></i>
+                        </button>
+                    </div>
+
+                    <div class="mt-6 md:mt-8 text-right" vid="143">
+                        <button onclick="openQnaModal()" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-forest text-cream px-8 py-3.5 rounded-full font-bold hover:bg-forest/90 transition-all shadow-md active:scale-95" vid="144">
+                            <i class="ph ph-pencil-simple text-lg" vid="145"></i> 1:1 문의 작성하기
                         </button>
                     </div>
 
@@ -632,15 +642,15 @@
         
         window.addEventListener('scroll', () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY > lastScrollY && currentScrollY > 60) {
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                navbar.style.transform = 'translateY(0)';
-            }
-            
-            if(currentScrollY > 50) {
+            if (currentScrollY > 50) {
+                if (currentScrollY > lastScrollY) {
+                    navbar.style.transform = 'translateY(-100%)';
+                } else {
+                    navbar.style.transform = 'translateY(0)';
+                }
                 navbar.classList.add('shadow-md');
             } else {
+                navbar.style.transform = 'translateY(0)';
                 navbar.classList.remove('shadow-md');
             }
             lastScrollY = currentScrollY;
@@ -766,8 +776,6 @@
                 `).join('');
                 list.style.opacity = '1';
             }, 200);
-
-            window.scrollTo({ top: document.getElementById('tab-qna').offsetTop - 100, behavior: 'smooth' });
         }
 
         

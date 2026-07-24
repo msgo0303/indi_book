@@ -104,7 +104,36 @@
             mask-image: linear-gradient(to right, black 90%, transparent 100%);
             -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
         }
+
+        /* Mobile Drawer Style */
+        #mobile-drawer {
+            transform: translateY(-100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #mobile-drawer.open {
+            transform: translateY(0);
+        }
+        #mobile-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #mobile-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
+    <!-- Page Transition Effect -->
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out !important;
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+    </style>
+    <script src="transition.js" defer></script>
 </head>
 <body class="selection:bg-forest selection:text-cream" vid="12">
 
@@ -115,7 +144,7 @@
         vid="10">
         <div class="max-w-[1440px] mx-auto px-4 md:px-8 h-16 md:h-20 flex items-center justify-between" vid="11">
 
-            <a href="#"
+            <a href="index.html"
                 class="font-serif text-xl md:text-2xl font-bold tracking-tight text-forest flex items-center gap-2"
                 vid="12">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 md:w-8 md:h-8" fill="none" viewBox="0 0 24 24"
@@ -621,14 +650,15 @@
 
         window.addEventListener('scroll', () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY > lastScrollY && currentScrollY > 60) {
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                navbar.style.transform = 'translateY(0)';
-            }
-            if(currentScrollY > 50) {
+            if (currentScrollY > 50) {
+                if (currentScrollY > lastScrollY) {
+                    navbar.style.transform = 'translateY(-100%)';
+                } else {
+                    navbar.style.transform = 'translateY(0)';
+                }
                 navbar.classList.add('shadow-md');
             } else {
+                navbar.style.transform = 'translateY(0)';
                 navbar.classList.remove('shadow-md');
             }
             lastScrollY = currentScrollY;
