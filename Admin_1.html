@@ -2318,6 +2318,9 @@
                 document.getElementById('book-cover-url').value = '';
                 document.getElementById('book-cover-preview').src = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
 
+                // ⭐️ 추가: 서점원의 한 줄 초기화
+                document.getElementById('book-editor-comment').value = '';
+
                 document.getElementById('book-description').value = '';
                 document.getElementById('book-toc').value = '';
                 document.getElementById('book-author-intro').value = '';
@@ -2341,6 +2344,9 @@
                 document.getElementById('book-cover-url').value = book.cover_image || '';
                 document.getElementById('book-cover-preview').src = book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
 
+                // ⭐️ 추가: 기존 서점원의 한 줄 불러오기
+                document.getElementById('book-editor-comment').value = book.editor_comment || '';
+
                 document.getElementById('book-description').value = book.description || '';
                 document.getElementById('book-toc').value = book.table_of_contents || '';
                 document.getElementById('book-author-intro').value = book.author_intro || '';
@@ -2348,7 +2354,6 @@
                 document.getElementById('book-pages').value = book.pages || '';
                 document.getElementById('book-isbn').value = book.isbn || '';
 
-                // 정보 에디터 영역으로 스무스 스크롤 이동
                 document.querySelector('#page-books form').scrollIntoView({ behavior: 'smooth' });
             }
 
@@ -2364,6 +2369,9 @@
                 const price = parseInt(document.getElementById('book-price').value) || 0;
                 const stock = parseInt(document.getElementById('book-stock').value) || 0;
                 const coverImage = document.getElementById('book-cover-url').value.trim();
+
+                // ⭐️ 추가: 서점원의 한 줄 값 가져오기
+                const editorComment = document.getElementById('book-editor-comment').value.trim();
 
                 const description = document.getElementById('book-description').value.trim();
                 const toc = document.getElementById('book-toc').value.trim();
@@ -2385,6 +2393,10 @@
                     price: price,
                     stock: stock,
                     cover_image: coverImage || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600',
+
+                    // ⭐️ 추가: Supabase DB 객체에 포함
+                    editor_comment: editorComment,
+
                     description: description,
                     table_of_contents: toc,
                     author_intro: authorIntro,
