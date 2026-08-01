@@ -2643,6 +2643,9 @@
             // Supabase 연동 - 진열 도서 동적 렌더링
             loadMainCurations();
 
+            // Supabase 연동 - 페르소나 맞춤 도서 로딩
+            loadPersonaBooks();
+
             function initSkeletonLoaders() {
                 // 최초 1회 원래 하드코딩된 HTML 백업 (데이터베이스 조회 실패 시 Fallback 복원용)
                 const bestsellerGrid = document.getElementById('best-seller-grid');
@@ -3195,6 +3198,37 @@
                     editorGrid.innerHTML = window.originalEditorPicksHtml;
                     editorGrid.classList.add('fade-in');
                 }
+            }
+        }
+
+        async function loadPersonaBooks() {
+            if (typeof window.supabaseClient === 'undefined' || !window.supabaseClient) {
+                return;
+            }
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('persona_books')
+                    .select('*')
+                    .order('persona_key')
+                    .order('book_index');
+                if (error) throw error;
+                if (data && data.length > 0) {
+                    data.forEach(item => {
+                        const key = item.persona_key;
+                        const idx = item.book_index - 1; // 0 or 1
+                        if (PERSONA_DATA[key] && PERSONA_DATA[key].books) {
+                            PERSONA_DATA[key].books[idx] = {
+                                title: item.title,
+                                author: item.author || '',
+                                price: item.price || '',
+                                image: item.image_url || ''
+                            };
+                        }
+                    });
+                    console.log("Dynamically loaded persona books from Supabase.");
+                }
+            } catch (e) {
+                console.error("Error loading persona books from Supabase, falling back to static default:", e);
             }
         }
     </script>
