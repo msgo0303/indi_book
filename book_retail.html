@@ -446,8 +446,125 @@
 
 
         
-        document.addEventListener('DOMContentLoaded', () => {
-            
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 1. URL Parameters Parsing
+            const urlParams = new URLSearchParams(window.location.search);
+            const paramTitle = urlParams.get('title');
+            const paramImage = urlParams.get('image') || urlParams.get('cover_image');
+            const paramPrice = urlParams.get('price');
+            const paramOriginalPrice = urlParams.get('original_price') || urlParams.get('price_list');
+            const paramAuthor = urlParams.get('author');
+            const paramSubtitle = urlParams.get('subtitle');
+            const paramCondition = urlParams.get('condition') || urlParams.get('badge');
+
+            if (paramTitle) bookData.title = paramTitle;
+            if (paramImage) bookData.cover_image = paramImage;
+            if (paramPrice) {
+                const rawPrice = paramPrice.replace(/[^0-9]/g, '');
+                bookData.price = rawPrice ? Number(rawPrice).toLocaleString() : paramPrice;
+            }
+            if (paramOriginalPrice) {
+                const rawOrig = paramOriginalPrice.replace(/[^0-9]/g, '');
+                bookData.original_price = rawOrig ? Number(rawOrig).toLocaleString() : paramOriginalPrice;
+            }
+            if (paramAuthor) bookData.author = paramAuthor;
+            if (paramSubtitle) bookData.subtitle = paramSubtitle;
+            if (paramCondition) {
+                if (paramCondition.includes('A') || paramCondition.includes('최상')) {
+                    bookData.condition = '최상 (A급)';
+                } else if (paramCondition.includes('B') || paramCondition.includes('우수')) {
+                    bookData.condition = '우수 (B급)';
+                } else if (paramCondition.includes('C') || paramCondition.includes('보통')) {
+                    bookData.condition = '보통 (C급)';
+                } else {
+                    bookData.condition = paramCondition;
+                }
+            }
+
+            // 2. Fetch from Supabase Books table if title is present and client is available
+            let currentReviews = [...reviewsData];
+            const cleanTitle = paramTitle ? paramTitle.replace(/\s*\(중고\)$/, '').trim() : '';
+            if (window.supabaseClient && cleanTitle) {
+                try {
+                    const { data: dbBook } = await window.supabaseClient
+                        .from('books')
+                        .select('*')
+                        .eq('title', cleanTitle)
+                        .limit(1)
+                        .maybeSingle();
+
+                    if (dbBook) {
+                        bookData.id = dbBook.id;
+                        // Keep original paramTitle if set to preserve "(중고)" suffix
+                        if (!bookData.title) bookData.title = dbBook.title;
+                        bookData.author = dbBook.author || bookData.author;
+                        // Use DB cover image only if URL param cover image is empty
+                        if (!paramImage && dbBook.cover_image) {
+                            bookData.cover_image = dbBook.cover_image;
+                        }
+                        // Use DB prices only if URL params are missing
+                        if (!paramPrice && dbBook.price) {
+                            bookData.price = Number(dbBook.price).toLocaleString();
+                        }
+                        if (!paramOriginalPrice && dbBook.price) {
+                            bookData.original_price = Number(Math.round(dbBook.price * 1.25)).toLocaleString();
+                        }
+                        
+                        if (dbBook.description) bookData.description = dbBook.description;
+                        if (dbBook.table_of_contents) bookData.table_of_contents = dbBook.table_of_contents;
+                        if (dbBook.author_intro) {
+                            bookData.author_intro = `
+                                <div class="flex flex-col items-center text-center space-y-4">
+                                    <div class="w-16 h-16 rounded-full bg-gray-200 overflow-hidden mb-2">
+                                        <img src="${dbBook.cover_image || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200'}" alt="Author" class="w-full h-full object-cover mix-blend-luminosity opacity-80" />
+                                    </div>
+                                    <h5 class="font-serif font-bold text-lg">${dbBook.author || '저자'}</h5>
+                                    <p class="font-sans text-sm text-gray-600 leading-relaxed text-left">
+                                        ${dbBook.author_intro}
+                                    </p>
+                                </div>`;
+                        }
+                        
+                        // Meta specs update
+                        const pubDate = dbBook.publish_date || '2023년 10월 25일';
+                        const pages = dbBook.pages || '212쪽 / 340g';
+                        const isbn = dbBook.isbn || '9791190000001';
+                        
+                        bookData.book_meta_info = `
+                            <div class="grid grid-cols-[100px_1fr] gap-y-4 text-[13px] font-sans">
+                                <div class="text-muted border-b border-gray-100 pb-3">발행일</div>
+                                <div class="text-charcoal font-medium border-b border-gray-100 pb-3">${pubDate}</div>
+                                
+                                <div class="text-muted border-b border-gray-100 pb-3">쪽수 / 무게</div>
+                                <div class="text-charcoal font-medium border-b border-gray-100 pb-3">${pages}</div>
+                                
+                                <div class="text-muted border-b border-gray-100 pb-3">크기</div>
+                                <div class="text-charcoal font-medium border-b border-gray-100 pb-3">128 * 188 * 15 mm</div>
+                                
+                                <div class="text-muted pb-1">ISBN</div>
+                                <div class="text-charcoal font-medium pb-1">${isbn}</div>
+                            </div>`;
+
+                        // Load dynamic reviews if any
+                        const { data: dbReviews } = await window.supabaseClient
+                            .from('book_reviews')
+                            .select('*')
+                            .eq('book_id', dbBook.id)
+                            .order('created_at', { ascending: false });
+
+                        if (dbReviews && dbReviews.length > 0) {
+                            currentReviews = dbReviews.map(r => ({
+                                id: r.id,
+                                text: r.review_text,
+                                user: r.user_name,
+                                rating: r.rating
+                            }));
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error loading book details in retail layout:", err);
+                }
+            }
             
             document.getElementById('header-title').textContent = bookData.title;
             document.getElementById('hero-title').textContent = bookData.title;
@@ -530,7 +647,7 @@
 
             
             const reviewsContainer = document.getElementById('reviews-container');
-            reviewsData.forEach(review => {
+            currentReviews.forEach(review => {
                 const starsHtml = Array(5).fill(0).map((_, i) => 
                     `<svg class="w-3.5 h-3.5 ${i < review.rating ? 'text-charcoal fill-current' : 'text-gray-300 fill-current'}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>`
                 ).join('');
