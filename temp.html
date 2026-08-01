@@ -996,7 +996,7 @@
                     const interviewTab = document.getElementById('content-3');
                     if (interviewTab) {
                         const img = interviewTab.querySelector('img');
-                        if (img && it.profile_image) img.src = it.profile_image;
+                        if (img) img.src = it.profile_image || "https://t1.kakaocdn.net/talkstyle/avatar/profile/char_l_3.png";
 
                         const name = interviewTab.querySelector('h2.text-2xl.font-serif');
                         if (name) name.textContent = `이달의 독립출판인 : ${it.writer_name}`;
