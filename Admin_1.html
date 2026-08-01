@@ -3979,8 +3979,15 @@ ON CONFLICT (persona_key, book_index) DO UPDATE SET
                         .order('book_index', { ascending: true });
 
                     if (error) {
-                        // 만약 테이블이 없는 오류(42P01)라면 경고창을 띄우고 폼을 숨깁니다.
-                        if (error.code === '42P01' || (error.message && error.message.includes('relation') && error.message.includes('does not exist'))) {
+                        // 만약 테이블이 없는 오류라면 경고창을 띄우고 폼을 숨깁니다.
+                        const isTableMissing = error.code === '42P01' || 
+                                               error.code === 'PGRST116' ||
+                                               (error.message && (
+                                                   error.message.includes('relation') || 
+                                                   error.message.includes('Could not find the table') || 
+                                                   error.message.includes('does not exist')
+                                               ));
+                        if (isTableMissing) {
                             if (warningBox) warningBox.classList.remove('hidden');
                             if (editorContent) editorContent.classList.add('hidden');
                             return;
