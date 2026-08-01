@@ -1766,6 +1766,14 @@ ON CONFLICT (persona_key, book_index) DO UPDATE SET
                     class="p-6 overflow-y-auto font-sans space-y-4">
                     <input type="hidden" id="used-book-id">
 
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-charcoal/70">도서 라이브러리에서 선택 (자동 완성)</label>
+                        <select id="used-book-select" onchange="autoFillUsedBook(this.value)"
+                            class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none text-sm text-charcoal">
+                            <option value="">-- 직접 입력 또는 도서 선택 --</option>
+                        </select>
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="space-y-1">
                             <label class="block text-xs font-bold text-charcoal/70">도서명 *</label>
@@ -3284,9 +3292,27 @@ ON CONFLICT (persona_key, book_index) DO UPDATE SET
                 }
             }
 
-            function openUsedBookModal(bookId = null) {
+            async function openUsedBookModal(bookId = null) {
                 const modal = document.getElementById('modal-used-book');
                 const titleEl = document.getElementById('used-book-modal-title');
+
+                // Populate library books dropdown
+                const selectEl = document.getElementById('used-book-select');
+                if (selectEl) {
+                    if (libraryBooksList.length === 0 && window.supabaseClient) {
+                        try {
+                            const { data: books } = await window.supabaseClient
+                                .from('books')
+                                .select('id, title, author, price, cover_image')
+                                .order('title', { ascending: true });
+                            libraryBooksList = books || [];
+                        } catch (e) {
+                            console.error("Error loading library books for used book selection:", e);
+                        }
+                    }
+                    selectEl.innerHTML = '<option value="">-- 직접 입력 또는 도서 선택 --</option>' +
+                        libraryBooksList.map(b => `<option value="${b.id}">${b.title} (${b.author})</option>`).join('');
+                }
 
                 const coverInput = document.getElementById('used-book-cover-url');
                 if (coverInput && !coverInput.dataset.listenerBound) {
@@ -3297,6 +3323,7 @@ ON CONFLICT (persona_key, book_index) DO UPDATE SET
                     coverInput.dataset.listenerBound = 'true';
                 }
 
+                let matchedBookId = "";
                 if (bookId) {
                     const book = usedBooksList.find(b => b.id == bookId);
                     if (!book) return;
@@ -3312,6 +3339,9 @@ ON CONFLICT (persona_key, book_index) DO UPDATE SET
                     document.getElementById('used-book-quality').value = book.quality;
                     document.getElementById('used-book-story').value = book.story || '';
                     document.getElementById('used-book-cover-preview').src = book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
+
+                    const matchedLibBook = libraryBooksList.find(b => b.title === book.title);
+                    if (matchedLibBook) matchedBookId = matchedLibBook.id;
                 } else {
                     titleEl.textContent = '신규 중고 도서 등록';
                     document.getElementById('used-book-id').value = '';
@@ -3319,9 +3349,24 @@ ON CONFLICT (persona_key, book_index) DO UPDATE SET
                     document.getElementById('used-book-cover-preview').src = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
                 }
 
+                if (selectEl) selectEl.value = matchedBookId;
+
                 modal.classList.remove('opacity-0', 'pointer-events-none');
                 modal.querySelector('.bg-cream').classList.remove('scale-95');
                 modal.querySelector('.bg-cream').classList.add('scale-100');
+            }
+
+            function autoFillUsedBook(bookId) {
+                if (!bookId) return;
+                const book = libraryBooksList.find(b => b.id == bookId);
+                if (!book) return;
+
+                document.getElementById('used-book-title').value = book.title;
+                document.getElementById('used-book-price').value = book.price || 0;
+                document.getElementById('used-book-cover-url').value = book.cover_image || "";
+                document.getElementById('used-book-cover-preview').src = book.cover_image || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300';
+                
+                calculateDiscount();
             }
 
             function closeUsedBookModal() {
