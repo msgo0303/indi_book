@@ -383,6 +383,28 @@
         </div>
     </div>
 
+    <!-- modal-login-required: 로그인 안내 팝업 -->
+    <div id="modal-login-required" class="fixed inset-0 z-[120] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" onclick="closeLoginRequiredModal()"></div>
+        <div class="bg-ivory rounded-3xl w-full max-w-[400px] relative z-10 shadow-2xl overflow-hidden border border-borderLight p-8 flex flex-col items-center text-center scale-95 transition-transform duration-300">
+            <div class="w-16 h-16 rounded-full bg-terra/10 text-terra flex items-center justify-center mb-6">
+                <i class="ph ph-user-circle text-4xl"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold text-charcoal mb-3">로그인이 필요한 서비스입니다</h3>
+            <p class="text-sm text-muted leading-relaxed mb-8">
+                도서 구매 및 결제 서비스를 이용하시려면<br>먼저 로그인해 주시기 바랍니다.
+            </p>
+            <div class="flex gap-3 w-full">
+                <button onclick="closeLoginRequiredModal()" class="flex-1 py-3.5 border border-charcoal/20 text-charcoal font-bold rounded-full text-sm hover:bg-surface transition-colors active:scale-95">
+                    취소
+                </button>
+                <a href="login.html" class="flex-1 py-3.5 bg-charcoal text-white font-bold rounded-full text-sm hover:bg-black text-center flex items-center justify-center transition-colors active:scale-95">
+                    로그인 하러가기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- modal-review: 리뷰 작성 팝업 -->
     <div id="modal-review" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" onclick="closeReviewModal()"></div>
@@ -713,6 +735,39 @@
             modal.querySelector('.bg-ivory').classList.add('scale-95');
             document.body.style.overflow = '';
         }
+
+        function closeSuccessModal() {
+            const modal = document.getElementById('modal-success');
+            if (modal) {
+                modal.classList.add('pointer-events-none');
+                modal.classList.remove('opacity-100');
+                modal.querySelector('.bg-ivory').classList.remove('scale-100');
+                modal.querySelector('.bg-ivory').classList.add('scale-95');
+            }
+        }
+
+        function openLoginRequiredModal() {
+            // Close purchase modal first so they don't overlap
+            closePurchaseModal();
+
+            const modal = document.getElementById('modal-login-required');
+            if (modal) {
+                modal.classList.remove('pointer-events-none');
+                modal.classList.add('opacity-100');
+                modal.querySelector('.bg-ivory').classList.remove('scale-95');
+                modal.querySelector('.bg-ivory').classList.add('scale-100');
+            }
+        }
+
+        function closeLoginRequiredModal() {
+            const modal = document.getElementById('modal-login-required');
+            if (modal) {
+                modal.classList.add('pointer-events-none');
+                modal.classList.remove('opacity-100');
+                modal.querySelector('.bg-ivory').classList.remove('scale-100');
+                modal.querySelector('.bg-ivory').classList.add('scale-95');
+            }
+        }
         
         function changePurchaseQty(delta) {
             purchaseQty = Math.max(1, purchaseQty + delta);
@@ -732,6 +787,18 @@
         }
         
         async function submitPurchase() {
+            // Check if user is logged in
+            if (window.supabaseClient) {
+                const { data: { session } } = await window.supabaseClient.auth.getSession();
+                if (!session) {
+                    openLoginRequiredModal();
+                    return;
+                }
+            } else {
+                openLoginRequiredModal();
+                return;
+            }
+
             const buyerName = document.getElementById('buyer-name').value.trim();
             const buyerPhone = document.getElementById('buyer-phone').value.trim();
             const buyerAddress = document.getElementById('buyer-address').value.trim();
