@@ -37,5 +37,35 @@ INSERT INTO public.about_settings (key, value) VALUES
 
 ('tab2_biz3_title', '인공지능 기반의 독서 라이프케어'),
 ('tab2_biz3_desc', '독서 취향을 추적하고, 완독률과 독서 습관을 정밀 분석하는 리브레 AI 솔루션을 연구하고 개발합니다.'),
-('tab2_biz3_image', 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=800&auto=format&fit=crop')
+('tab2_biz3_image', 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=800&auto=format&fit=crop'),
+
+-- Tab 3 (북 큐레이션)
+('tab3_title', '나의 인생책은 무엇일까?'),
+('tab3_desc', '우연한 만남을 넘어, 과학적이고 감성적인 여정을 통해 찾게 될 당신만의 한 줄.'),
+('tab3_pkg1_image', 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop'),
+('tab3_pkg1_caption', '따뜻한 친환경 패키징과 손글씨 엽서'),
+('tab3_pkg2_image', 'https://images.unsplash.com/photo-1476275466078-4007374efbbe?q=80&w=600&auto=format&fit=crop'),
+('tab3_pkg2_caption', '영혼의 울림을 전하는 나만의 문장 배송'),
+('tab3_pkg3_image', 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600&auto=format&fit=crop'),
+('tab3_pkg3_caption', '당신을 위해 심혈을 기울여 고른 한 권의 인생책'),
+('tab3_cta_title', '1회성 심층 분석 북 큐레이션'),
+('tab3_cta_subtitle', 'DEEP ANALYSIS & SELECTION'),
+('tab3_cta_desc', '매달 받아보는 구독 서비스와는 달리, 단 한 번 전문가의 집중적이고 다각적인 독서 성향 스캐닝을 통해 당신의 영혼에 완벽하게 맞닿는 한 권의 책과 심층 인지 분석 서적 리포트를 전달해 드리는 단독 특별 프로그램입니다.'),
+('tab3_cta_btn_text', '심층 분석 큐레이션 신청하기'),
+
+-- Tab 4 (리브레 AI)
+('tab4_title', '리브레 AI'),
+('tab4_desc', '독서의 가치를 현대적으로 확장하는 가상의 지능형 앱 서비스, 리브레 AI'),
+('tab4_feat1_title', '취향 분석'),
+('tab4_feat1_sub', '정밀 독서 성향 스캐너'),
+('tab4_feat1_desc', '독자의 선호 단어와 어조 분석'),
+('tab4_feat2_title', '상황별 추천'),
+('tab4_feat2_sub', '시절과 감정 맞춤 추천'),
+('tab4_feat2_desc', '상실, 위로, 모험 등 현재 마음에 어울리는 책 매칭'),
+('tab4_feat3_title', '스마트 발췌'),
+('tab4_feat3_sub', '에센셜 AI 아카이빙'),
+('tab4_feat3_desc', '책을 읽는 도중 영감을 준 문장을 자동으로 수집 및 분류'),
+('tab4_feat4_title', '도서 추적'),
+('tab4_feat4_sub', '독서 습관 분석 대시보드'),
+('tab4_feat4_desc', '완독 시간과 빈도를 추적하는 감성 통계 리포트')
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;

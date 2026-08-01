@@ -1955,6 +1955,186 @@ ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;</div>
                     </div>
                 </div>
 
+                <!-- Tab 3 Curation Card -->
+                <div class="bg-white rounded-xl border border-forest/10 shadow-soft p-6 md:p-8 space-y-6">
+                    <h3 class="text-lg font-bold text-forest border-b border-forest/5 pb-2 flex items-center gap-2">
+                        <i class="ph ph-bookmark text-xl text-terra"></i> 탭3. 북 큐레이션 설정
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">큐레이션 대제목</label>
+                            <input type="text" id="about-tab3-title" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">큐레이션 설명글</label>
+                            <input type="text" id="about-tab3-desc" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                    </div>
+
+                    <!-- Package gallery -->
+                    <div class="border-t border-forest/5 pt-4">
+                        <h4 class="text-sm font-bold text-forest mb-4">큐레이션 패키지 갤러리 (3장)</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Package 1 -->
+                            <div class="p-4 bg-paper/50 rounded-lg border border-forest/5 space-y-3">
+                                <span class="text-xs font-bold text-forest bg-forest/10 px-2 py-0.5 rounded">패키지 1</span>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">설명 (Caption)</label>
+                                    <input type="text" id="about-tab3-pkg1-caption" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">이미지 URL</label>
+                                    <input type="url" id="about-tab3-pkg1-image" oninput="previewImage('about-tab3-pkg1-preview', this.value)" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="aspect-video border border-forest/10 rounded overflow-hidden">
+                                    <img id="about-tab3-pkg1-preview" src="" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=200'">
+                                </div>
+                            </div>
+                            <!-- Package 2 -->
+                            <div class="p-4 bg-paper/50 rounded-lg border border-forest/5 space-y-3">
+                                <span class="text-xs font-bold text-forest bg-forest/10 px-2 py-0.5 rounded">패키지 2</span>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">설명 (Caption)</label>
+                                    <input type="text" id="about-tab3-pkg2-caption" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">이미지 URL</label>
+                                    <input type="url" id="about-tab3-pkg2-image" oninput="previewImage('about-tab3-pkg2-preview', this.value)" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="aspect-video border border-forest/10 rounded overflow-hidden">
+                                    <img id="about-tab3-pkg2-preview" src="" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1476275466078-4007374efbbe?q=80&w=200'">
+                                </div>
+                            </div>
+                            <!-- Package 3 -->
+                            <div class="p-4 bg-paper/50 rounded-lg border border-forest/5 space-y-3">
+                                <span class="text-xs font-bold text-forest bg-forest/10 px-2 py-0.5 rounded">패키지 3</span>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">설명 (Caption)</label>
+                                    <input type="text" id="about-tab3-pkg3-caption" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">이미지 URL</label>
+                                    <input type="url" id="about-tab3-pkg3-image" oninput="previewImage('about-tab3-pkg3-preview', this.value)" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="aspect-video border border-forest/10 rounded overflow-hidden">
+                                    <img id="about-tab3-pkg3-preview" src="" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=200'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3 CTA Program section -->
+                    <div class="border-t border-forest/5 pt-4 space-y-4">
+                        <h4 class="text-sm font-bold text-forest">심층 분석 프로그램 CTA 설정</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-xs font-bold text-charcoal/70">CTA 소제목 (e.g. DEEP ANALYSIS & SELECTION)</label>
+                                <input type="text" id="about-tab3-cta-subtitle" class="w-full p-2.5 bg-paper border border-forest/20 rounded text-sm text-charcoal">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-xs font-bold text-charcoal/70">CTA 대제목 (e.g. 1회성 심층 분석 북 큐레이션)</label>
+                                <input type="text" id="about-tab3-cta-title" class="w-full p-2.5 bg-paper border border-forest/20 rounded text-sm text-charcoal">
+                            </div>
+                            <div class="space-y-1 md:col-span-2">
+                                <label class="block text-xs font-bold text-charcoal/70">CTA 설명글</label>
+                                <textarea id="about-tab3-cta-desc" rows="3" class="w-full p-2.5 bg-paper border border-forest/20 rounded text-xs text-charcoal"></textarea>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-xs font-bold text-charcoal/70">CTA 버튼 텍스트 (e.g. 심층 분석 큐레이션 신청하기)</label>
+                                <input type="text" id="about-tab3-cta-btn-text" class="w-full p-2.5 bg-paper border border-forest/20 rounded text-sm text-charcoal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4 Libre AI Card -->
+                <div class="bg-white rounded-xl border border-forest/10 shadow-soft p-6 md:p-8 space-y-6">
+                    <h3 class="text-lg font-bold text-forest border-b border-forest/5 pb-2 flex items-center gap-2">
+                        <i class="ph ph-sparkle text-xl text-terra"></i> 탭4. 리브레 AI 설정
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">리브레 AI 제목</label>
+                            <input type="text" id="about-tab4-title" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-charcoal/70">리브레 AI 설명글</label>
+                            <textarea id="about-tab4-desc" rows="2" class="w-full p-2.5 bg-paper border border-forest/20 rounded focus:ring-1 focus:ring-forest text-sm text-charcoal"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 4 Features grid -->
+                    <div class="border-t border-forest/5 pt-4 space-y-4">
+                        <h4 class="text-sm font-bold text-forest">리브레 AI 주요 기능 카드 (4가지)</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Feature 1 -->
+                            <div class="p-4 bg-paper/50 rounded-lg border border-forest/5 space-y-2">
+                                <span class="text-xs font-bold text-forest bg-forest/10 px-2 py-0.5 rounded">기능 1</span>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">기능명 (Title)</label>
+                                    <input type="text" id="about-tab4-feat1-title" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">소제목 (Subtitle)</label>
+                                    <input type="text" id="about-tab4-feat1-sub" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">설명 (Description)</label>
+                                    <textarea id="about-tab4-feat1-desc" rows="2" class="w-full p-2 bg-white border border-forest/20 rounded text-xs"></textarea>
+                                </div>
+                            </div>
+                            <!-- Feature 2 -->
+                            <div class="p-4 bg-paper/50 rounded-lg border border-forest/5 space-y-2">
+                                <span class="text-xs font-bold text-forest bg-forest/10 px-2 py-0.5 rounded">기능 2</span>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">기능명 (Title)</label>
+                                    <input type="text" id="about-tab4-feat2-title" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">소제목 (Subtitle)</label>
+                                    <input type="text" id="about-tab4-feat2-sub" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">설명 (Description)</label>
+                                    <textarea id="about-tab4-feat2-desc" rows="2" class="w-full p-2 bg-white border border-forest/20 rounded text-xs"></textarea>
+                                </div>
+                            </div>
+                            <!-- Feature 3 -->
+                            <div class="p-4 bg-paper/50 rounded-lg border border-forest/5 space-y-2">
+                                <span class="text-xs font-bold text-forest bg-forest/10 px-2 py-0.5 rounded">기능 3</span>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">기능명 (Title)</label>
+                                    <input type="text" id="about-tab4-feat3-title" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">소제목 (Subtitle)</label>
+                                    <input type="text" id="about-tab4-feat3-sub" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">설명 (Description)</label>
+                                    <textarea id="about-tab4-feat3-desc" rows="2" class="w-full p-2 bg-white border border-forest/20 rounded text-xs"></textarea>
+                                </div>
+                            </div>
+                            <!-- Feature 4 -->
+                            <div class="p-4 bg-paper/50 rounded-lg border border-forest/5 space-y-2">
+                                <span class="text-xs font-bold text-forest bg-forest/10 px-2 py-0.5 rounded">기능 4</span>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">기능명 (Title)</label>
+                                    <input type="text" id="about-tab4-feat4-title" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">소제목 (Subtitle)</label>
+                                    <input type="text" id="about-tab4-feat4-sub" class="w-full p-2 bg-white border border-forest/20 rounded text-xs">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-[10px] text-charcoal/60">설명 (Description)</label>
+                                    <textarea id="about-tab4-feat4-desc" rows="2" class="w-full p-2 bg-white border border-forest/20 rounded text-xs"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Save Action Button -->
                 <div class="flex justify-end pt-4 border-t border-forest/10">
                     <button onclick="saveAboutConfiguration()" class="px-8 py-3 bg-forest text-cream rounded-md text-sm font-bold shadow-md hover:bg-forest/90 transition-all flex items-center gap-2">
@@ -4506,6 +4686,7 @@ ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;</div>
                         'hero_subtitle': '시간이 멈춘 공간, 깊은 사유의 숲으로 당신을 초대합니다.',
                         'hero_desc': '독립서점은 단순히 책을 파는 곳이 아닌, 작가의 영혼과 독자의 내면이 만나 조용히 공명하는 은신처입니다.',
                         'hero_image': 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=2000&auto=format&fit=crop',
+                        
                         'tab1_title': '독립서점이 무엇인가요?',
                         'tab1_subtitle': '대형 서점의 분류표에는 없는, 당신을 위한 이야기',
                         'tab1_desc': '자본과 유통의 논리에서 벗어나 책방지기의 뚜렷한 가치관과 취향으로 채워진 공간입니다. 세상에 단 몇 권만 존재하는 독립출판물과 깊은 교감을 나눌 수 있습니다.',
@@ -4515,6 +4696,7 @@ ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;</div>
                         'tab1_slide2_caption': '스탠드 불빛 아래의 시집',
                         'tab1_slide3_image': 'https://images.unsplash.com/photo-1463320726281-696a485928c7?q=80&w=800&auto=format&fit=crop',
                         'tab1_slide3_caption': '방명록 방명 기록',
+                        
                         'tab2_biz1_title': '독립 출판 파트너십',
                         'tab2_biz1_desc': '신진 작가들의 서정적이고 실험적인 텍스트를 발굴하고, 한 권의 아름다운 실물 책으로 세상에 빛을 보게 돕습니다.',
                         'tab2_biz1_image': 'https://images.unsplash.com/photo-1544716278-e513176f20b5?q=80&w=800&auto=format&fit=crop',
@@ -4523,7 +4705,37 @@ ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;</div>
                         'tab2_biz2_image': 'https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?q=80&w=800&auto=format&fit=crop',
                         'tab2_biz3_title': '인공지능 기반의 독서 라이프케어',
                         'tab2_biz3_desc': '독서 취향을 추적하고, 완독률과 독서 습관을 정밀 분석하는 리브레 AI 솔루션을 연구하고 개발합니다.',
-                        'tab2_biz3_image': 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=800&auto=format&fit=crop'
+                        'tab2_biz3_image': 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=800&auto=format&fit=crop',
+
+                        // Tab 3 Curation
+                        'tab3_title': '나의 인생책은 무엇일까?',
+                        'tab3_desc': '우연한 만남을 넘어, 과학적이고 감성적인 여정을 통해 찾게 될 당신만의 한 줄.',
+                        'tab3_pkg1_image': 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop',
+                        'tab3_pkg1_caption': '따뜻한 친환경 패키징과 손글씨 엽서',
+                        'tab3_pkg2_image': 'https://images.unsplash.com/photo-1476275466078-4007374efbbe?q=80&w=600&auto=format&fit=crop',
+                        'tab3_pkg2_caption': '영혼의 울림을 전하는 나만의 문장 배송',
+                        'tab3_pkg3_image': 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600&auto=format&fit=crop',
+                        'tab3_pkg3_caption': '당신을 위해 심혈을 기울여 고른 한 권의 인생책',
+                        'tab3_cta_title': '1회성 심층 분석 북 큐레이션',
+                        'tab3_cta_subtitle': 'DEEP ANALYSIS & SELECTION',
+                        'tab3_cta_desc': '매달 받아보는 구독 서비스와는 달리, 단 한 번 전문가의 집중적이고 다각적인 독서 성향 스캐닝을 통해 당신의 영혼에 완벽하게 맞닿는 한 권의 책과 심층 인지 분석 서적 리포트를 전달해 드리는 단독 특별 프로그램입니다.',
+                        'tab3_cta_btn_text': '심층 분석 큐레이션 신청하기',
+
+                        // Tab 4 Libre AI
+                        'tab4_title': '리브레 AI',
+                        'tab4_desc': '독서의 가치를 현대적으로 확장하는 가상의 지능형 앱 서비스, 리브레 AI',
+                        'tab4_feat1_title': '취향 분석',
+                        'tab4_feat1_sub': '정밀 독서 성향 스캐너',
+                        'tab4_feat1_desc': '독자의 선호 단어와 어조 분석',
+                        'tab4_feat2_title': '상황별 추천',
+                        'tab4_feat2_sub': '시절과 감정 맞춤 추천',
+                        'tab4_feat2_desc': '상실, 위로, 모험 등 현재 마음에 어울리는 책 매칭',
+                        'tab4_feat3_title': '스마트 발췌',
+                        'tab4_feat3_sub': '에센셜 AI 아카이빙',
+                        'tab4_feat3_desc': '책을 읽는 도중 영감을 준 문장을 자동으로 수집 및 분류',
+                        'tab4_feat4_title': '도서 추적',
+                        'tab4_feat4_sub': '독서 습관 분석 대시보드',
+                        'tab4_feat4_desc': '완독 시간과 빈도를 추적하는 감성 통계 리포트'
                     };
 
                     Object.keys(defaults).forEach(key => {
@@ -4556,7 +4768,19 @@ ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;</div>
                     'tab1_slide3_image', 'tab1_slide3_caption',
                     'tab2_biz1_title', 'tab2_biz1_desc', 'tab2_biz1_image',
                     'tab2_biz2_title', 'tab2_biz2_desc', 'tab2_biz2_image',
-                    'tab2_biz3_title', 'tab2_biz3_desc', 'tab2_biz3_image'
+                    'tab2_biz3_title', 'tab2_biz3_desc', 'tab2_biz3_image',
+                    
+                    'tab3_title', 'tab3_desc',
+                    'tab3_pkg1_image', 'tab3_pkg1_caption',
+                    'tab3_pkg2_image', 'tab3_pkg2_caption',
+                    'tab3_pkg3_image', 'tab3_pkg3_caption',
+                    'tab3_cta_title', 'tab3_cta_subtitle', 'tab3_cta_desc', 'tab3_cta_btn_text',
+
+                    'tab4_title', 'tab4_desc',
+                    'tab4_feat1_title', 'tab4_feat1_sub', 'tab4_feat1_desc',
+                    'tab4_feat2_title', 'tab4_feat2_sub', 'tab4_feat2_desc',
+                    'tab4_feat3_title', 'tab4_feat3_sub', 'tab4_feat3_desc',
+                    'tab4_feat4_title', 'tab4_feat4_sub', 'tab4_feat4_desc'
                 ];
 
                 try {
