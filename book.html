@@ -746,12 +746,20 @@
             }
         }
 
-        function openLoginRequiredModal() {
+        function openLoginRequiredModal(message) {
             // Close purchase modal first so they don't overlap
             closePurchaseModal();
 
             const modal = document.getElementById('modal-login-required');
             if (modal) {
+                const descEl = modal.querySelector('p.text-sm');
+                if (descEl) {
+                    if (message) {
+                        descEl.innerHTML = message;
+                    } else {
+                        descEl.innerHTML = `도서 구매 및 결제 서비스를 이용하시려면<br>먼저 로그인해 주시기 바랍니다.`;
+                    }
+                }
                 modal.classList.remove('pointer-events-none');
                 modal.classList.add('opacity-100');
                 modal.querySelector('.bg-ivory').classList.remove('scale-95');
@@ -1119,7 +1127,18 @@
         // --- 리뷰 모달 관련 제어 스크립트 ---
         let selectedRating = 5;
         
-        function openReviewModal() {
+        async function openReviewModal() {
+            if (window.supabaseClient) {
+                const { data: { session } } = await window.supabaseClient.auth.getSession();
+                if (!session) {
+                    openLoginRequiredModal(`리뷰 작성 서비스를 이용하시려면<br>먼저 로그인해 주시기 바랍니다.`);
+                    return;
+                }
+            } else {
+                openLoginRequiredModal(`리뷰 작성 서비스를 이용하시려면<br>먼저 로그인해 주시기 바랍니다.`);
+                return;
+            }
+
             selectedRating = 5;
             updateRatingStars();
             document.getElementById('review-username').value = '';
