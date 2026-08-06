@@ -510,6 +510,22 @@
     </main>
 
     
+    <!-- 로그인 유도 모달 -->
+    <div id="login-required-modal" class="fixed inset-0 z-[110] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4" vid="195-1">
+        <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeLoginRequiredModal()" vid="195-2"></div>
+        <div class="bg-cream rounded-3xl w-full max-w-md p-8 relative z-10 shadow-2xl border border-terra/20 transform scale-95 opacity-0 transition-all duration-300" id="login-required-modal-content" vid="195-3">
+            <div class="text-center mb-6" vid="195-4">
+                <i class="ph ph-lock-keyhole text-4xl text-terra mb-3 block" vid="195-5"></i>
+                <h3 class="text-xl font-bold text-forest mb-2" vid="195-6">로그인이 필요합니다</h3>
+                <p class="text-charcoal/60 text-sm" vid="195-7">로그인 후 문의 등록 서비스를 이용해보세요.</p>
+            </div>
+            <div class="flex gap-4" vid="195-8">
+                <a href="login.html?view=signup" class="flex-1 py-3 bg-paper text-charcoal text-center font-bold rounded-full border border-charcoal/10 hover:bg-charcoal/5 transition-colors" vid="195-9">회원가입</a>
+                <a href="login.html" class="flex-1 py-3 bg-forest text-cream text-center font-bold rounded-full hover:bg-forest/90 transition-colors shadow-md" vid="195-10">로그인</a>
+            </div>
+        </div>
+    </div>
+
     <div id="notice-modal" class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 px-4" vid="196">
         <div class="absolute inset-0 bg-forest/80 backdrop-blur-sm" onclick="closeNoticeModal()" vid="197"></div>
         <div class="bg-cream rounded-3xl w-full max-w-lg max-h-[85vh] overflow-y-auto relative z-10 shadow-2xl border border-terra/20 transform scale-95 opacity-0 transition-all duration-300" id="notice-modal-content" vid="198">
@@ -869,6 +885,8 @@
         
         const qnaModal = document.getElementById('qna-modal');
         const qnaModalContent = document.getElementById('qna-modal-content');
+        const loginRequiredModal = document.getElementById('login-required-modal');
+        const loginRequiredModalContent = document.getElementById('login-required-modal-content');
 
         function openQnaModal() {
             qnaModal.classList.remove('opacity-0', 'pointer-events-none');
@@ -888,7 +906,41 @@
             }, 300);
         }
 
-        function submitQna() {
+        function openLoginRequiredModal() {
+            loginRequiredModal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                loginRequiredModalContent.classList.remove('scale-95', 'opacity-0');
+                loginRequiredModalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLoginRequiredModal() {
+            loginRequiredModalContent.classList.remove('scale-100', 'opacity-100');
+            loginRequiredModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                loginRequiredModal.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        async function submitQna() {
+            if (window.supabaseClient) {
+                const { data: { session } } = await window.supabaseClient.auth.getSession();
+                if (!session) {
+                    closeQnaModal();
+                    setTimeout(() => {
+                        openLoginRequiredModal();
+                    }, 350);
+                    return;
+                }
+            } else {
+                closeQnaModal();
+                setTimeout(() => {
+                    openLoginRequiredModal();
+                }, 350);
+                return;
+            }
             
             closeQnaModal();
             setTimeout(() => {
