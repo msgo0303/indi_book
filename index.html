@@ -2225,8 +2225,25 @@
 
         // 돌고 돌아 책장 슬라이더 무한루프 & 중앙 강조 스크립트
         initInfiniteBookshelf = function() {
-            const track = document.getElementById('bookshelf-track');
+            let track = document.getElementById('bookshelf-track');
             if (!track) return;
+
+            // 기존 자동 슬라이드 인터벌 제거하여 중복 동작 방지
+            if (window.bookshelfAutoSlideInterval) {
+                clearInterval(window.bookshelfAutoSlideInterval);
+                window.bookshelfAutoSlideInterval = null;
+            }
+
+            // 기존 리사이즈 이벤트 제거하여 메모리 누수 및 오동작 방지
+            if (window.bookshelfResizeHandler) {
+                window.removeEventListener('resize', window.bookshelfResizeHandler);
+                window.bookshelfResizeHandler = null;
+            }
+
+            // 중복 이벤트 리스너 방지를 위해 트랙 노드를 복제하여 교체
+            const newTrack = track.cloneNode(true);
+            track.parentNode.replaceChild(newTrack, track);
+            track = newTrack;
 
             const originalCards = Array.from(track.children);
             if (originalCards.length === 0) return;
@@ -2328,10 +2345,12 @@
             }
 
             setTimeout(setInitialPosition, 100);
-            window.addEventListener('resize', setInitialPosition);
+
+            // 리사이즈 이벤트 저장 및 등록
+            window.bookshelfResizeHandler = setInitialPosition;
+            window.addEventListener('resize', window.bookshelfResizeHandler);
 
             // 자동 슬라이드 및 직접 드래그 속도 제한 로직
-            let autoSlideInterval;
             let userInteracting = false;
             let isDown = false;
             let startX;
@@ -2347,14 +2366,17 @@
 
             function startAutoSlide() {
                 stopAutoSlide();
-                autoSlideInterval = setInterval(() => {
+                window.bookshelfAutoSlideInterval = setInterval(() => {
                     if (userInteracting || isTransitioning || isDown) return;
                     track.scrollBy({ left: getStepWidth(), behavior: 'smooth' });
                 }, 3000);
             }
 
             function stopAutoSlide() {
-                if (autoSlideInterval) clearInterval(autoSlideInterval);
+                if (window.bookshelfAutoSlideInterval) {
+                    clearInterval(window.bookshelfAutoSlideInterval);
+                    window.bookshelfAutoSlideInterval = null;
+                }
             }
 
             // 드래그 종료 핸들러 (속도 및 이동 수량 제한)
@@ -2509,6 +2531,9 @@
                     }
                 }
             });
+
+            // 자동 슬라이드 시작
+            startAutoSlide();
         };
 
         // best-seller-grid 클릭 이벤트 위임 - 각 베스트셀러 도서 상세페이지(book.html)로 이동
