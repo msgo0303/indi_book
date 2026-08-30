@@ -529,7 +529,7 @@
             display: inline-flex;
             gap: 5px;
             align-items: center;
-            transition: all 0.2s ease;
+            transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
             box-shadow: 0 2px 6px rgba(90, 65, 44, 0.03);
         }
 
@@ -2041,7 +2041,6 @@
                 const isSelected = (selectedKeywords[groupIndex] || []).includes(word);
                 return `
                                 <button class="chip ${isSelected ? 'selected' : ''}" onclick="toggleKeyword(${groupIndex}, '${word}')">
-                                    ${isSelected ? '<i data-lucide="check" class="w-3.5 h-3.5 mr-1"></i>' : ''}
                                     ${word}
                                 </button>
                             `;
