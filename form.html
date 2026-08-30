@@ -27,17 +27,38 @@
             theme: {
                 extend: {
                     colors: {
-                        background: '#faf7f2',
-                        foreground: '#2c241d',
-                        cream: '#faf7f2',
-                        sand: '#ead6bd',
-                        brown: '#8c6d53',
-                        dark: '#2c241d',
-                        line: '#d8c4ad',
-                        soft: '#f1e5d6',
+                        background: 'var(--background)',
+                        foreground: 'var(--foreground)',
+                        cream: 'var(--background)',
+                        sand: 'var(--secondary)',
+                        brown: 'var(--primary)',
+                        dark: 'var(--accent)',
+                        line: 'var(--muted)',
+                        soft: 'var(--muted)',
                         highlight: '#e7c96a',
-                        ivory: '#FBF9F6',
-                        charcoal: '#2B2A29',
+                        ivory: 'var(--card)',
+                        charcoal: 'var(--accent)',
+                        // Tailwind equivalents of Next.js theme values
+                        primary: {
+                            DEFAULT: 'var(--primary)',
+                            foreground: 'var(--primary-foreground)',
+                        },
+                        secondary: {
+                            DEFAULT: 'var(--secondary)',
+                            foreground: 'var(--secondary-foreground)',
+                        },
+                        accent: {
+                            DEFAULT: 'var(--accent)',
+                            foreground: 'var(--accent-foreground)',
+                        },
+                        muted: {
+                            DEFAULT: 'var(--muted)',
+                            foreground: 'var(--muted-foreground)',
+                        },
+                        card: {
+                            DEFAULT: 'var(--card)',
+                            foreground: 'var(--card-foreground)',
+                        },
                     },
                     fontFamily: {
                         serif: ['"Gowun Batang"', 'serif'],
@@ -51,21 +72,42 @@
     <!-- Custom CSS compiled from v0's globals.css -->
     <style>
         :root {
-            --background: #faf7f2;
-            --foreground: #2c241d;
-            --cream: #faf7f2;
-            --sand: #ead6bd;
-            --brown: #8c6d53;
-            --dark: #2c241d;
-            --line: #d8c4ad;
-            --soft: #f1e5d6;
-            --highlight: #e7c96a;
+            /* Warm Autumn Theme variables */
+            --background: #f5f1ea;
+            --foreground: #463b30;
+            --card: #faf8f5;
+            --card-foreground: #463b30;
+            --popover: #faf8f5;
+            --popover-foreground: #463b30;
+            --primary: #ab6b35;
+            --primary-foreground: #faf8f5;
+            --secondary: #ebdcc9;
+            --secondary-foreground: #5a4b3c;
+            --muted: #eddcd0;
+            --muted-foreground: #847262;
+            --accent: #5a412c;
+            --accent-foreground: #fcf9f6;
+            
+            /* Leaf palette colors */
+            --leaf-1: #ab6b35;
+            --leaf-2: #d19451;
+            --leaf-3: #5a412c;
+            --leaf-4: #e3b27b;
+            
+            /* Legacy CSS variables mapping to new theme variables */
+            --cream: var(--background);
+            --sand: var(--secondary);
+            --brown: var(--primary);
+            --dark: var(--accent);
+            --line: var(--muted);
+            --soft: var(--muted);
+            
             --radius: 1rem;
         }
         
         body {
-            background-color: var(--cream);
-            color: var(--dark);
+            background-color: var(--background);
+            color: var(--foreground);
             font-family: 'Noto Sans KR', sans-serif;
             line-height: 1.6;
         }
@@ -149,6 +191,44 @@
         .reveal.revealed {
             opacity: 1;
             transform: translateY(0);
+        }
+        
+        /* Falling Leaves Animation */
+        @keyframes leaf-fall {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            8% {
+                opacity: var(--leaf-opacity, 0.8);
+            }
+            50% {
+                transform: translateY(50vh) translateX(var(--leaf-sway, 30px)) rotate(calc(var(--leaf-spin, 360deg) * 0.5));
+            }
+            92% {
+                opacity: var(--leaf-opacity, 0.8);
+            }
+            100% {
+                transform: translateY(112vh) translateX(calc(var(--leaf-sway, 30px) * -1)) rotate(var(--leaf-spin, 360deg));
+                opacity: 0;
+            }
+        }
+        
+        .leaf-fall {
+            animation-name: leaf-fall;
+            animation-duration: var(--leaf-duration, 12s);
+            animation-delay: var(--leaf-delay, 0s);
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+            will-change: transform, opacity;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .leaf-fall {
+                animation: none;
+                opacity: var(--leaf-opacity, 0.6);
+                top: 20%;
+            }
         }
         
         .intro.fade-out .intro-copy {
@@ -952,12 +1032,12 @@
     </style>
     <script src="transition.js" defer></script>
 </head>
-<body class="bg-cream text-dark">
+<body class="bg-background text-foreground">
 
     <!-- Intro Animation Screen -->
     <div id="intro-screen" class="intro">
         <button id="skip-intro-btn">Skip intro</button>
-        <div class="intro-copy text-dark">
+        <div class="intro-copy text-foreground">
             <span class="eyebrow">a small book for your life</span>
             <h2 class="reveal">당신의 마음에는<br>어떤 책이 머물고 있나요?</h2>
         </div>
@@ -965,19 +1045,61 @@
         <div id="intro-window" class="intro-window"></div>
     </div>
 
+    <!-- Header Navigation -->
+    <header class="relative z-30 flex items-center justify-between px-6 py-6 sm:px-10 max-w-[1440px] mx-auto bg-transparent">
+        <a href="#top" class="flex items-center gap-2 font-serif text-lg font-semibold tracking-tight text-foreground">
+            <!-- Leaf SVG Icon -->
+            <svg class="h-5 w-5 text-primary" viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 4C14 12 8 30 16 46c4 8 12 13 16 13s12-5 16-13c8-16 2-34-16-42Z" />
+                <path d="M32 6V58" stroke="rgba(0,0,0,0.18)" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            <span>돌고 돌아 책방</span>
+        </a>
+
+        <nav aria-label="주요 메뉴" class="hidden items-center gap-8 md:flex font-sans text-xs tracking-wider">
+            <a href="About.html" class="font-medium text-foreground/70 transition-colors hover:text-foreground">ABOUT</a>
+            <a href="library.html" class="font-medium text-foreground/70 transition-colors hover:text-foreground">LIBRARY</a>
+            <a href="events.html" class="font-medium text-foreground/70 transition-colors hover:text-foreground">EVENTS</a>
+            <a href="community.html" class="font-medium text-foreground/70 transition-colors hover:text-foreground">COMMUNITY</a>
+        </nav>
+
+        <a href="#find" class="rounded-full border border-foreground/15 bg-card px-4 py-2 text-xs font-semibold text-foreground shadow-sm transition-colors hover:bg-secondary md:px-5 font-sans">
+            큐레이션 신청
+        </a>
+    </header>
+
     <main id="top">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-copy">
-                <span class="eyebrow">A book chosen just for you</span>
-                <h1 class="reveal">지나온 마음과<br><em>다가올 나</em>를 위한<br>인생책 한 권</h1>
-                <p class="font-sans text-[#6f6256] mt-4 reveal" style="transition-delay: 100ms;">당신의 오늘을 천천히 들여다보고,<br>지금 가장 필요한 문장을 골라 보내드려요.</p>
-                <a class="text-link mt-8 font-sans reveal" style="transition-delay: 200ms;" href="#find">내 마음 들여다보기 <i data-lucide="arrow-down" class="w-4 h-4 inline ml-1"></i></a>
-            </div>
-            <div class="hero-art select-none">
-                <div class="sun"></div>
-                <div class="hero-note reveal">“책은 때때로 나보다 나를 더 잘 알아본다”</div>
-                <img src="https://sbkhqoiicpqihitcrwbb.supabase.co/storage/v1/object/public/images/review_3_7_11zon.webp" alt="책방 일러스트" class="book-stack w-[265px] object-contain reveal" style="transition-delay: 150ms;">
+        <!-- Hero Section (Autumn Theme) -->
+        <section class="relative min-h-[85vh] overflow-hidden flex flex-col justify-center -mt-[82px] pt-[82px]">
+            <!-- Background Image -->
+            <img src="images/autumn-hero.png" alt="따뜻한 색조로 물든 가을 나무들과 오솔길을 그린 일러스트" class="absolute inset-0 w-full h-full object-cover select-none">
+            
+            <!-- Bottom fade overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-background/10 via-background/5 to-background" aria-hidden="true"></div>
+
+            <!-- Falling Leaves Container -->
+            <div id="falling-leaves-container" class="absolute inset-0 pointer-events-none z-10"></div>
+
+            <!-- Centered Copy Container -->
+            <div class="relative z-20 flex flex-col items-center justify-center px-6 py-20 text-center max-w-[1440px] mx-auto w-full">
+                <span class="eyebrow mb-4 text-xs font-medium uppercase tracking-[0.25em] text-primary">Autumn Curation</span>
+                <h1 class="reveal max-w-3xl font-serif text-4xl font-semibold leading-tight text-balance text-foreground sm:text-5xl md:text-6xl">
+                    <span class="block">지나온 마음과</span>
+                    <span class="block">다가올 나를 위한</span>
+                    <span class="block">인생책 한 권</span>
+                </h1>
+                <p class="font-sans mt-6 max-w-xl text-pretty text-sm leading-relaxed text-foreground/75 sm:text-base reveal" style="transition-delay: 100ms;">
+                    당신의 오늘을 천천히 들여다보고,<br class="hidden sm:block" />
+                    지금 가장 필요한 문장을 골라 보내드려요.
+                </p>
+                <div class="mt-6 font-serif italic text-sm sm:text-base text-foreground/60 reveal" style="transition-delay: 150ms;">
+                    “책은 때때로 나보다 나를 더 잘 알아본다”
+                </div>
+                <div class="mt-8 flex flex-wrap items-center justify-center gap-4 reveal" style="transition-delay: 200ms;">
+                    <a href="#find" class="rounded-full bg-primary px-7 py-3.5 text-xs font-semibold text-primary-foreground shadow-md transition-transform hover:scale-[1.03] font-sans">
+                        내 마음 들여다보기 <i data-lucide="arrow-down" class="w-3.5 h-3.5 inline ml-1"></i>
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -1247,9 +1369,52 @@
         let recommendedBookObj = null;
         let currentReviewIndex = 0;
 
+        // Leaf configurations mapping Next.js leaves config
+        const leaves = [
+            { left: 3, size: 22, duration: 13, delay: 0, sway: 40, spin: 380, color: 'var(--leaf-1)', opacity: 0.9 },
+            { left: 10, size: 16, duration: 10, delay: 2.4, sway: -30, spin: -320, color: 'var(--leaf-2)', opacity: 0.75 },
+            { left: 17, size: 26, duration: 15, delay: 5, sway: 50, spin: 420, color: 'var(--leaf-3)', opacity: 0.85 },
+            { left: 24, size: 14, duration: 9, delay: 1, sway: -25, spin: -300, color: 'var(--leaf-1)', opacity: 0.6 },
+            { left: 31, size: 20, duration: 12, delay: 3.6, sway: 35, spin: 360, color: 'var(--leaf-4)', opacity: 0.8 },
+            { left: 38, size: 18, duration: 11, delay: 6.2, sway: -40, spin: -340, color: 'var(--leaf-2)', opacity: 0.7 },
+            { left: 45, size: 24, duration: 14, delay: 0.8, sway: 30, spin: 400, color: 'var(--leaf-3)', opacity: 0.9 },
+            { left: 52, size: 15, duration: 10.5, delay: 4.4, sway: -20, spin: -280, color: 'var(--leaf-1)', opacity: 0.65 },
+            { left: 59, size: 21, duration: 13.5, delay: 2, sway: 45, spin: 360, color: 'var(--leaf-4)', opacity: 0.85 },
+            { left: 66, size: 17, duration: 11.5, delay: 7, sway: -35, spin: -320, color: 'var(--leaf-2)', opacity: 0.7 },
+            { left: 73, size: 25, duration: 15.5, delay: 1.6, sway: 40, spin: 440, color: 'var(--leaf-3)', opacity: 0.9 },
+            { left: 80, size: 14, duration: 9.5, delay: 5.6, sway: -25, spin: -300, color: 'var(--leaf-1)', opacity: 0.6 },
+            { left: 87, size: 19, duration: 12.5, delay: 3, sway: 30, spin: 380, color: 'var(--leaf-4)', opacity: 0.8 },
+            { left: 94, size: 16, duration: 10.8, delay: 6.8, sway: -30, spin: -340, color: 'var(--leaf-2)', opacity: 0.7 },
+            { left: 55, size: 22, duration: 14.2, delay: 8.4, sway: 35, spin: 400, color: 'var(--leaf-3)', opacity: 0.8 },
+            { left: 20, size: 18, duration: 12.8, delay: 9.2, sway: -40, spin: -360, color: 'var(--leaf-1)', opacity: 0.75 }
+        ];
+
+        function renderFallingLeaves() {
+            const container = document.getElementById('falling-leaves-container');
+            if (!container) return;
+            container.innerHTML = leaves.map(leaf => `
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="leaf-fall absolute top-[-10%]" aria-hidden="true" style="
+                    left: ${leaf.left}%;
+                    width: ${leaf.size}px;
+                    height: ${leaf.size}px;
+                    color: ${leaf.color};
+                    opacity: 0;
+                    --leaf-duration: ${leaf.duration}s;
+                    --leaf-delay: ${leaf.delay}s;
+                    --leaf-sway: ${leaf.sway}px;
+                    --leaf-spin: ${leaf.spin}deg;
+                    --leaf-opacity: ${leaf.opacity};
+                ">
+                    <path d="M32 4C14 12 8 30 16 46c4 8 12 13 16 13s12-5 16-13c8-16 2-34-16-42Z" fill="currentColor"/>
+                    <path d="M32 6V58" stroke="rgba(0,0,0,0.18)" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            `).join('');
+        }
+
         // Initialize App
         document.addEventListener("DOMContentLoaded", () => {
             // Render all sections
+            renderFallingLeaves();
             renderPolaroids();
             renderKeywords();
             renderReviews();
