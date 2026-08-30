@@ -1261,6 +1261,40 @@
             border: none;
             border-radius: 1.5px;
         }
+
+        /* Equalizer Animation for Mobile BGM */
+        .bgm-eq {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 10px;
+            width: 14px;
+            cursor: pointer;
+        }
+
+        .bgm-eq-bar {
+            width: 2px;
+            height: 3px;
+            background-color: #ab6b35;
+            border-radius: 999px;
+            animation: bgm-eq-bounce 0.8s ease-in-out infinite alternate;
+            animation-play-state: paused;
+            transition: height 0.2s ease;
+        }
+
+        .bgm-eq.playing .bgm-eq-bar {
+            animation-play-state: running;
+        }
+
+        .bgm-eq-bar:nth-child(1) { animation-duration: 0.5s; }
+        .bgm-eq-bar:nth-child(2) { animation-duration: 0.8s; animation-delay: 0.1s; }
+        .bgm-eq-bar:nth-child(3) { animation-duration: 0.6s; animation-delay: 0.25s; }
+        .bgm-eq-bar:nth-child(4) { animation-duration: 0.7s; animation-delay: 0.05s; }
+
+        @keyframes bgm-eq-bounce {
+            0% { height: 2px; }
+            100% { height: 10px; }
+        }
     </style>
 
     <!-- Page Transition Effect -->
@@ -1685,7 +1719,7 @@
     </footer>
 
     <!-- BGM Controller -->
-    <div id="bgm-controller" class="fixed bottom-6 left-6 z-50 flex items-center gap-2.5 bg-[#faf8f5]/90 backdrop-blur-md border border-[#ebdcc9] p-1.5 pr-3 rounded-full shadow-md transition-all duration-500 opacity-0 translate-y-4 pointer-events-none font-sans text-xs">
+    <div id="bgm-controller" class="fixed bottom-6 left-6 z-50 flex items-center gap-2.5 bg-[#faf8f5]/90 backdrop-blur-md border border-[#ebdcc9] p-1.5 pr-2.5 rounded-full shadow-md transition-all duration-500 opacity-0 translate-y-4 pointer-events-none font-sans text-xs">
         <audio id="bgm-audio" src="bgm.mp3" loop preload="auto"></audio>
         <button id="bgm-toggle-btn" class="w-7 h-7 rounded-full bg-[#ab6b35] text-white flex items-center justify-center hover:bg-[#5a412c] transition-colors focus:outline-none" aria-label="음악 재생/일시정지">
             <i data-lucide="play" class="w-3.5 h-3.5"></i>
@@ -1693,8 +1727,14 @@
         <button id="bgm-mute-btn" class="text-[#ab6b35] focus:outline-none" aria-label="음소거 토글">
             <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
         </button>
-        <div class="flex items-center pr-0.5">
+        <div class="hidden md:flex items-center pr-0.5">
             <input id="bgm-volume" type="range" min="0" max="1" step="0.01" value="0.40" class="w-12 h-2 rounded-full appearance-none cursor-pointer focus:outline-none" style="background: linear-gradient(to right, #ab6b35 0%, #ab6b35 40%, #ebdcc9 40%, #ebdcc9 100%)">
+        </div>
+        <div id="bgm-eq" class="flex md:hidden bgm-eq pr-0.5" aria-label="음악 재생 중">
+            <span class="bgm-eq-bar"></span>
+            <span class="bgm-eq-bar"></span>
+            <span class="bgm-eq-bar"></span>
+            <span class="bgm-eq-bar"></span>
         </div>
     </div>
 
@@ -2347,6 +2387,7 @@
             const toggleBtn = document.getElementById('bgm-toggle-btn');
             const muteBtn = document.getElementById('bgm-mute-btn');
             const volumeSlider = document.getElementById('bgm-volume');
+            const eq = document.getElementById('bgm-eq');
 
             let isPlaying = false;
             let lastVolume = 0.4; // Default to 40%
@@ -2400,8 +2441,10 @@
             function updateBgmUI() {
                 if (isPlaying) {
                     toggleBtn.innerHTML = '<i data-lucide="pause" class="w-3.5 h-3.5"></i>';
+                    eq.classList.add('playing');
                 } else {
                     toggleBtn.innerHTML = '<i data-lucide="play" class="w-3.5 h-3.5"></i>';
+                    eq.classList.remove('playing');
                 }
 
                 const currentVol = audio.muted ? 0 : audio.volume;
@@ -2449,6 +2492,16 @@
                     lastVolume = vol;
                 }
                 updateBgmUI();
+            });
+
+            // Mobile Equalizer click listener
+            eq.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (isPlaying) {
+                    pauseBgm();
+                } else {
+                    playBgm();
+                }
             });
         });
     </script>
