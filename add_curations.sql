@@ -4,19 +4,20 @@ CREATE TABLE IF NOT EXISTS public.curations (
     user_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
     name TEXT NOT NULL,
     contact TEXT NOT NULL,
-    address TEXT,
-    age_info TEXT,
-    preference TEXT,
-    environment TEXT,
-    referral TEXT,
+    address TEXT,                     -- 거주 지역 (city)
+    age INTEGER,                      -- 나이 (정수형)
+    gender TEXT,                      -- 성별 (여성, 남성, 선택하지 않음)
+    selected_keywords TEXT[],         -- 선택한 감정 키워드 목록
+    recommended_book TEXT,            -- 추천받은 인생책 제목
+    environment TEXT,                 -- 선호하는 독서 분위기
     status TEXT DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED')),
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- 2. 초기 큐레이션 신청 내역 Mock 데이터 삽입
-INSERT INTO public.curations (id, name, contact, address, age_info, preference, environment, referral, status)
+INSERT INTO public.curations (id, name, contact, address, age, gender, selected_keywords, recommended_book, environment, status)
 VALUES
-(1022, '김도윤', '010-5555-4444', '부산 해운대구', '40대 이상', '지친 하루 끝, 위로가 되는 책', '햇살 드는 베란다', '검색엔진', 'PENDING'),
-(1023, '이서연', '010-9876-5432', '경기 성남시', '30대', '퇴근 후 30분씩 가볍게 읽을 수 있는 위로가 되는 에세이', '조용한 심야 카페', '지인 추천', 'APPROVED'),
-(1024, '박지우', '010-1234-5678', '서울 마포구', '20대', '최근에 번아웃이 왔어요. 아무 생각 없이 푹 빠져들 수 있는 소설을 원해요.', '비 오는 날 따뜻한 방안', '인스타그램', 'PENDING')
+(1022, '김도윤', '010-5555-4444', '부산 해운대구', 42, '남성', ARRAY['#압박감', '#무기력과번아웃', '#여유로운숨고르기'], '숲속의 자본주의자', '햇살 드는 베란다', 'PENDING'),
+(1023, '이서연', '010-9876-5432', '경기 성남시', 31, '여성', ARRAY['#의기소침', '#답답한정체기', '#주체적인확신'], '이어령의 마지막 수업', '조용한 심야 카페', 'APPROVED'),
+(1024, '박지우', '010-1234-5678', '서울 마포구', 25, '선택하지 않음', ARRAY['#혼란스러움', '#공허함', '#따뜻한자기수용'], '어린이라는 세계', '비 오는 날 따뜻한 방안', 'PENDING')
 ON CONFLICT (id) DO NOTHING;

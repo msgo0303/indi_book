@@ -1,123 +1,945 @@
-<html lang="ko" vid="0"><head vid="1">
-    <meta charset="UTF-8" vid="2">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" vid="3">
-    <title vid="4">오래된 서랍 - 북 큐레이션 신청</title>
-    <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" vid="9">
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>오래된 서랍 - 북 큐레이션 신청</title>
     
-    <script vid="10">
+    <!-- Tailwind CSS v3 CDN -->
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Supabase JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Configuration for Supabase -->
+    <script src="config.js"></script>
+    
+    <!-- Google Fonts Gowun Batang (Serif) and Noto Sans KR (Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+    
+    <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        cream: '#FDFBF7',
-                        forest: '#1B4332',
-                        terra: '#A36A00',
-                        charcoal: '#2D2D2D',
-                        paper: '#F5F2EB', 
+                        background: '#faf7f2',
+                        foreground: '#2c241d',
+                        cream: '#faf7f2',
+                        sand: '#ead6bd',
+                        brown: '#8c6d53',
+                        dark: '#2c241d',
+                        line: '#d8c4ad',
+                        soft: '#f1e5d6',
+                        highlight: '#e7c96a',
+                        ivory: '#FBF9F6',
+                        charcoal: '#2B2A29',
                     },
                     fontFamily: {
-                        serif: ['"Noto Serif KR"', 'serif'],
-                        sans: ['"Noto Serif KR"', 'sans-serif'],
+                        serif: ['"Gowun Batang"', 'serif'],
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
                     },
                 }
             }
         }
     </script>
-    <style vid="11">
-        body {
-            font-family: 'Noto Serif KR', serif;
-            -webkit-tap-highlight-color: transparent;
+    
+    <!-- Custom CSS compiled from v0's globals.css -->
+    <style>
+        :root {
+            --background: #faf7f2;
+            --foreground: #2c241d;
+            --cream: #faf7f2;
+            --sand: #ead6bd;
+            --brown: #8c6d53;
+            --dark: #2c241d;
+            --line: #d8c4ad;
+            --soft: #f1e5d6;
+            --highlight: #e7c96a;
+            --radius: 1rem;
         }
-
-        .step-panel {
-            position: absolute;
+        
+        body {
+            background-color: var(--cream);
+            color: var(--dark);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+        }
+        
+        button, a {
+            font: inherit;
+        }
+        
+        button {
+            cursor: pointer;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .intro {
+            position: fixed;
             inset: 0;
-            width: 100%;
-            height: 100%;
+            background: transparent;
+            z-index: 50;
             display: flex;
             flex-direction: column;
-            background-color: #FDFBF7;
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            visibility: hidden;
-            box-sizing: border-box !important;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.5s ease-in-out;
         }
-
-        .slide-active {
-            transform: translateX(0);
-            visibility: visible;
+        
+        .intro.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .intro-window {
+            position: absolute;
+            top: calc(55% + 25px);
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: 0 0 0 9999px var(--sand);
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 10;
+            border: 2px solid var(--brown);
         }
-
-        .slide-in-right {
-            transform: translateX(100%);
-            visibility: hidden;
-            z-index: 5;
+        
+        .intro.fade-out .intro-window {
+            transform: translate(-50%, -50%) scale(45);
         }
-
-        .slide-in-left {
-            transform: translateX(-100%);
-            visibility: hidden;
-            z-index: 5;
+        
+        .intro button {
+            position: absolute;
+            top: 28px;
+            right: 30px;
+            border: 1px solid #a98c70;
+            background: var(--cream);
+            border-radius: 999px;
+            padding: 8px 16px;
+            color: var(--dark);
+            font-size: 12px;
+            z-index: 30;
+            cursor: pointer;
         }
-
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        
+        .intro-copy {
+            text-align: center;
+            z-index: 20;
+            transition: opacity 0.5s ease-in-out;
+            transform: translateY(-50px);
         }
-
-        .radio-peer:checked + div {
-            border-color: #A36A00;
-            background-color: rgba(163, 106, 0, 0.05);
-            color: #A36A00;
+        
+        /* Scroll Reveal Effect CSS */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-
-        .radio-peer:checked + div .check-icon {
+        .reveal.revealed {
             opacity: 1;
+            transform: translateY(0);
         }
-
-        /* Mobile Spacing & Padding Optimization */
-        @media (max-width: 640px) {
-            .px-6 {
-                padding-left: 2rem !important;
-                padding-right: 2rem !important;
+        
+        .intro.fade-out .intro-copy {
+            opacity: 0;
+        }
+        
+        .intro-copy h2 {
+            font: 400 clamp(30px, 5vw, 64px)/1.25 'Gowun Batang', serif;
+            margin: 18px 0 28px;
+        }
+        
+        .intro-copy svg {
+            margin: auto;
+        }
+        
+        .eyebrow {
+            font-size: 11px;
+            letter-spacing: .17em;
+            text-transform: uppercase;
+            color: var(--brown);
+            display: block;
+        }
+        
+        .logo {
+            letter-spacing: .1em;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        header {
+            height: 82px;
+            padding: 0 clamp(24px, 5vw, 76px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--cream);
+            border-bottom: 1px solid var(--line);
+        }
+        
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            font-size: 13px;
+        }
+        
+        nav a:hover, .text-link:hover {
+            color: var(--brown);
+        }
+        
+        .nav-button, .primary-button {
+            border: 0;
+            background: var(--dark);
+            color: var(--cream);
+            border-radius: 999px;
+            padding: 13px 21px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: .25s;
+        }
+        
+        .nav-button:hover, .primary-button:hover {
+            background: var(--brown);
+            transform: translateY(-2px);
+        }
+        
+        .mobile-menu {
+            display: none;
+            border: 0;
+            background: transparent;
+        }
+        
+        .hero {
+            min-height: 650px;
+            background: var(--sand);
+            padding: 80px clamp(24px, 8vw, 130px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+        
+        .hero-copy {
+            max-width: 560px;
+        }
+        
+        .hero h1, .section-heading h2 {
+            font: 400 clamp(44px, 6.6vw, 88px)/1.1 'Gowun Batang', serif;
+            letter-spacing: -.05em;
+            margin: 18px 0 24px;
+        }
+        
+        .hero h1 em, .section-heading h2 em, .success-modal h2 em {
+            font-style: normal;
+        }
+        
+        .hero p {
+            font-size: 16px;
+            margin-bottom: 34px;
+        }
+        
+        .text-link {
+            display: inline-flex;
+            gap: 9px;
+            align-items: center;
+            font-size: 13px;
+            border-bottom: 1px solid var(--brown);
+            padding-bottom: 5px;
+        }
+        
+        .hero-art {
+            width: 43%;
+            height: 470px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+        
+        .sun {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: #d9b98f;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: .7;
+            z-index: 1;
+        }
+        
+        .hero-note {
+            position: relative;
+            z-index: 2;
+            font: normal 24px/1.5 'Gowun Batang', serif;
+            white-space: nowrap;
+            text-align: center;
+        }
+        
+        .book-stack {
+            position: relative;
+            z-index: 2;
+            width: 265px;
+            height: auto;
+            border-radius: 1.5rem;
+            filter: drop-shadow(12px 12px 8px #8c6d5344);
+        }
+        
+        .book-spine {
+            height: 54px;
+            border-radius: 4px;
+            width: 265px;
+            margin-top: 5px;
+        }
+        
+        .one { background: #a87a58; transform: rotate(3deg); }
+        .two { background: #f5e8d7; transform: rotate(-2deg); }
+        .three { background: #6b5343; transform: rotate(5deg); }
+        
+        section {
+            padding: 110px clamp(24px, 8vw, 130px);
+        }
+        
+        .section-heading h2 {
+            font-size: clamp(39px, 5vw, 67px);
+            margin: 16px 0;
+        }
+        
+        .section-heading p {
+            color: #6f6256;
+        }
+        
+        .memory {
+            display: grid;
+            grid-template-columns: 35% 1fr;
+            gap: 60px;
+            max-width: 1400px;
+            margin: auto;
+        }
+        
+        .polaroids {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 19px;
+        }
+        
+        .polaroid {
+            background: #fff;
+            border: 0;
+            padding: 9px 9px 18px;
+            box-shadow: 0 9px 18px #5d47301a;
+            transform: rotate(var(--r, 0deg));
+            transition: .3s;
+        }
+        
+        .polaroid:nth-child(2n) { --r: 2deg; }
+        .polaroid:nth-child(3n) { --r: -2deg; }
+        .polaroid img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            display: block;
+            filter: saturate(.72);
+        }
+        
+        .polaroid span {
+            display: block;
+            font: italic 13px 'Gowun Batang', serif;
+            padding-top: 11px;
+        }
+        
+        .find {
+            background: #f0e2d3;
+        }
+        
+        .centered {
+            text-align: center;
+        }
+        
+        .centered p {
+            margin: auto;
+            max-width: 460px;
+        }
+        
+        .keyword-groups {
+            max-width: 920px;
+            margin: 55px auto 0;
+        }
+        
+        .keyword-group {
+            padding: 28px 0;
+            border-bottom: 1px solid var(--line);
+        }
+        
+        .group-label {
+            display: block;
+            font: 22px 'Gowun Batang', serif;
+        }
+        
+        .group-question {
+            font-size: 12px;
+            color: #8e7b68;
+        }
+        
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 17px;
+        }
+        
+        .chip {
+            border: 1px solid var(--line);
+            background: transparent;
+            border-radius: 999px;
+            padding: 9px 15px;
+            font-size: 13px;
+            color: #725f4e;
+            display: inline-flex;
+            gap: 5px;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+        
+        .chip.selected {
+            background: var(--brown);
+            border-color: var(--brown);
+            color: var(--cream);
+        }
+        
+        .result-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 920px;
+            margin: 35px auto 0;
+            font-size: 13px;
+            color: #806d5a;
+        }
+        
+        .primary-button:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            text-align: center;
+            margin: 40px;
+        }
+        
+        .breathe {
+            animation: breathe 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes breathe {
+            to {
+                transform: scale(1.2) rotate(8deg);
             }
-            .pt-28 {
-                padding-top: 9rem !important;
+        }
+        
+        .result-card {
+            max-width: 720px;
+            margin: 45px auto 0;
+            padding: 28px;
+            background: var(--cream);
+            display: flex;
+            gap: 30px;
+            box-shadow: 0 15px 40px #795d431a;
+        }
+        
+        .result-card img {
+            width: 145px;
+            height: 205px;
+            object-fit: cover;
+        }
+        
+        .result-card h3 {
+            font: 35px 'Gowun Batang', serif;
+            margin: 5px 0;
+        }
+        
+        .author {
+            font-size: 12px;
+            color: var(--brown);
+        }
+        
+        .tagline {
+            font: italic 18px 'Gowun Batang', serif;
+            color: #5d4730;
+        }
+        
+        .result-card p:not(.author):not(.tagline) {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        
+        .apply {
+            display: grid;
+            grid-template-columns: 35% 1fr;
+            gap: 70px;
+            max-width: 1400px;
+            margin: auto;
+        }
+        
+        .form-card {
+            background: #fff;
+            padding: 35px;
+            border-radius: 4px;
+            box-shadow: 0 12px 35px #60452a12;
+        }
+        
+        .selected-summary {
+            background: var(--soft);
+            padding: 15px;
+            margin-bottom: 24px;
+            font-size: 12px;
+        }
+        
+        .selected-summary b {
+            font-weight: 400;
+            color: var(--brown);
+            margin-right: 9px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 19px;
+        }
+        
+        label, legend {
+            font-size: 12px;
+            color: #6d5d4d;
+        }
+        
+        input:not([type=radio]):not([type=checkbox]), textarea {
+            display: block;
+            width: 100%;
+            border: 0;
+            border-bottom: 1px solid var(--line);
+            padding: 10px 0;
+            outline: 0;
+            background: transparent;
+            color: var(--dark);
+            font-family: inherit;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: var(--brown) !important;
+        }
+        
+        textarea {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px;
+            background: #fff;
+            resize: none;
+        }
+        
+        fieldset {
+            border: 0;
+            padding: 0;
+            margin: 24px 0;
+        }
+        
+        .gender {
+            display: flex;
+            gap: 8px;
+            margin-top: 9px;
+        }
+        
+        .gender label span {
+            display: block;
+            border: 1px solid var(--line);
+            padding: 9px 13px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .gender input {
+            display: none;
+        }
+        
+        .gender input:checked + span {
+            background: var(--dark);
+            color: var(--cream);
+            border-color: var(--dark);
+        }
+        
+        .agree {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .agree a {
+            text-decoration: underline;
+            margin-left: auto;
+            color: var(--brown);
+        }
+        
+        .wide {
+            width: 100%;
+            justify-content: center;
+            margin-top: 28px;
+        }
+        
+        .reviews {
+            background: var(--dark);
+            color: var(--cream);
+        }
+        
+        .reviews .eyebrow, .reviews .section-heading p {
+            color: #c8a97e;
+        }
+        
+        .reviews .section-heading h2 {
+            color: var(--cream);
+        }
+        
+        .review-window {
+            overflow: hidden;
+            max-width: 820px;
+            margin: 50px auto 20px;
+        }
+        
+        .review-track {
+            display: flex;
+            transition: transform 0.4s ease;
+        }
+        
+        .review {
+            min-width: 100%;
+            padding: 45px clamp(24px, 8vw, 95px);
+            background: #3a3028;
+            border: 1px solid #665344;
+        }
+        
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--sand);
+            color: var(--dark);
+            display: grid;
+            place-items: center;
+            font-family: 'Gowun Batang', serif;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        
+        .quote {
+            font: 24px/1.6 'Gowun Batang', serif;
+            min-height: 120px;
+        }
+        
+        .review-tags {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .review-tags span {
+            color: #c8a97e;
+            font-size: 11px;
+        }
+        
+        .review-by {
+            border-top: 1px solid #665344;
+            margin-top: 25px;
+            padding-top: 15px;
+            font-size: 13px;
+        }
+        
+        .review-by small {
+            color: #a99989;
+            margin-left: 9px;
+        }
+        
+        .review-by b {
+            float: right;
+            color: #d4a96d;
+            font-size: 12px;
+        }
+        
+        .carousel-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+        
+        .carousel-controls button {
+            border: 1px solid #685748;
+            background: transparent;
+            color: var(--cream);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .carousel-controls button:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .carousel-controls span {
+            font-size: 11px;
+            color: #ae9a87;
+        }
+        
+        .faq {
+            max-width: 1000px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 40% 1fr;
+            gap: 80px;
+        }
+        
+        .faq-item {
+            border-top: 1px solid var(--line);
+            overflow: hidden;
+        }
+        
+        .faq-item button {
+            width: 100%;
+            padding: 20px 0;
+            border: 0;
+            background: transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            cursor: pointer;
+        }
+        
+        .faq-item p {
+            margin: 0 0 20px;
+            color: #786856;
+            font-size: 13px;
+            display: none;
+            line-height: 1.7;
+        }
+        
+        .faq-item.active p {
+            display: block;
+        }
+        
+        .rotate {
+            transform: rotate(180deg);
+        }
+        
+        .community {
+            background: var(--sand);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .community-links {
+            display: flex;
+            gap: 14px;
+        }
+        
+        .community-links a {
+            background: var(--cream);
+            padding: 20px;
+            min-width: 250px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            box-shadow: 0 8px 18px #60452a12;
+            transition: .25s;
+        }
+        
+        .community-links a:hover {
+            transform: translateY(-4px);
+        }
+        
+        .community-links a svg:last-child {
+            margin-left: auto;
+        }
+        
+        .community-links small {
+            color: var(--brown);
+            font-size: 11px;
+        }
+        
+        footer {
+            padding: 28px clamp(24px, 8vw, 130px);
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            color: #806e5c;
+            font-size: 12px;
+        }
+        
+        footer small {
+            margin-left: auto;
+        }
+        
+        .modal-backdrop {
+            position: fixed;
+            z-index: 60;
+            inset: 0;
+            background: rgba(44, 36, 29, 0.8);
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+        
+        .photo-modal {
+            background: #fff;
+            padding: 12px 12px 24px;
+            max-width: 440px;
+            position: relative;
+        }
+        
+        .photo-modal img {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: cover;
+        }
+        
+        .photo-modal p {
+            text-align: center;
+            font: italic 20px 'Gowun Batang', serif;
+            margin: 15px 0 0;
+        }
+        
+        .close {
+            position: absolute;
+            right: -45px;
+            top: 0;
+            color: #fff;
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+        }
+        
+        .success-modal {
+            background: var(--cream);
+            text-align: center;
+            padding: 55px 35px;
+            max-width: 450px;
+            position: relative;
+        }
+        
+        .success-mark {
+            display: grid;
+            place-items: center;
+            margin: 0 auto 20px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--sand);
+        }
+        
+        .success-modal h2 {
+            font: 38px/1.2 'Gowun Batang', serif;
+            margin: 14px;
+        }
+        
+        .success-modal p {
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+        
+        @media (max-width: 800px) {
+            header { height: 64px; padding: 0 18px; }
+            .logo { font-size: 14px; letter-spacing: .05em; }
+            .mobile-menu { display: grid; place-items: center; padding: 8px; }
+            nav { display: none; }
+            .hero { min-height: 0; display: block; padding: 56px 22px 42px; }
+            .hero-copy { max-width: none; }
+            .hero h1, .section-heading h2 { font-size: clamp(37px, 10.5vw, 52px); line-height: 1.18; letter-spacing: -.07em; margin: 14px 0 20px; }
+            .hero p { font-size: 14px; line-height: 1.8; }
+            .hero-art { 
+                width: calc(100% + 10px); 
+                height: auto; 
+                margin-top: 18px; 
+                min-width: 0; 
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                position: relative;
             }
-            .pb-8 {
-                padding-bottom: 2.5rem !important;
+            .sun { 
+                width: 170px; 
+                height: 170px; 
+                left: 50%; 
+                top: 50%; 
+                transform: translate(-50%, -50%); 
             }
-            .mb-8 {
-                margin-bottom: 2.25rem !important;
+            .hero-note { 
+                font-size: 16px; 
+                line-height: 1.65; 
+                left: auto; 
+                top: auto; 
+                transform: none; 
+                position: relative;
+                z-index: 2;
+                white-space: nowrap; 
             }
-            .mb-6 {
-                margin-bottom: 1.75rem !important;
+            .book-stack { 
+                left: auto; 
+                bottom: auto; 
+                transform: none; 
+                position: relative;
+                z-index: 2;
+                width: 220px !important; 
+                border-radius: 1rem; 
             }
-            .gap-3 {
-                gap: 1rem !important;
-            }
-            .space-y-4 > :not([hidden]) ~ :not([hidden]) {
-                margin-top: 1.25rem !important;
-            }
-            
-            /* 질문 타이틀 상단 50px 여백 추가 */
-            .step-panel h2 {
-                margin-top: 50px !important;
-            }
+            .book-spine { width: 175px; height: 36px; }
+            .memory, .apply, .faq { display: block; padding-left: 22px; padding-right: 22px; }
+            .memory .section-heading, .apply .section-heading, .faq .section-heading { margin-bottom: 32px; }
+            .section-heading p { font-size: 13px; line-height: 1.8; }
+            .polaroids { gap: 8px; }
+            .polaroid { padding: 5px 5px 11px; }
+            .polaroid span { font-size: 9px; }
+            .result-action, .community { display: block; }
+            .result-action { padding-top: 25px; }
+            .result-action .primary-button { margin-top: 14px; width: 100%; justify-content: center; }
+            .result-card { display: block; padding: 22px; }
+            .result-card img { width: 105px; height: 150px; margin-bottom: 16px; }
+            .result-card h3 { font-size: 24px; }
+            .form-card { padding: 18px; }
+            .form-grid { grid-template-columns: 1fr; gap: 14px; }
+            .community-links { display: block; margin-top: 26px; }
+            .community-links a { margin-bottom: 10px; min-width: 0; padding: 17px; }
+            .community { padding: 62px 22px; }
+            .community h2 { font-size: 39px; }
+            footer { display: block; padding: 24px 22px; font-size: 12px; }
+            footer span, footer small { display: block; margin-bottom: 7px; }
+            footer small { margin-left: 0; }
+            .close { right: 0; top: -45px; }
+            .quote { font-size: 18px; }
         }
     </style>
+    
     <!-- Page Transition Effect -->
     <style>
         body {
@@ -130,590 +952,625 @@
     </style>
     <script src="transition.js" defer></script>
 </head>
-<body class="bg-charcoal flex items-center justify-center min-h-screen relative overflow-hidden text-charcoal" vid="12">
+<body class="bg-cream text-dark">
 
-    <div class="absolute inset-0 z-0" vid="13">
-        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&amp;w=2128&amp;auto=format&amp;fit=crop" class="w-full h-full object-cover blur-xl opacity-60 transform scale-110" alt="Background" vid="14">
-        <div class="absolute inset-0 bg-charcoal/70 mix-blend-multiply" vid="15"></div>
+    <!-- Intro Animation Screen -->
+    <div id="intro-screen" class="intro">
+        <button id="skip-intro-btn">Skip intro</button>
+        <div class="intro-copy text-dark">
+            <span class="eyebrow">a small book for your life</span>
+            <h2 class="reveal">당신의 마음에는<br>어떤 책이 머물고 있나요?</h2>
+        </div>
+        <!-- Center circular window (empty/transparent hole) -->
+        <div id="intro-window" class="intro-window"></div>
     </div>
 
-    <main class="relative z-10 w-full h-[100dvh] sm:h-[844px] sm:w-[390px] bg-cream sm:rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.4)] overflow-hidden flex flex-col sm:border-8 border-charcoal/90" vid="16">
-        
-        <header id="stepper-header" class="absolute top-0 left-0 w-full z-20 px-6 pt-12 pb-4 bg-cream/95 backdrop-blur-md transition-opacity duration-300 opacity-0 pointer-events-none border-b border-charcoal/5" vid="17">
-            <div class="flex justify-between items-end mb-3" vid="18">
-                <span class="text-xs font-bold text-forest tracking-widest" vid="19">CURATION</span>
-                <span class="text-xs font-bold text-terra font-sans" vid="20"><span id="current-step-num" vid="21">1</span> / 10</span>
+    <main id="top">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-copy">
+                <span class="eyebrow">A book chosen just for you</span>
+                <h1 class="reveal">지나온 마음과<br><em>다가올 나</em>를 위한<br>인생책 한 권</h1>
+                <p class="font-sans text-[#6f6256] mt-4 reveal" style="transition-delay: 100ms;">당신의 오늘을 천천히 들여다보고,<br>지금 가장 필요한 문장을 골라 보내드려요.</p>
+                <a class="text-link mt-8 font-sans reveal" style="transition-delay: 200ms;" href="#find">내 마음 들여다보기 <i data-lucide="arrow-down" class="w-4 h-4 inline ml-1"></i></a>
             </div>
-            <div class="w-full h-1.5 bg-paper rounded-full overflow-hidden" vid="22">
-                <div id="progress-bar" class="h-full bg-terra transition-all duration-500 ease-out w-[10%]" vid="23"></div>
+            <div class="hero-art select-none">
+                <div class="sun"></div>
+                <div class="hero-note reveal">“책은 때때로 나보다 나를 더 잘 알아본다”</div>
+                <img src="https://sbkhqoiicpqihitcrwbb.supabase.co/storage/v1/object/public/images/review_3_7_11zon.webp" alt="책방 일러스트" class="book-stack w-[265px] object-contain reveal" style="transition-delay: 150ms;">
             </div>
-        </header>
+        </section>
 
-        <form id="curation-form" class="relative flex-1 w-full h-full" onsubmit="event.preventDefault(); submitForm();" vid="24">
+        <!-- Memory Section (Polaroid Gallery) -->
+        <section class="memory">
+            <div class="section-heading">
+                <span class="eyebrow">little fragments</span>
+                <h2 class="reveal">당신의 하루에,<br><em>책 같은 순간</em>이 있나요?</h2>
+                <p class="font-sans mt-2 reveal" style="transition-delay: 100ms;">사진을 눌러 그날의 마음을 잠깐 꺼내보세요.</p>
+            </div>
+            <div class="polaroids" id="polaroids-grid">
+                <!-- Loaded dynamically by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Find Section (Questionnaire & Curation Results) -->
+        <section class="find" id="find">
+            <div class="section-heading centered">
+                <span class="eyebrow">find your life book</span>
+                <h2 class="reveal">세 가지 시간 속에서<br><em>나의 마음</em>을 골라주세요</h2>
+                <p class="font-sans mt-2 reveal" style="transition-delay: 100ms;">정답은 없어요. 지금 떠오르는 단어를 편하게 선택해보세요.</p>
+            </div>
+            <div class="keyword-groups reveal" style="transition-delay: 150ms;" id="keyword-groups-container">
+                <!-- Loaded dynamically by JavaScript -->
+            </div>
+            <div class="result-action font-sans reveal" style="transition-delay: 200ms;">
+                <span id="selected-count-text">마음에 닿는 단어를 골라주세요</span>
+                <button class="primary-button" id="find-book-btn" disabled onclick="findBook()">결과 확인하기 <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+            </div>
             
-            <div id="step-1" class="step-panel slide-active" vid="25">
-                <div class="h-[55%] relative w-full" vid="26">
-                    <img src="https://sbkhqoiicpqihitcrwbb.supabase.co/storage/v1/object/public/images/clinet_4_6_11zon.webp" class="w-full h-full object-cover" alt="Welcome Cover" vid="27">
-                    <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/20 to-transparent" vid="28"></div>
-                    <div class="absolute top-12 left-6 w-12 h-12 border-2 border-dashed border-cream/50 rounded-full flex items-center justify-center text-cream transform -rotate-12 backdrop-blur-sm" vid="29">
-                        <i class="ph ph-books text-2xl" vid="30"></i>
-                    </div>
+            <!-- Curation Loading State -->
+            <div class="loading hidden" id="loading-spinner">
+                <div class="flex justify-center mb-4">
+                    <i data-lucide="book-open" class="breathe w-10 h-10 text-brown"></i>
                 </div>
-                <div class="flex-1 px-6 pb-8 pt-2 flex flex-col relative z-10" vid="31">
-                    <h1 class="text-3xl font-bold text-forest leading-tight mb-3" vid="32">당신만을 위한<br vid="33">북 큐레이션</h1>
-                    <p class="text-charcoal/70 text-sm font-light mb-8" vid="34">지금 나만의 인생책을 찾는 여정을 시작해 보세요.</p>
-                    
-                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-charcoal/5 mb-auto relative" vid="35">
-                        <i class="ph-fill ph-quotes text-terra/20 text-3xl absolute top-3 right-4" vid="36"></i>
-                        <div class="flex text-terra text-sm mb-2" vid="37">
-                            <i class="ph-fill ph-star" vid="38"></i><i class="ph-fill ph-star" vid="39"></i><i class="ph-fill ph-star" vid="40"></i><i class="ph-fill ph-star" vid="41"></i><i class="ph-fill ph-star" vid="42"></i>
-                        </div>
-                        <p class="text-sm font-light leading-relaxed text-charcoal/90" vid="43">"이 큐레이션을 통해 제 삶의 방향을 바꾸는 책을 만났습니다."</p>
-                        <p class="text-xs text-charcoal/40 mt-2 font-sans" vid="44">- 독자 김**</p>
-                    </div>
-
-                    <button type="button" onclick="goToStep(2)" class="w-full py-4 mt-6 bg-forest text-cream rounded-full font-bold text-lg hover:bg-forest/90 transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-forest/20" vid="45">
-                        시작하기 <i class="ph ph-arrow-right group-hover:translate-x-1 transition-transform" vid="46"></i>
-                    </button>
-                </div>
+                <p class="font-sans text-[#786856]">당신에게 맞는 문장을 찾고 있어요</p>
             </div>
 
-            <div id="step-2" class="step-panel slide-in-right pt-28 pb-8" vid="47">
-                <div class="flex-1 overflow-y-auto hide-scrollbar flex flex-col px-6" vid="48">
-                    <h2 class="text-2xl font-bold text-forest mb-8" vid="49">안내 및 주의사항</h2>
-                    
-                    <div class="space-y-4 mb-auto" vid="50">
-                        <div class="bg-paper p-5 rounded-2xl border border-forest/10 flex items-start gap-4" vid="51">
-                            <div class="w-10 h-10 rounded-full bg-forest/10 text-forest flex items-center justify-center shrink-0" vid="52">
-                                <i class="ph-fill ph-users text-xl" vid="53"></i>
-                            </div>
-                            <div vid="54">
-                                <h3 class="font-bold text-forest mb-1" vid="55">모집 인원 &amp; 발표</h3>
-                                <p class="text-sm text-charcoal/70 font-light leading-relaxed" vid="56">모집 기간 중 당첨자 개별 연락 예정</p>
-                            </div>
-                        </div>
+            <!-- Curation Recommendation Card -->
+            <div class="result-card hidden" id="result-card" style="opacity: 0; transform: translateY(20px); transition: all 0.6s ease;">
+                <img id="result-cover" src="life-book-cover.png" alt="추천 인생책 표지">
+                <div>
+                    <span class="eyebrow">your life book</span>
+                    <h3 id="result-title">인생책 로딩 실패</h3>
+                    <p class="author font-sans mb-3" id="result-author">작가 이름</p>
+                    <p class="tagline mb-4" id="result-tagline">“인생책 한마디”</p>
+                    <p class="font-sans text-[#2c241d] text-sm leading-relaxed" id="result-reason">추천 사유</p>
+                    <button class="primary-button mt-6 font-sans" onclick="scrollToForm()">나의 인생책 받기 <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                </div>
+            </div>
+        </section>
 
-                        <div class="bg-paper p-5 rounded-2xl border border-forest/10 flex items-start gap-4" vid="57">
-                            <div class="w-10 h-10 rounded-full bg-terra/10 text-terra flex items-center justify-center shrink-0" vid="58">
-                                <i class="ph-fill ph-gift text-xl" vid="59"></i>
-                            </div>
-                            <div vid="60">
-                                <h3 class="font-bold text-forest mb-1" vid="61">체험 혜택</h3>
-                                <p class="text-sm text-charcoal/70 font-light leading-relaxed" vid="62">전 프로그램 100% 무료 제공</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-paper p-5 rounded-2xl border border-forest/10 flex items-start gap-4" vid="63">
-                            <div class="w-10 h-10 rounded-full bg-charcoal/10 text-charcoal flex items-center justify-center shrink-0" vid="64">
-                                <i class="ph-fill ph-warning-circle text-xl" vid="65"></i>
-                            </div>
-                            <div vid="66">
-                                <h3 class="font-bold text-forest mb-1" vid="67">주의사항</h3>
-                                <p class="text-sm text-charcoal/70 font-light leading-relaxed" vid="68">1인 1회 신청 가능<br vid="69">이벤트 당첨 시 정성 어린 후기 작성을 요청드립니다.</p>
-                            </div>
-                        </div>
+        <!-- Apply Section (Registration Form) -->
+        <section class="apply" id="apply">
+            <div class="section-heading">
+                <span class="eyebrow">a warm delivery</span>
+                <h2 class="reveal">당신의 책을<br><em>준비할게요</em></h2>
+                <p class="font-sans mt-2 reveal" style="transition-delay: 100ms;">선택한 마음을 담아, 한 권의 책을 정성껏 보내드립니다.</p>
+            </div>
+            <form id="apply-form" onsubmit="submitForm(event)" class="form-card font-sans reveal" style="transition-delay: 150ms;">
+                <div class="selected-summary">
+                    <span class="block mb-2 font-bold text-brown">선택한 마음</span>
+                    <div id="selected-summary-chips" class="flex flex-wrap gap-2 text-xs">
+                        <span class="text-charcoal/50 italic">아직 선택한 마음이 없어요</span>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="flex flex-col gap-1">
+                        <label for="form-name">이름</label>
+                        <input id="form-name" required placeholder="이름을 알려주세요">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="form-age">나이</label>
+                        <input id="form-age" type="number" required placeholder="나이">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="form-city">거주지</label>
+                        <input id="form-city" required placeholder="도시 또는 지역 (예: 서울 마포구)">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="form-phone">연락처</label>
+                        <input id="form-phone" required placeholder="010-0000-0000">
                     </div>
                 </div>
                 
-                <div class="px-6 pt-4 border-t border-charcoal/5 mt-4" vid="70">
-                    <button type="button" onclick="goToStep(3)" class="w-full py-4 bg-forest text-cream rounded-full font-bold text-lg hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20" vid="71">
-                        신청 시작하기
-                    </button>
-                </div>
-            </div>
-
-            <div id="step-3" class="step-panel slide-in-right pt-28 pb-8" vid="72">
-                <div class="flex-1 flex flex-col overflow-hidden px-6" vid="73">
-                    <h2 class="text-2xl font-bold text-forest mb-6" vid="74">개인정보 수집 및 동의</h2>
-                    
-                    <div class="flex-1 bg-white border border-charcoal/10 rounded-2xl p-5 overflow-y-auto text-xs text-charcoal/60 leading-relaxed font-sans shadow-inner mb-6 relative" vid="75">
-                        <p class="font-bold text-charcoal mb-2" vid="76">[개인정보 수집 및 이용 목적]</p>
-                        <p class="mb-4" vid="77">오래된 서랍은 이벤트 진행, 당첨자 선정, 안내 및 도서 배송을 위하여 아래와 같이 개인정보를 수집 및 이용합니다.</p>
-                        
-                        <p class="font-bold text-charcoal mb-2" vid="78">[수집하는 개인정보 항목]</p>
-                        <p class="mb-4" vid="79">필수항목: 이름, 연락처, 주소, 연령대, 독서 취향 데이터</p>
-
-                        <p class="font-bold text-charcoal mb-2" vid="80">[개인정보 보유 및 이용기간]</p>
-                        <p class="mb-4" vid="81">수집된 개인정보는 이벤트 종료 및 경품 배송 완료 후 1개월 이내에 지체 없이 파기됩니다. 단, 관계 법령에 의하여 보존할 필요가 있는 경우 해당 법령에서 정한 기간 동안 보존합니다.</p>
-                        
-                        <p class="font-bold text-charcoal mb-2" vid="82">[동의를 거부할 권리 및 불이익]</p>
-                        <p vid="83">이용자는 개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있습니다. 다만, 필수항목 수집에 동의하지 않으실 경우 이벤트 참여 및 경품 배송이 제한될 수 있습니다.</p>
-                        
-                        <div class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-white to-transparent pointer-events-none" vid="84"></div>
+                <fieldset>
+                    <legend class="mb-2">성별</legend>
+                    <div class="gender font-sans">
+                        <label>
+                            <input type="radio" name="gender" value="여성" checked>
+                            <span>여성</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="gender" value="남성">
+                            <span>남성</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="gender" value="선택하지 않음">
+                            <span>선택하지 않음</span>
+                        </label>
                     </div>
+                </fieldset>
 
-                    <label class="flex items-center gap-3 cursor-pointer mb-2 p-2 rounded-xl hover:bg-paper transition-colors group" vid="85">
-                        <input type="checkbox" id="consent-check" class="hidden peer" onchange="toggleConsentButton()" vid="86">
-                        <div class="w-6 h-6 rounded flex items-center justify-center border-2 border-charcoal/20 peer-checked:bg-terra peer-checked:border-terra text-white transition-all bg-white group-hover:border-terra/50" vid="87">
-                            <i class="ph-bold ph-check opacity-0 peer-checked:opacity-100 text-sm" vid="88"></i>
-                        </div>
-                        <span class="text-sm font-medium text-forest" vid="89">위 이용약관 및 개인정보 수집에 동의합니다. <span class="text-terra" vid="90">(필수)</span></span>
-                    </label>
+                <!-- Environment question added to form card -->
+                <div class="flex flex-col gap-2 mt-4">
+                    <label for="form-environment">어떤 분위기에서 주로 독서하시나요? (선택)</label>
+                    <textarea id="form-environment" rows="3" placeholder="예: 비 오는 주말 오후, 차 한 잔과 함께 소파에서 편하게 읽는 것을 좋아해요."></textarea>
                 </div>
+
+                <label class="agree mt-6 cursor-pointer">
+                    <input type="checkbox" id="form-agree" required class="accent-brown">
+                    <span class="ml-2">개인정보 수집 및 이용에 동의합니다</span>
+                    <a href="#privacy" onclick="alert('개인정보 수집 및 이용 동의:\n오래된 서랍은 이벤트 진행, 당첨자 선정, 안내 및 도서 배송을 위하여 개인정보(이름, 연락처, 주소, 연령대, 성별, 취향 데이터)를 수집 및 이용합니다. 수집된 개인정보는 이벤트 종료 및 경품 배송 완료 후 1개월 이내에 지체 없이 파기됩니다.')" class="text-brown underline text-xs">내용 보기</a>
+                </label>
                 
-                <div class="px-6 pt-4 mt-2" vid="91">
-                    <button type="button" id="btn-consent" onclick="goToStep(4)" disabled="" class="w-full py-4 bg-charcoal/10 text-charcoal/40 rounded-full font-bold text-lg transition-all duration-300" vid="92">
-                        동의합니다
-                    </button>
+                <button class="primary-button wide mt-6" type="submit" id="submit-form-btn">신청하기 <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+            </form>
+        </section>
+
+        <!-- Reviews Section -->
+        <section class="reviews" id="reviews">
+            <div class="section-heading centered">
+                <span class="eyebrow">from our readers</span>
+                <h2 class="reveal">개성 넘치는 후기들</h2>
+            </div>
+            <div class="review-window reveal">
+                <div class="review-track" id="review-track">
+                    <!-- Loaded dynamically by JavaScript -->
                 </div>
             </div>
-
-            <div id="step-4" class="step-panel slide-in-right pt-28 pb-8 flex flex-col" vid="93">
-                <div class="flex-1 overflow-y-auto px-6" vid="94">
-                    <h2 class="text-2xl font-bold text-forest mb-2" vid="95">저희 이벤트를 어떻게<br vid="96">알게 되셨나요?</h2>
-                    <p class="text-charcoal/50 text-sm mb-8 font-light" vid="97">가장 큰 영향을 받은 경로 하나를 선택해주세요.</p>
-                    
-                    <div class="grid grid-cols-2 gap-3 mb-4" vid="98">
-                        <label class="block" vid="99">
-                            <input type="radio" name="referral" value="인스타 DM" class="radio-peer hidden" onchange="toggleCustomInput('referral-custom', false)" vid="100">
-                            <div class="p-4 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80 h-full flex flex-col justify-center items-center gap-2" vid="101">
-                                <i class="ph ph-instagram-logo text-2xl text-charcoal/30 check-icon transition-colors" vid="102"></i>
-                                인스타 DM
-                            </div>
-                        </label>
-                        <label class="block" vid="103">
-                            <input type="radio" name="referral" value="인스타 광고" class="radio-peer hidden" onchange="toggleCustomInput('referral-custom', false)" vid="104">
-                            <div class="p-4 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80 h-full flex flex-col justify-center items-center gap-2" vid="105">
-                                <i class="ph ph-megaphone text-2xl text-charcoal/30 check-icon transition-colors" vid="106"></i>
-                                인스타 광고
-                            </div>
-                        </label>
-                        <label class="block" vid="107">
-                            <input type="radio" name="referral" value="유튜브 광고" class="radio-peer hidden" onchange="toggleCustomInput('referral-custom', false)" vid="108">
-                            <div class="p-4 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80 h-full flex flex-col justify-center items-center gap-2" vid="109">
-                                <i class="ph ph-youtube-logo text-2xl text-charcoal/30 check-icon transition-colors" vid="110"></i>
-                                유튜브 광고
-                            </div>
-                        </label>
-                        <label class="block" vid="111">
-                            <input type="radio" name="referral" value="구글 광고" class="radio-peer hidden" onchange="toggleCustomInput('referral-custom', false)" vid="112">
-                            <div class="p-4 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80 h-full flex flex-col justify-center items-center gap-2" vid="113">
-                                <i class="ph ph-google-logo text-2xl text-charcoal/30 check-icon transition-colors" vid="114"></i>
-                                구글 광고
-                            </div>
-                        </label>
-                        <label class="block" vid="115">
-                            <input type="radio" name="referral" value="홍보 포스터" class="radio-peer hidden" onchange="toggleCustomInput('referral-custom', false)" vid="116">
-                            <div class="p-4 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80 h-full flex flex-col justify-center items-center gap-2" vid="117">
-                                <i class="ph ph-image text-2xl text-charcoal/30 check-icon transition-colors" vid="118"></i>
-                                홍보 포스터
-                            </div>
-                        </label>
-                        <label class="block" vid="119">
-                            <input type="radio" name="referral" value="지인 추천" class="radio-peer hidden" onchange="toggleCustomInput('referral-custom', false)" vid="120">
-                            <div class="p-4 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80 h-full flex flex-col justify-center items-center gap-2" vid="121">
-                                <i class="ph ph-users text-2xl text-charcoal/30 check-icon transition-colors" vid="122"></i>
-                                지인 추천
-                            </div>
-                        </label>
-                    </div>
-                    
-                    <label class="block w-full mb-2" vid="123">
-                        <input type="radio" name="referral" value="기타" class="radio-peer hidden" onchange="toggleCustomInput('referral-custom', true)" vid="124">
-                        <div class="p-4 rounded-xl border border-charcoal/10 bg-white text-left pl-5 cursor-pointer transition-all font-medium text-sm text-charcoal/80 flex items-center gap-3" vid="125">
-                            <div class="w-4 h-4 rounded-full border border-charcoal/30 flex items-center justify-center" vid="126">
-                                <div class="w-2 h-2 rounded-full bg-terra opacity-0 check-icon transition-opacity" vid="127"></div>
-                            </div>
-                            기타 (직접 입력)
-                        </div>
-                    </label>
-
-                    <div id="referral-custom" class="overflow-hidden transition-all duration-300 max-h-0 opacity-0" vid="128">
-                        <input type="text" name="referral_custom" placeholder="어떤 경로로 오셨나요?" class="w-full p-4 mt-2 rounded-xl border border-charcoal/20 focus:border-terra bg-white outline-none font-sans text-sm transition-colors placeholder:text-charcoal/30" vid="129">
-                    </div>
-                </div>
-                
-                <div class="px-6 pt-4 border-t border-charcoal/5 flex gap-3 mt-auto" vid="130">
-                    <button type="button" onclick="goToStep(3)" class="w-1/3 py-4 rounded-full border border-forest text-forest font-bold bg-transparent hover:bg-forest/5 transition-colors" vid="131">이전으로</button>
-                    <button type="button" onclick="validateAndNext(4, 5, 'referral')" class="w-2/3 py-4 rounded-full bg-forest text-cream font-bold hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20" vid="132">다음으로</button>
-                </div>
+            <div class="carousel-controls font-sans reveal" style="transition-delay: 150ms;">
+                <button onclick="prevReview()" aria-label="이전 후기"><i data-lucide="chevron-left"></i></button>
+                <span id="review-counter">01 / 03</span>
+                <button onclick="nextReview()" aria-label="다음 후기"><i data-lucide="chevron-right"></i></button>
             </div>
+        </section>
 
-            <div id="step-5" class="step-panel slide-in-right pt-28 pb-8 flex flex-col" vid="133">
-                <div class="flex-1 overflow-y-auto px-6" vid="134">
-                    <h2 class="text-2xl font-bold text-forest mb-2" vid="135">지금 나에게 필요한 책은<br vid="136">어떤 느낌이면 좋겠나요?</h2>
-                    <p class="text-charcoal/50 text-sm mb-8 font-light" vid="137">가장 끌리는 문장 하나를 골라주세요.</p>
-                    
-                    <div class="flex flex-col gap-3" vid="138">
-                        <label class="block" vid="139">
-                            <input type="radio" name="preference" value="위로가 되는 책" class="radio-peer hidden" vid="140">
-                            <div class="p-5 rounded-xl border border-charcoal/10 bg-white cursor-pointer transition-all font-medium text-charcoal/80 flex items-center gap-4 hover:border-terra/50 hover:shadow-md" vid="141">
-                                <div class="w-10 h-10 rounded-full bg-paper flex items-center justify-center shrink-0 text-terra/60 check-icon" vid="142">
-                                    <i class="ph-fill ph-heart text-xl" vid="143"></i>
-                                </div>
-                                지친 하루 끝, 위로가 되는 책
-                            </div>
-                        </label>
-                        <label class="block" vid="144">
-                            <input type="radio" name="preference" value="나를 돌아보게 하는 책" class="radio-peer hidden" vid="145">
-                            <div class="p-5 rounded-xl border border-charcoal/10 bg-white cursor-pointer transition-all font-medium text-charcoal/80 flex items-center gap-4 hover:border-terra/50 hover:shadow-md" vid="146">
-                                <div class="w-10 h-10 rounded-full bg-paper flex items-center justify-center shrink-0 text-terra/60 check-icon" vid="147">
-                                    <i class="ph-fill ph-user-focus text-xl" vid="148"></i>
-                                </div>
-                                깊은 사색, 나를 돌아보게 하는 책
-                            </div>
-                        </label>
-                        <label class="block" vid="149">
-                            <input type="radio" name="preference" value="현실적인 조언을 주는 책" class="radio-peer hidden" vid="150">
-                            <div class="p-5 rounded-xl border border-charcoal/10 bg-white cursor-pointer transition-all font-medium text-charcoal/80 flex items-center gap-4 hover:border-terra/50 hover:shadow-md" vid="151">
-                                <div class="w-10 h-10 rounded-full bg-paper flex items-center justify-center shrink-0 text-terra/60 check-icon" vid="152">
-                                    <i class="ph-fill ph-compass text-xl" vid="153"></i>
-                                </div>
-                                방향이 필요할 때, 현실적인 조언
-                            </div>
-                        </label>
-                        <label class="block" vid="154">
-                            <input type="radio" name="preference" value="의욕을 다시 찾게 해주는 책" class="radio-peer hidden" vid="155">
-                            <div class="p-5 rounded-xl border border-charcoal/10 bg-white cursor-pointer transition-all font-medium text-charcoal/80 flex items-center gap-4 hover:border-terra/50 hover:shadow-md" vid="156">
-                                <div class="w-10 h-10 rounded-full bg-paper flex items-center justify-center shrink-0 text-terra/60 check-icon" vid="157">
-                                    <i class="ph-fill ph-sparkle text-xl" vid="158"></i>
-                                </div>
-                                무기력 탈출, 의욕을 찾아주는 책
-                            </div>
-                        </label>
-                        <label class="block" vid="159">
-                            <input type="radio" name="preference" value="가볍게 읽기 좋은 책" class="radio-peer hidden" vid="160">
-                            <div class="p-5 rounded-xl border border-charcoal/10 bg-white cursor-pointer transition-all font-medium text-charcoal/80 flex items-center gap-4 hover:border-terra/50 hover:shadow-md" vid="161">
-                                <div class="w-10 h-10 rounded-full bg-paper flex items-center justify-center shrink-0 text-terra/60 check-icon" vid="162">
-                                    <i class="ph-fill ph-coffee text-xl" vid="163"></i>
-                                </div>
-                                복잡한 생각 없이 가볍게 읽기 좋은 책
-                            </div>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="px-6 pt-4 border-t border-charcoal/5 flex gap-3 mt-auto" vid="164">
-                    <button type="button" onclick="goToStep(4)" class="w-1/3 py-4 rounded-full border border-forest text-forest font-bold bg-transparent hover:bg-forest/5 transition-colors" vid="165">이전으로</button>
-                    <button type="button" onclick="validateAndNext(5, 6, 'preference')" class="w-2/3 py-4 rounded-full bg-forest text-cream font-bold hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20" vid="166">다음으로</button>
-                </div>
+        <!-- FAQ Section -->
+        <section class="faq" id="faq">
+            <div class="section-heading">
+                <span class="eyebrow">questions & answers</span>
+                <h2 class="reveal">궁금한 마음도<br><em>편하게 물어보세요</em></h2>
             </div>
-
-            <div id="step-6" class="step-panel slide-in-right pt-28 pb-8 flex flex-col" vid="167">
-                <div class="flex-1 px-6 flex flex-col" vid="168">
-                    <h2 class="text-2xl font-bold text-forest mb-2" vid="169">나는 어떤 분위기에서<br vid="170">주로 독서하나요?</h2>
-                    <p class="text-charcoal/50 text-sm mb-8 font-light" vid="171">큐레이션 디테일을 위해 자유롭게 적어주세요.</p>
-                    
-                    <div class="flex-1 relative" vid="172">
-                        <textarea name="environment" id="environment-input" rows="6" placeholder="예: 비 내리는 주말 오후, 따뜻한 차 한 잔과 함께 푹신한 소파에서 읽는 것을 좋아해요." class="w-full p-5 rounded-2xl border border-charcoal/20 focus:border-terra focus:ring-4 focus:ring-terra/10 bg-white outline-none font-sans text-sm transition-all resize-none placeholder:text-charcoal/30 shadow-inner" vid="173"></textarea>
-                        <div class="absolute bottom-4 right-4 text-xs text-charcoal/40 font-sans" vid="174"><span id="env-count" vid="175">0</span> / 100자</div>
-                    </div>
-                </div>
-                
-                <div class="px-6 pt-4 border-t border-charcoal/5 flex gap-3 mt-auto" vid="176">
-                    <button type="button" onclick="goToStep(5)" class="w-1/3 py-4 rounded-full border border-forest text-forest font-bold bg-transparent hover:bg-forest/5 transition-colors" vid="177">이전으로</button>
-                    <button type="button" onclick="validateTextAndNext(6, 7, 'environment-input')" class="w-2/3 py-4 rounded-full bg-forest text-cream font-bold hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20" vid="178">다음으로</button>
-                </div>
+            <div class="faq-list w-full flex flex-col gap-2 font-sans" id="faq-list-container">
+                <!-- Loaded dynamically by JavaScript -->
             </div>
+        </section>
 
-            <div id="step-7" class="step-panel slide-in-right pt-28 pb-8 flex flex-col" vid="179">
-                <div class="flex-1 px-6" vid="180">
-                    <h2 class="text-2xl font-bold text-forest mb-2" vid="181">신청하시는 분 성함을<br vid="182">부탁드려요!</h2>
-                    <p class="text-charcoal/50 text-sm mb-8 font-light" vid="183">(이벤트 안내와 정확한 연락을 위해 사용됩니다.)</p>
-                    
-                    <div class="relative mt-4" vid="184">
-                        <input type="text" name="user_name" id="name-input" placeholder="이름을 입력해주세요" class="w-full p-5 pl-14 rounded-2xl border border-charcoal/20 focus:border-terra focus:ring-4 focus:ring-terra/10 bg-white outline-none font-sans text-lg transition-all placeholder:text-charcoal/30 shadow-inner text-forest font-bold" vid="185">
-                        <i class="ph ph-user absolute left-5 top-1/2 -translate-y-1/2 text-2xl text-charcoal/30" vid="186"></i>
-                    </div>
-                </div>
-                
-                <div class="px-6 pt-4 border-t border-charcoal/5 flex gap-3 mt-auto" vid="187">
-                    <button type="button" onclick="goToStep(6)" class="w-1/3 py-4 rounded-full border border-forest text-forest font-bold bg-transparent hover:bg-forest/5 transition-colors" vid="188">이전으로</button>
-                    <button type="button" onclick="validateTextAndNext(7, 8, 'name-input')" class="w-2/3 py-4 rounded-full bg-forest text-cream font-bold hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20" vid="189">다음으로</button>
-                </div>
+        <!-- Community Links Section -->
+        <section class="community">
+            <div>
+                <span class="eyebrow">stay in touch</span>
+                <h2 class="reveal">마음책방의<br><em>새로운 소식</em></h2>
             </div>
-
-            <div id="step-8" class="step-panel slide-in-right pt-28 pb-8 flex flex-col" vid="190">
-                <div class="flex-1 overflow-y-auto px-6" vid="191">
-                    <h2 class="text-2xl font-bold text-forest mb-8" vid="192">연령대가 어떻게 되실까요?</h2>
-                    
-                    <div class="grid grid-cols-2 gap-3 mb-4" vid="193">
-                        <label class="block" vid="194">
-                            <input type="radio" name="age" value="만 19-20세" class="radio-peer hidden" onchange="toggleCustomInput('age-custom', false)" vid="195">
-                            <div class="py-4 px-2 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80" vid="196">
-                                만 19-20세
-                            </div>
-                        </label>
-                        <label class="block" vid="197">
-                            <input type="radio" name="age" value="만 21-22세" class="radio-peer hidden" onchange="toggleCustomInput('age-custom', false)" vid="198">
-                            <div class="py-4 px-2 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80" vid="199">
-                                만 21-22세
-                            </div>
-                        </label>
-                        <label class="block" vid="200">
-                            <input type="radio" name="age" value="만 23-24세" class="radio-peer hidden" onchange="toggleCustomInput('age-custom', false)" vid="201">
-                            <div class="py-4 px-2 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80" vid="202">
-                                만 23-24세
-                            </div>
-                        </label>
-                        <label class="block" vid="203">
-                            <input type="radio" name="age" value="만 25-26세" class="radio-peer hidden" onchange="toggleCustomInput('age-custom', false)" vid="204">
-                            <div class="py-4 px-2 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80" vid="205">
-                                만 25-26세
-                            </div>
-                        </label>
-                        <label class="block" vid="206">
-                            <input type="radio" name="age" value="만 27-28세" class="radio-peer hidden" onchange="toggleCustomInput('age-custom', false)" vid="207">
-                            <div class="py-4 px-2 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80" vid="208">
-                                만 27-28세
-                            </div>
-                        </label>
-                        <label class="block" vid="209">
-                            <input type="radio" name="age" value="만 28-29세" class="radio-peer hidden" onchange="toggleCustomInput('age-custom', false)" vid="210">
-                            <div class="py-4 px-2 rounded-xl border border-charcoal/10 bg-white text-center cursor-pointer transition-all font-medium text-sm text-charcoal/80" vid="211">
-                                만 28-29세
-                            </div>
-                        </label>
-                    </div>
-                    
-                    <label class="block w-full mb-2" vid="212">
-                        <input type="radio" name="age" value="기타" class="radio-peer hidden" onchange="toggleCustomInput('age-custom', true)" vid="213">
-                        <div class="py-4 px-5 rounded-xl border border-charcoal/10 bg-white text-left cursor-pointer transition-all font-medium text-sm text-charcoal/80 flex items-center justify-between" vid="214">
-                            기타 (직접 입력)
-                            <div class="w-4 h-4 rounded-full border border-charcoal/30 flex items-center justify-center" vid="215">
-                                <div class="w-2 h-2 rounded-full bg-terra opacity-0 check-icon transition-opacity" vid="216"></div>
-                            </div>
-                        </div>
-                    </label>
-
-                    <div id="age-custom" class="overflow-hidden transition-all duration-300 max-h-0 opacity-0 relative" vid="217">
-                        <input type="number" name="age_custom" placeholder="숫자만 입력" class="w-full p-4 pl-5 pr-12 mt-2 rounded-xl border border-charcoal/20 focus:border-terra bg-white outline-none font-sans text-sm transition-colors placeholder:text-charcoal/30" vid="218">
-                        <span class="absolute right-5 top-1/2 translate-y-[2px] font-sans text-sm text-charcoal/50" vid="219">세</span>
-                    </div>
-                </div>
-                
-                <div class="px-6 pt-4 border-t border-charcoal/5 flex gap-3 mt-auto" vid="220">
-                    <button type="button" onclick="goToStep(7)" class="w-1/3 py-4 rounded-full border border-forest text-forest font-bold bg-transparent hover:bg-forest/5 transition-colors" vid="221">이전으로</button>
-                    <button type="button" onclick="validateAndNext(8, 9, 'age')" class="w-2/3 py-4 rounded-full bg-forest text-cream font-bold hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20" vid="222">다음으로</button>
-                </div>
+            <div class="community-links font-sans flex-wrap">
+                <a href="https://instagram.com" target="_blank" class="reveal">
+                    <i data-lucide="camera" class="text-brown"></i>
+                    <span>인스타그램<br><small class="text-[#8c6d53]">@maeum.books</small></span>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
+                </a>
+                <a href="https://smartstore.naver.com" target="_blank" class="reveal" style="transition-delay: 150ms;">
+                    <i data-lucide="book-open" class="text-brown"></i>
+                    <span>네이버 스마트스토어<br><small class="text-[#8c6d53]">책과 마음을 만나는 곳</small></span>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
+                </a>
             </div>
-
-            <div id="step-9" class="step-panel slide-in-right pt-28 pb-8 flex flex-col" vid="223">
-                <div class="flex-1 px-6" vid="224">
-                    <h2 class="text-2xl font-bold text-forest mb-2" vid="225">블라인드 패키징 된 책을<br vid="226">선물해 드리고 있어요!</h2>
-                    <p class="text-charcoal/50 text-sm mb-8 font-light" vid="227">원활한 배송을 위해 실 거주지 작성을 부탁드립니다. (예: 서울 관악구)</p>
-                    
-                    <div class="relative mt-4" vid="228">
-                        <input type="text" name="address" id="address-input" placeholder="거주하시는 지역을 적어주세요" class="w-full p-5 pl-14 rounded-2xl border border-charcoal/20 focus:border-terra focus:ring-4 focus:ring-terra/10 bg-white outline-none font-sans text-lg transition-all placeholder:text-charcoal/30 shadow-inner text-forest font-bold" vid="229">
-                        <i class="ph ph-map-pin absolute left-5 top-1/2 -translate-y-1/2 text-2xl text-charcoal/30" vid="230"></i>
-                    </div>
-                </div>
-                
-                <div class="px-6 pt-4 border-t border-charcoal/5 flex gap-3 mt-auto" vid="231">
-                    <button type="button" onclick="goToStep(8)" class="w-1/3 py-4 rounded-full border border-forest text-forest font-bold bg-transparent hover:bg-forest/5 transition-colors" vid="232">이전으로</button>
-                    <button type="button" onclick="validateTextAndNext(9, 10, 'address-input')" class="w-2/3 py-4 rounded-full bg-forest text-cream font-bold hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20" vid="233">다음으로</button>
-                </div>
-            </div>
-
-            <div id="step-10" class="step-panel slide-in-right pt-28 pb-8 flex flex-col" vid="234">
-                <div class="flex-1 px-6" vid="235">
-                    <h2 class="text-2xl font-bold text-forest mb-2" vid="236">이벤트 선정 상세 안내를<br vid="237">받으실 연락처입니다.</h2>
-                    <p class="text-charcoal/50 text-sm mb-8 font-light" vid="238">(이벤트 안내 목적 외에는 절대로 사용하지 않습니다.)</p>
-                    
-                    <div class="relative mt-4" vid="239">
-                        <input type="tel" name="contact" id="contact-input" placeholder="010-0000-0000" class="w-full p-5 pl-14 rounded-2xl border border-charcoal/20 focus:border-terra focus:ring-4 focus:ring-terra/10 bg-white outline-none font-sans text-xl transition-all placeholder:text-charcoal/30 shadow-inner text-forest font-bold tracking-wider" vid="240">
-                        <i class="ph ph-phone absolute left-5 top-1/2 -translate-y-1/2 text-2xl text-charcoal/30" vid="241"></i>
-                    </div>
-                </div>
-                
-                <div class="px-6 pt-4 border-t border-charcoal/5 flex gap-3 mt-auto" vid="242">
-                    <button type="button" onclick="goToStep(9)" class="w-1/3 py-4 rounded-full border border-forest text-forest font-bold bg-transparent hover:bg-forest/5 transition-colors" vid="243">이전으로</button>
-                    <button type="submit" id="submit-btn" class="w-2/3 py-4 rounded-full bg-terra text-cream font-bold hover:bg-[#8A5A00] transition-colors shadow-lg shadow-terra/30 flex items-center justify-center gap-2" vid="244">
-                        <span vid="245">완료</span>
-                        <i class="ph-bold ph-check" vid="246"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div id="step-11" class="step-panel slide-in-right pt-28 pb-8 flex flex-col items-center justify-center text-center" vid="247">
-                <div class="flex-1 flex flex-col items-center justify-center px-6 w-full" vid="248-wrapper">
-                    <div class="w-24 h-24 bg-forest rounded-full flex items-center justify-center mb-8 shadow-[0_10px_30px_rgba(27,67,50,0.3)] animate-[bounce_1s_ease-in-out]" vid="248">
-                        <i class="ph-bold ph-check text-5xl text-cream" vid="249"></i>
-                    </div>
-                    
-                    <h2 class="text-3xl font-bold text-forest mb-4 leading-tight" vid="250">감사합니다.<br vid="251">신청이 정상적으로<br vid="252">완료되었습니다!</h2>
-                    <p class="text-charcoal/60 mb-12 font-light" vid="253">작성해주신 소중한 이야기를 바탕으로<br vid="254">나에게 꼭 맞는 책을 찾아드릴게요.</p>
-                </div>
-                
-                <div class="w-full flex flex-col gap-3 px-6 mt-auto" vid="255">
-                    <a href="About.html?tab=tab3" class="w-full py-4 bg-forest text-cream rounded-full font-bold text-lg hover:bg-forest/90 transition-colors shadow-lg shadow-forest/20 flex items-center justify-center" vid="256">
-                        이벤트 안내 바로가기
-                    </a>
-                    <button type="button" onclick="goToStep(1, true)" class="w-full py-4 border border-charcoal/20 text-charcoal rounded-full font-bold bg-transparent hover:bg-charcoal/5 transition-colors" vid="257">
-                        수정하기
-                    </button>
-                </div>
-            </div>
-
-        </form>
-
-        <div id="error-toast" class="absolute top-20 left-1/2 -translate-x-1/2 bg-charcoal text-cream font-sans text-sm py-3 px-6 rounded-full shadow-xl transition-all duration-300 opacity-0 -translate-y-full pointer-events-none z-50 flex items-center gap-2 whitespace-nowrap" vid="258">
-            <i class="ph-fill ph-warning-circle text-terra text-lg" vid="259"></i>
-            <span id="error-msg" vid="260">항목을 선택해주세요.</span>
-        </div>
-
+        </section>
     </main>
 
-    <script vid="261">
-        let currentStep = 1;
-        const totalSteps = 10;
-        
-        function updateHeader(step) {
-            const header = document.getElementById('stepper-header');
-            const stepNum = document.getElementById('current-step-num');
-            const progressBar = document.getElementById('progress-bar');
+    <!-- Footer -->
+    <footer class="bg-charcoal text-ivory pt-12 pb-8 border-t border-charcoal/20">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-start gap-8 mb-8">
+            <div class="flex flex-col">
+                <a href="#" class="font-serif text-xl font-bold tracking-tight text-ivory flex items-center gap-2 mb-4 opacity-90">
+                    <img src="https://sbkhqoiicpqihitcrwbb.supabase.co/storage/v1/object/public/images/20bb1b60-2e2c-4141-b075-605d29eb78a2.png" alt="돌고 돌아 책방" class="h-8 w-auto object-contain">
+                    돌고 돌아 책방
+                </a>
+                <p class="text-ivory/50 text-xs leading-relaxed max-w-sm">
+                    종이 냄새 가득한 공간에서 잊혀진 이야기들을 다시 만납니다. 누군가의 서재에서 출발한 책이 당신에게 닿기까지의 다정한 여정을 함께합니다.
+                </p>
+            </div>
             
-            if (step === 1 || step === 11) {
-                header.classList.add('opacity-0', 'pointer-events-none');
-                header.classList.remove('opacity-100');
-            } else {
-                header.classList.remove('opacity-0', 'pointer-events-none');
-                header.classList.add('opacity-100');
-                stepNum.innerText = step;
-                progressBar.style.width = `${(step / totalSteps) * 100}%`;
+            <div class="flex flex-col md:items-end gap-3 text-xs text-ivory/40">
+                <p>주소 : 서울특별시 금천구 독산로 6길 11, 1층</p>
+                <p>대표번호 : 010-4207-4934 | 이메일 : youneedcomma@indiibook.co.kr</p>
+                <p>사업자등록번호 : 683-09-03033</p>
+            </div>
+        </div>
+
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 pt-6 border-t border-ivory/10 flex flex-col md:flex-row justify-between items-center text-ivory/30 text-[11px]">
+            <div class="flex gap-4 mb-3 md:mb-0 font-sans">
+                <a href="About.html" class="hover:text-ivory transition-colors">ABOUT</a>
+                <a href="library.html" class="hover:text-ivory transition-colors">LIBRARY</a>
+                <a href="events.html" class="hover:text-ivory transition-colors">EVENTS</a>
+                <a href="community.html" class="hover:text-ivory transition-colors">COMMUNITY</a>
+                <a href="#" class="hover:text-ivory transition-colors font-medium">개인정보처리방침</a>
+            </div>
+            <p>© 2024 돌고 돌아 책방 (Cozy &amp; Warm Archive). All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Photo Zoom Modal Backdrop -->
+    <div id="photo-modal" class="modal-backdrop hidden" onclick="closePhotoModal()">
+        <div class="photo-modal" onclick="event.stopPropagation()" style="opacity: 0; transform: scale(0.9); transition: all 0.3s ease;">
+            <button class="close" onclick="closePhotoModal()" aria-label="닫기"><i data-lucide="x"></i></button>
+            <img id="modal-img" src="" alt="">
+            <p id="modal-caption" class="font-serif text-[#2c241d]"></p>
+        </div>
+    </div>
+
+    <!-- Curation Success Modal Backdrop -->
+    <div id="success-modal" class="modal-backdrop hidden">
+        <div class="success-modal font-sans" style="opacity: 0; transform: scale(0.9); transition: all 0.3s ease;">
+            <span class="success-mark text-dark"><i data-lucide="check" class="w-6 h-6"></i></span>
+            <span class="eyebrow">thank you</span>
+            <h2>당신의 책을<br><em>준비하고 있을게요</em></h2>
+            <p class="text-charcoal/60 mt-4"><span id="success-user-name" class="font-bold"></span>님의 마음을 잘 담아 보내드릴게요.<br>곧 연락드리겠습니다.</p>
+            <div class="flex flex-col gap-3">
+                <a href="About.html?tab=tab3" class="primary-button font-sans justify-center">이벤트 안내 바로가기</a>
+                <button class="w-full py-4 border border-line text-dark rounded-full font-bold bg-transparent hover:bg-dark/5 transition-colors" onclick="closeSuccessModal()">확인했어요</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script Logic -->
+    <script>
+        // Data Definitions matching life-data.ts
+        const keywordGroups = [
+            { label: '과거의 나', question: '그때의 나는 어땠는가?', words: ['#의기소침', '#압박감', '#순수한즐거움', '#외로움', '#열등감', '#벅찬성취', '#혼란스러움'] },
+            { label: '현재의 나', question: '지금의 나는 무엇을 느끼는가?', words: ['#무기력과번아웃', '#조급함', '#잔잔한평온', '#공허함', '#답답한정체기', '#설레는몰입', '#버거운책임감'] },
+            { label: '미래의 나', question: '앞으로의 나는 어떻게 느끼고 싶은가?', words: ['#흔들리지않는단단함', '#가벼운해방감', '#따뜻한자기수용', '#주체적인확신', '#용기있는도전', '#여유로운숨고르기'] }
+        ];
+
+        const books = [
+            { title: '숲속의 자본주의자', author: '박혜윤', tagline: '온갖 기대와 압박 속에서 지친 당신에게 건네는 무해한 쉼표', reason: '과거의 무거운 압박과 현재의 번아웃을 지나, 세상의 기준 대신 나만의 속도로 숨 쉴 수 있는 단단한 자유를 전합니다.', cover: 'life-book-cover.png' },
+            { title: '어린이라는 세계', author: '김소영', tagline: '작고 움츠러들었던 내 안의 아이를 다정하게 안아주는 문장들', reason: '의기소침했던 기억과 정체된 마음에 따뜻한 온기를 불어넣고, 다시금 고개를 들 용기를 찾아줍니다.', cover: 'life-book-cover.png' },
+            { title: '이어령의 마지막 수업', author: '김지수, 이어령', tagline: '어두운 안갯속에서 내 안의 중심을 또렷하게 세워주는 나침반', reason: '복잡하게 얽힌 감정의 실타래를 풀고, 흔들리지 않는 나만의 본질을 마주할 수 있도록 깊은 통찰을 선사합니다.', cover: 'life-book-cover.png' },
+            { title: '어떤 날, 어떤 마음', author: '마음 큐레이터', tagline: '지나온 계절의 감정들을 엮어 건네는 단 하나의 문장 처방전', reason: '고르신 세 가지 시간 속 마음의 궤적을 따라, 지금 당신의 마음에 가장 포근하게 가닿을 책을 선물합니다.', cover: 'life-book-cover.png' }
+        ];
+
+        const reviews = [
+            { name: '김*서', role: '20대 후반, 직장인', tags: ['#압박감', '#무기력과번아웃', '#가벼운해방감'], quote: '과거의 압박과 번아웃을 그대로 선택했는데, 추천받은 책의 첫 문장을 읽자마자 억눌렸던 마음에 큰 위로를 받았습니다.' },
+            { name: '이*현', role: '30대 초반, 프리랜서', tags: ['#의기소침', '#답답한정체기', '#주체적인확신'], quote: '정체된 기분 때문에 답답했는데, 내 감정의 흐름에 꼭 맞는 인생책을 찾게 되어 다시 나아갈 힘이 생겼어요.' },
+            { name: '박*민', role: '40대, 작은 가게 운영', tags: ['#버거운책임감', '#따뜻한자기수용'], quote: '누군가 내 마음을 조용히 알아준 것 같았어요. 책을 펼치는 일이 다시 기대됩니다.' }
+        ];
+
+        const photos = [
+            ['https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=700&q=85', '천천히, 나를 읽는 시간'],
+            ['https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=700&q=85', '마음이 쉬어가는 자리'],
+            ['https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=700&q=85', '좋아하는 문장 하나'],
+            ['https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=700&q=85', '페이지 사이의 계절'],
+            ['https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=700&q=85', '오늘의 작은 발견'],
+            ['https://images.unsplash.com/photo-1526243741027-444d633d7365?auto=format&fit=crop&w=700&q=85', '고요한 오후'],
+            ['https://images.unsplash.com/photo-1474932430478-367dbb6832c1?auto=format&fit=crop&w=700&q=85', '다정한 마음의 모양'],
+            ['https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=700&q=85', '창가에서 생각하기'],
+            ['https://images.unsplash.com/photo-1511108690759-009324a90311?auto=format&fit=crop&w=700&q=85', '다시, 첫 문장']
+        ];
+
+        const faqs = [
+            ['어떤 기준으로 책을 골라주나요?', '선택해주신 과거·현재·미래의 감정 키워드를 바탕으로, 지금의 마음에 가장 다정하게 닿을 수 있는 책을 큐레이션합니다.'],
+            ['신청 후 책은 언제 받아볼 수 있나요?', '신청 내용을 확인한 뒤 3–5일 안에 따뜻한 포장으로 보내드립니다. 배송 전 안내 메시지를 드려요.'],
+            ['개인정보는 어떻게 관리되나요?', '책 발송을 위한 최소한의 정보만 사용하며, 발송 완료 후 안전하게 파기합니다.']
+        ];
+
+        // State Management
+        let selectedKeywords = [];
+        let recommendedBookObj = null;
+        let currentReviewIndex = 0;
+
+        // Initialize App
+        document.addEventListener("DOMContentLoaded", () => {
+            // Render all sections
+            renderPolaroids();
+            renderKeywords();
+            renderReviews();
+            renderFAQs();
+            
+            // Set up phone input format filter
+            const phoneInput = document.getElementById('form-phone');
+            phoneInput.addEventListener('input', function(e) {
+                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,4})(\d{0,4})/);
+                e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+            });
+
+            // Reusable function to dismiss intro screen with an expanding circular window reveal effect
+            let introDismissed = false;
+            function hideIntro() {
+                if (introDismissed) return;
+                introDismissed = true;
+                const intro = document.getElementById('intro-screen');
+                intro.classList.add('fade-out');
+                setTimeout(() => {
+                    intro.classList.add('hidden');
+                }, 1500);
             }
+
+            // Skip button click handler
+            document.getElementById('skip-intro-btn').addEventListener('click', hideIntro);
+            
+            // Auto fade out after 3 seconds (3000ms)
+            setTimeout(hideIntro, 3000);
+            
+            // Initialize Scroll Reveal
+            initScrollReveal();
+            
+            // Create lucide icons
+            lucide.createIcons();
+        });
+
+        // 8. Scroll Reveal Logic
+        function initScrollReveal() {
+            const elements = document.querySelectorAll('.reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            elements.forEach(el => observer.observe(el));
         }
 
-        function goToStep(targetStep, skipValidation = false) {
-            const currentPanel = document.getElementById(`step-${currentStep}`);
-            const targetPanel = document.getElementById(`step-${targetStep}`);
-            
-            const isForward = targetStep > currentStep;
-            
-            targetPanel.className = `step-panel z-20 ${isForward ? 'slide-in-right' : 'slide-in-left'}`;
-            
-            void targetPanel.offsetWidth;
-            
-            targetPanel.className = 'step-panel slide-active z-20';
-            currentPanel.className = `step-panel z-10 ${isForward ? 'slide-in-left' : 'slide-in-right'}`;
-            
-            currentStep = targetStep;
-            updateHeader(currentStep);
+
+        // 2. Render Polaroid Images
+        function renderPolaroids() {
+            const grid = document.getElementById('polaroids-grid');
+            grid.innerHTML = photos.map(([src, caption], i) => `
+                <button class="polaroid reveal" style="transition-delay: ${i * 100}ms;" onclick="openPhotoModal('${src}', '${caption}')">
+                    <img src="${src}" alt="${caption}">
+                    <span>${caption}</span>
+                </button>
+            `).join('');
         }
 
-        function showError(msg) {
-            const toast = document.getElementById('error-toast');
-            document.getElementById('error-msg').innerText = msg;
-            toast.classList.remove('opacity-0', '-translate-y-full');
-            toast.classList.add('opacity-100', 'translate-y-0');
+        // 3. Polaroid Zoom Modal Actions
+        function openPhotoModal(src, caption) {
+            const modal = document.getElementById('photo-modal');
+            const img = document.getElementById('modal-img');
+            const cap = document.getElementById('modal-caption');
+            const modalContent = modal.querySelector('.photo-modal');
+            
+            img.src = src;
+            cap.innerText = caption;
+            modal.classList.remove('hidden');
+            
             setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', '-translate-y-full');
-            }, 2500);
+                modalContent.style.opacity = '1';
+                modalContent.style.transform = 'scale(1)';
+            }, 10);
         }
 
-        function toggleConsentButton() {
-            const checkbox = document.getElementById('consent-check');
-            const btn = document.getElementById('btn-consent');
-            if (checkbox.checked) {
+        function closePhotoModal() {
+            const modal = document.getElementById('photo-modal');
+            const modalContent = modal.querySelector('.photo-modal');
+            
+            modalContent.style.opacity = '0';
+            modalContent.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // 4. Keyword Toggles & Chips
+        function renderKeywords() {
+            const container = document.getElementById('keyword-groups-container');
+            container.innerHTML = keywordGroups.map(group => `
+                <div class="keyword-group">
+                    <div>
+                        <span class="group-label">${group.label}</span>
+                        <span class="group-question">${group.question}</span>
+                    </div>
+                    <div class="chips">
+                        ${group.words.map(word => {
+                            const isSelected = selectedKeywords.includes(word);
+                            return `
+                                <button class="chip ${isSelected ? 'selected' : ''}" onclick="toggleKeyword('${word}')">
+                                    ${isSelected ? '<i data-lucide="check" class="w-3.5 h-3.5 mr-1"></i>' : ''}
+                                    ${word}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // Toggles a selected keyword chip
+        function toggleKeyword(word) {
+            const index = selectedKeywords.indexOf(word);
+            if (index > -1) {
+                selectedKeywords.splice(index, 1);
+            } else {
+                selectedKeywords.push(word);
+            }
+            renderKeywords();
+            updateResultAction();
+            updateFormSummary();
+        }
+
+        function updateResultAction() {
+            const countText = document.getElementById('selected-count-text');
+            const btn = document.getElementById('find-book-btn');
+            if (selectedKeywords.length > 0) {
+                countText.innerText = `${selectedKeywords.length}개의 마음을 골랐어요`;
                 btn.removeAttribute('disabled');
-                btn.classList.remove('bg-charcoal/10', 'text-charcoal/40');
-                btn.classList.add('bg-forest', 'text-cream', 'shadow-lg', 'shadow-forest/20', 'hover:bg-forest/90');
             } else {
+                countText.innerText = '마음에 닿는 단어를 골라주세요';
                 btn.setAttribute('disabled', 'true');
-                btn.classList.add('bg-charcoal/10', 'text-charcoal/40');
-                btn.classList.remove('bg-forest', 'text-cream', 'shadow-lg', 'shadow-forest/20', 'hover:bg-forest/90');
             }
         }
 
-        function toggleCustomInput(id, show) {
-            const el = document.getElementById(id);
-            const input = el.querySelector('input');
-            if (show) {
-                el.classList.remove('max-h-0', 'opacity-0');
-                el.classList.add('max-h-16', 'opacity-100');
-                setTimeout(() => input.focus(), 300);
+        function updateFormSummary() {
+            const container = document.getElementById('selected-summary-chips');
+            if (selectedKeywords.length > 0) {
+                container.innerHTML = selectedKeywords.map(word => `
+                    <b class="bg-soft text-[#8c6d53] py-1 px-2.5 rounded-full font-normal">${word}</b>
+                `).join('');
             } else {
-                el.classList.add('max-h-0', 'opacity-0');
-                el.classList.remove('max-h-16', 'opacity-100');
-                input.value = '';
+                container.innerHTML = `<span class="text-charcoal/50 italic">아직 선택한 마음이 없어요</span>`;
             }
         }
 
-        function validateAndNext(current, target, radioName) {
-            const selected = document.querySelector(`input[name="${radioName}"]:checked`);
-            if (!selected) {
-                showError('항목을 하나 선택해주세요.');
-                return;
-            }
-            if (selected.value === '기타') {
-                const customInput = document.querySelector(`input[name="${radioName}_custom"]`);
-                if (!customInput.value.trim()) {
-                    showError('내용을 직접 입력해주세요.');
-                    customInput.focus();
-                    return;
-                }
-            }
-            goToStep(target);
+        // 5. Curation Recommendation System (Mock Algorithm)
+        function getRecommendation(selected) {
+            if (selected.some(x => ['#압박감', '#무기력과번아웃'].includes(x)) && selected.some(x => ['#가벼운해방감', '#여유로운숨고르기'].includes(x))) return books[0];
+            if (selected.some(x => ['#의기소침', '#열등감', '#답답한정체기'].includes(x)) && selected.some(x => ['#따뜻한자기수용', '#용기있는도전'].includes(x))) return books[1];
+            if (selected.some(x => ['#혼란스러움', '#공허함'].includes(x)) && selected.some(x => ['#흔들리지않는단단함', '#주체적인확신'].includes(x))) return books[2];
+            return books[3];
         }
 
-        function validateTextAndNext(current, target, inputId) {
-            const input = document.getElementById(inputId);
-            if (!input.value.trim()) {
-                showError('필수 입력 항목입니다.');
-                input.focus();
-                return;
-            }
-            goToStep(target);
+        function findBook() {
+            const spinner = document.getElementById('loading-spinner');
+            const resultCard = document.getElementById('result-card');
+            const findBtn = document.getElementById('find-book-btn');
+            
+            findBtn.setAttribute('disabled', 'true');
+            resultCard.classList.add('hidden');
+            resultCard.style.opacity = '0';
+            resultCard.style.transform = 'translateY(20px)';
+            spinner.classList.remove('hidden');
+            
+            recommendedBookObj = getRecommendation(selectedKeywords);
+            
+            setTimeout(() => {
+                spinner.classList.add('hidden');
+                findBtn.removeAttribute('disabled');
+                
+                // Populate result details
+                document.getElementById('result-cover').src = recommendedBookObj.cover;
+                document.getElementById('result-title').innerText = recommendedBookObj.title;
+                document.getElementById('result-author').innerText = recommendedBookObj.author;
+                document.getElementById('result-tagline').innerText = `“${recommendedBookObj.tagline}”`;
+                document.getElementById('result-reason').innerText = recommendedBookObj.reason;
+                
+                resultCard.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    resultCard.style.opacity = '1';
+                    resultCard.style.transform = 'translateY(0)';
+                }, 50);
+                
+                resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 1500);
         }
 
-        const envInput = document.getElementById('environment-input');
-        const envCount = document.getElementById('env-count');
-        envInput.addEventListener('input', function() {
-            envCount.innerText = this.value.length;
-            if(this.value.length > 100) {
-                this.value = this.value.substring(0, 100);
-                envCount.innerText = 100;
+        // Navigation Scroll Helper
+        function scrollToForm() {
+            const formSection = document.getElementById('apply');
+            if (formSection) {
+                formSection.scrollIntoView({ behavior: 'smooth' });
             }
-        });
+        }
 
-        const contactInput = document.getElementById('contact-input');
-        contactInput.addEventListener('input', function(e) {
-            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,4})(\d{0,4})/);
-            e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
-        });
+        // 6. Reviews Slider
+        function renderReviews() {
+            const track = document.getElementById('review-track');
+            track.innerHTML = reviews.map(item => `
+                <article class="review">
+                    <div class="avatar">${item.name[0]}</div>
+                    <p class="quote">“${item.quote}”</p>
+                    <div class="review-tags">
+                        ${item.tags.map(t => `<span class="bg-[#4d3f34] text-[#c8a97e] text-xs py-0.5 px-2.5 rounded-full">${t}</span>`).join('')}
+                    </div>
+                    <div class="review-by font-sans text-cream/70 mt-6 pt-4 border-t border-[#665344] flex justify-between items-center w-full">
+                        <div>
+                            <span class="text-white font-medium">${item.name}</span>
+                            <small class="text-[#ae9a87] ml-2">${item.role}</small>
+                        </div>
+                        <b class="text-[#d4a96d] font-normal">★★★★★</b>
+                    </div>
+                </article>
+            `).join('');
+            updateReviewTrack();
+        }
 
-        async function submitForm() {
-            const contactInput = document.getElementById('contact-input');
-            const contact = contactInput.value;
-            if(contact.length < 12) { 
-                showError('올바른 연락처를 입력해주세요.');
-                contactInput.focus();
+        function updateReviewTrack() {
+            const track = document.getElementById('review-track');
+            track.style.transform = `translateX(-${currentReviewIndex * 100}%)`;
+            const counter = document.getElementById('review-counter');
+            counter.innerText = `0${currentReviewIndex + 1} / 0${reviews.length}`;
+        }
+
+        function prevReview() {
+            if (currentReviewIndex > 0) {
+                currentReviewIndex--;
+                updateReviewTrack();
+            }
+        }
+
+        function nextReview() {
+            if (currentReviewIndex < reviews.length - 1) {
+                currentReviewIndex++;
+                updateReviewTrack();
+            }
+        }
+
+        // 7. FAQ Toggle Accordion
+        function renderFAQs() {
+            const container = document.getElementById('faq-list-container');
+            container.innerHTML = faqs.map(([q, a], i) => `
+                <div class="faq-item reveal" style="transition-delay: ${i * 100}ms;">
+                    <button onclick="toggleFAQ(${i}, this)">
+                        <span class="font-medium text-dark font-sans">${q}</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-dark/40 transition-transform duration-300"></i>
+                    </button>
+                    <p class="font-sans text-[#786856] text-sm">${a}</p>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function toggleFAQ(index, btn) {
+            const parent = btn.parentElement;
+            const chevron = btn.querySelector('[data-lucide="chevron-down"]');
+            const isAlreadyActive = parent.classList.contains('active');
+            
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('p').style.display = 'none';
+                const itemChevron = item.querySelector('[data-lucide="chevron-down"]');
+                if (itemChevron) itemChevron.classList.remove('rotate');
+            });
+            
+            if (!isAlreadyActive) {
+                parent.classList.add('active');
+                parent.querySelector('p').style.display = 'block';
+                if (chevron) chevron.classList.add('rotate');
+            }
+        }
+
+        // 8. Submit Data to Supabase
+        async function submitForm(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('form-name').value.trim();
+            const age = document.getElementById('form-age').value.trim();
+            const city = document.getElementById('form-city').value.trim();
+            const phone = document.getElementById('form-phone').value.trim();
+            
+            const genderChecked = document.querySelector('input[name="gender"]:checked');
+            const gender = genderChecked ? genderChecked.value : '';
+            
+            const environment = document.getElementById('form-environment').value.trim();
+            const agree = document.getElementById('form-agree').checked;
+            
+            if (!name || !age || !city || !phone || !gender || !agree) {
+                alert('필수 항목을 모두 기입하고 동의해주세요.');
                 return;
             }
-
-            const btn = document.getElementById('submit-btn');
-            const originalContent = btn.innerHTML;
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-2xl"></i> 처리중...';
-            btn.classList.add('opacity-80', 'pointer-events-none');
-
-            // 설문 응답 값들 파싱
-            const referralChecked = document.querySelector('input[name="referral"]:checked');
-            let referral = referralChecked ? referralChecked.value : '';
-            if (referral === '기타') {
-                const referralCustom = document.querySelector('input[name="referral_custom"]').value.trim();
-                referral = referralCustom ? `기타: ${referralCustom}` : '기타';
+            
+            if (phone.length < 12) {
+                alert('올바른 연락처를 입력해주세요.');
+                return;
             }
-
-            const preferenceChecked = document.querySelector('input[name="preference"]:checked');
-            const preference = preferenceChecked ? preferenceChecked.value : '';
-
-            const environment = document.getElementById('environment-input').value.trim();
-            const name = document.getElementById('name-input').value.trim();
-
-            const ageChecked = document.querySelector('input[name="age"]:checked');
-            let age = ageChecked ? ageChecked.value : '';
-            if (age === '기타') {
-                const ageCustom = document.querySelector('input[name="age_custom"]').value.trim();
-                age = ageCustom ? `${ageCustom}세` : '기타';
-            }
-
-            const address = document.getElementById('address-input').value.trim();
-
-            // Supabase DB 저장
-            let userId = null;
+            
+            const submitBtn = document.getElementById('submit-form-btn');
+            const originalContent = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="inline-block animate-spin mr-2 border-2 border-cream border-t-transparent rounded-full w-4 h-4"></span> 처리 중...';
+            submitBtn.setAttribute('disabled', 'true');
+            
+            const keywordsText = selectedKeywords.length > 0 ? selectedKeywords : [];
+            const recommendedBookText = recommendedBookObj ? `${recommendedBookObj.title} (${recommendedBookObj.author})` : '추천 없음';
+            
+            let success = false;
+            
             if (window.supabaseClient) {
                 try {
+                    let userId = null;
                     const { data: { session } } = await window.supabaseClient.auth.getSession();
                     if (session) {
                         userId = session.user.id;
@@ -724,32 +1581,83 @@
                         .insert({
                             user_id: userId,
                             name: name,
-                            contact: contact,
-                            address: address,
-                            age_info: age,
-                            preference: preference,
-                            environment: environment,
-                            referral: referral,
+                            contact: phone,
+                            address: city,
+                            age: parseInt(age, 10) || null,
+                            gender: gender,
+                            selected_keywords: keywordsText,
+                            recommended_book: recommendedBookText,
+                            environment: environment || null,
                             status: 'PENDING'
                         });
-
+                        
                     if (error) {
-                        showError('신청 실패: ' + error.message);
-                        btn.innerHTML = originalContent;
-                        btn.classList.remove('opacity-80', 'pointer-events-none');
+                        console.error("Supabase error:", error);
+                        alert('데이터 저장 중 오류가 발생했습니다: ' + error.message);
+                        submitBtn.innerHTML = originalContent;
+                        submitBtn.removeAttribute('disabled');
                         return;
                     }
-                } catch (e) {
-                    console.error("Supabase insert error", e);
+                    
+                    success = true;
+                } catch (err) {
+                    console.error("Database connection error:", err);
+                    alert('데이터베이스 연결 실패.');
+                    submitBtn.innerHTML = originalContent;
+                    submitBtn.removeAttribute('disabled');
+                    return;
                 }
+            } else {
+                console.warn("Supabase client is not initialized. Using offline demo mockup.");
+                success = true;
             }
-
-            btn.innerHTML = originalContent;
-            btn.classList.remove('opacity-80', 'pointer-events-none');
-            goToStep(11);
+            
+            if (success) {
+                submitBtn.innerHTML = originalContent;
+                submitBtn.removeAttribute('disabled');
+                
+                document.getElementById('success-user-name').innerText = name;
+                openSuccessModal();
+            }
         }
-        
-        updateHeader(1);
+
+        // 9. Success Modal Actions
+        function openSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            const modalContent = modal.querySelector('.success-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.style.opacity = '1';
+                modalContent.style.transform = 'scale(1)';
+            }, 10);
+        }
+
+        function closeSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            const modalContent = modal.querySelector('.success-modal');
+            
+            modalContent.style.opacity = '0';
+            modalContent.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                
+                // Reset form values & selections
+                document.getElementById('apply-form').reset();
+                selectedKeywords = [];
+                recommendedBookObj = null;
+                
+                renderKeywords();
+                updateResultAction();
+                updateFormSummary();
+                
+                const resultCard = document.getElementById('result-card');
+                resultCard.classList.add('hidden');
+                resultCard.style.opacity = '0';
+                resultCard.style.transform = 'translateY(20px)';
+            }, 300);
+        }
     </script>
 
-</body></html>
+</body>
+</html>
