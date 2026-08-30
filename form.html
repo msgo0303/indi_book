@@ -94,13 +94,12 @@
             --leaf-3: #5a412c;
             --leaf-4: #e3b27b;
             
-            /* Legacy CSS variables mapping to new theme variables */
-            --cream: var(--background);
+            --cream: var(--card);
             --sand: var(--secondary);
             --brown: var(--primary);
             --dark: var(--accent);
             --line: var(--muted);
-            --soft: var(--muted);
+            --soft: var(--secondary);
             
             --radius: 1rem;
         }
@@ -413,9 +412,9 @@
         
         .polaroid {
             background: #fff;
-            border: 0;
+            border: 1px solid rgba(0, 0, 0, 0.03);
             padding: 9px 9px 18px;
-            box-shadow: 0 9px 18px #5d47301a;
+            box-shadow: 0 10px 25px rgba(90, 65, 44, 0.07);
             transform: rotate(var(--r, 0deg));
             transition: .3s;
         }
@@ -437,7 +436,7 @@
         }
         
         .find {
-            background: #f0e2d3;
+            background: var(--secondary);
         }
         
         .centered {
@@ -478,21 +477,23 @@
         
         .chip {
             border: 1px solid var(--line);
-            background: transparent;
+            background: var(--card);
             border-radius: 999px;
             padding: 9px 15px;
             font-size: 13px;
-            color: #725f4e;
+            color: var(--foreground);
             display: inline-flex;
             gap: 5px;
             align-items: center;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(90, 65, 44, 0.03);
         }
         
         .chip.selected {
-            background: var(--brown);
-            border-color: var(--brown);
-            color: var(--cream);
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--primary-foreground);
+            box-shadow: 0 4px 12px rgba(171, 107, 53, 0.25);
         }
         
         .result-action {
@@ -530,10 +531,12 @@
             max-width: 720px;
             margin: 45px auto 0;
             padding: 28px;
-            background: var(--cream);
+            background: var(--card);
+            border: 1px solid rgba(90, 65, 44, 0.05);
             display: flex;
             gap: 30px;
-            box-shadow: 0 15px 40px #795d431a;
+            box-shadow: 0 20px 40px rgba(90, 65, 44, 0.08);
+            border-radius: 8px;
         }
         
         .result-card img {
@@ -571,10 +574,11 @@
         }
         
         .form-card {
-            background: #fff;
+            background: var(--card);
             padding: 35px;
-            border-radius: 4px;
-            box-shadow: 0 12px 35px #60452a12;
+            border-radius: 8px;
+            border: 1px solid rgba(90, 65, 44, 0.05);
+            box-shadow: 0 15px 35px rgba(90, 65, 44, 0.08);
         }
         
         .selected-summary {
@@ -582,6 +586,7 @@
             padding: 15px;
             margin-bottom: 24px;
             font-size: 12px;
+            border-radius: 6px;
         }
         
         .selected-summary b {
@@ -680,7 +685,7 @@
         }
         
         .reviews .eyebrow, .reviews .section-heading p {
-            color: #c8a97e;
+            color: #e3b27b;
         }
         
         .reviews .section-heading h2 {
@@ -701,8 +706,9 @@
         .review {
             min-width: 100%;
             padding: 45px clamp(24px, 8vw, 95px);
-            background: #3a3028;
-            border: 1px solid #665344;
+            background: #463529;
+            border: 1px solid #604b3a;
+            border-radius: 8px;
         }
         
         .avatar {
@@ -731,12 +737,12 @@
         }
         
         .review-tags span {
-            color: #c8a97e;
+            color: #e3b27b;
             font-size: 11px;
         }
         
         .review-by {
-            border-top: 1px solid #665344;
+            border-top: 1px solid #604b3a;
             margin-top: 25px;
             padding-top: 15px;
             font-size: 13px;
@@ -749,7 +755,7 @@
         
         .review-by b {
             float: right;
-            color: #d4a96d;
+            color: #d19451;
             font-size: 12px;
         }
         
@@ -842,12 +848,15 @@
             display: flex;
             align-items: center;
             gap: 13px;
-            box-shadow: 0 8px 18px #60452a12;
-            transition: .25s;
+            border: 1px solid rgba(90, 65, 44, 0.05);
+            box-shadow: 0 8px 20px rgba(90, 65, 44, 0.06);
+            transition: all 0.25s ease-in-out;
+            border-radius: 8px;
         }
         
         .community-links a:hover {
             transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(90, 65, 44, 0.1);
         }
         
         .community-links a svg:last-child {
@@ -1553,7 +1562,7 @@
             const container = document.getElementById('selected-summary-chips');
             if (selectedKeywords.length > 0) {
                 container.innerHTML = selectedKeywords.map(word => `
-                    <b class="bg-soft text-[#8c6d53] py-1 px-2.5 rounded-full font-normal">${word}</b>
+                    <b class="bg-soft text-primary py-1 px-2.5 rounded-full font-normal">${word}</b>
                 `).join('');
             } else {
                 container.innerHTML = `<span class="text-charcoal/50 italic">아직 선택한 마음이 없어요</span>`;
@@ -1619,14 +1628,14 @@
                     <div class="avatar">${item.name[0]}</div>
                     <p class="quote">“${item.quote}”</p>
                     <div class="review-tags">
-                        ${item.tags.map(t => `<span class="bg-[#4d3f34] text-[#c8a97e] text-xs py-0.5 px-2.5 rounded-full">${t}</span>`).join('')}
+                        ${item.tags.map(t => `<span class="bg-[#504033] text-[#e3b27b] text-xs py-0.5 px-2.5 rounded-full">${t}</span>`).join('')}
                     </div>
-                    <div class="review-by font-sans text-cream/70 mt-6 pt-4 border-t border-[#665344] flex justify-between items-center w-full">
+                    <div class="review-by font-sans text-cream/70 mt-6 pt-4 border-t border-[#604b3a] flex justify-between items-center w-full">
                         <div>
                             <span class="text-white font-medium">${item.name}</span>
                             <small class="text-[#ae9a87] ml-2">${item.role}</small>
                         </div>
-                        <b class="text-[#d4a96d] font-normal">★★★★★</b>
+                        <b class="text-[#d19451] font-normal">★★★★★</b>
                     </div>
                 </article>
             `).join('');
