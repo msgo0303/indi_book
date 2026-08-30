@@ -1230,6 +1230,38 @@
                 font-size: 18px;
             }
         }
+
+        /* Custom BGM Volume Slider */
+        #bgm-volume {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 48px !important;
+            height: 9px !important;
+            background: #ebdcc9;
+            border-radius: 999px;
+            outline: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #bgm-volume::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 3px;
+            height: 11px;
+            background: #5a412c;
+            cursor: pointer;
+            border-radius: 1.5px;
+        }
+
+        #bgm-volume::-moz-range-thumb {
+            width: 3px;
+            height: 11px;
+            background: #5a412c;
+            cursor: pointer;
+            border: none;
+            border-radius: 1.5px;
+        }
     </style>
 
     <!-- Page Transition Effect -->
@@ -1650,6 +1682,20 @@
             <p>© 2024 돌고 돌아 책방 (Cozy &amp; Warm Archive). All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- BGM Controller -->
+    <div id="bgm-controller" class="fixed bottom-6 left-6 z-50 flex items-center gap-2.5 bg-[#faf8f5]/90 backdrop-blur-md border border-[#ebdcc9] p-1.5 pr-3 rounded-full shadow-md transition-all duration-500 opacity-0 translate-y-4 pointer-events-none font-sans text-xs">
+        <audio id="bgm-audio" src="bgm.mp3" loop preload="auto"></audio>
+        <button id="bgm-toggle-btn" class="w-7 h-7 rounded-full bg-[#ab6b35] text-white flex items-center justify-center hover:bg-[#5a412c] transition-colors focus:outline-none" aria-label="음악 재생/일시정지">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i>
+        </button>
+        <button id="bgm-mute-btn" class="text-[#ab6b35] focus:outline-none" aria-label="음소거 토글">
+            <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+        </button>
+        <div class="flex items-center pr-0.5">
+            <input id="bgm-volume" type="range" min="0" max="1" step="0.01" value="0.40" class="w-12 h-2 rounded-full appearance-none cursor-pointer focus:outline-none" style="background: linear-gradient(to right, #ab6b35 0%, #ab6b35 40%, #ebdcc9 40%, #ebdcc9 100%)">
+        </div>
+    </div>
 
     <!-- Photo Zoom Modal Backdrop -->
     <div id="photo-modal" class="modal-backdrop hidden" onclick="closePhotoModal()">
@@ -2292,6 +2338,118 @@
                 resultCard.style.transform = 'translateY(20px)';
             }, 300);
         }
+
+        // BGM Control Logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const audio = document.getElementById('bgm-audio');
+            const controller = document.getElementById('bgm-controller');
+            const toggleBtn = document.getElementById('bgm-toggle-btn');
+            const muteBtn = document.getElementById('bgm-mute-btn');
+            const volumeSlider = document.getElementById('bgm-volume');
+
+            let isPlaying = false;
+            let lastVolume = 0.4; // Default to 40%
+
+            // Set initial volume
+            audio.volume = lastVolume;
+
+            // First interaction to start playing (using capture: true to bypass stopPropagation)
+            const startPlayOnFirstInteraction = () => {
+                if (!isPlaying) {
+                    playBgm();
+                }
+            };
+
+            // Register at window capture phase so that inner element clicks still trigger play
+            window.addEventListener('click', startPlayOnFirstInteraction, { capture: true, once: true });
+            window.addEventListener('touchstart', startPlayOnFirstInteraction, { capture: true, once: true });
+
+            // Prevent global click event from triggering if clicking inside controller itself
+            controller.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            function playBgm() {
+                audio.muted = false;
+                audio.volume = lastVolume;
+
+                audio.play().then(() => {
+                    isPlaying = true;
+                    updateBgmUI();
+                    // Fade in the controller
+                    controller.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                }).catch(err => {
+                    console.error("Autoplay prevented or audio load failed, attempting muted fallback:", err);
+                    // Try muted autoplay as fallback
+                    audio.muted = true;
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        updateBgmUI();
+                        controller.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                    }).catch(e => console.error("Muted playback fallback also failed:", e));
+                });
+            }
+
+            function pauseBgm() {
+                audio.pause();
+                isPlaying = false;
+                updateBgmUI();
+            }
+
+            function updateBgmUI() {
+                if (isPlaying) {
+                    toggleBtn.innerHTML = '<i data-lucide="pause" class="w-3.5 h-3.5"></i>';
+                } else {
+                    toggleBtn.innerHTML = '<i data-lucide="play" class="w-3.5 h-3.5"></i>';
+                }
+
+                const currentVol = audio.muted ? 0 : audio.volume;
+
+                if (audio.muted || currentVol === 0) {
+                    muteBtn.innerHTML = '<i data-lucide="volume-x" class="w-3.5 h-3.5"></i>';
+                } else if (currentVol < 0.5) {
+                    muteBtn.innerHTML = '<i data-lucide="volume-1" class="w-3.5 h-3.5"></i>';
+                } else {
+                    muteBtn.innerHTML = '<i data-lucide="volume-2" class="w-3.5 h-3.5"></i>';
+                }
+                lucide.createIcons();
+
+                // Update slider state and background fill (1% precision)
+                volumeSlider.value = currentVol;
+                const percent = (currentVol * 100) + '%';
+                volumeSlider.style.background = `linear-gradient(to right, #ab6b35 0%, #ab6b35 ${percent}, #ebdcc9 ${percent}, #ebdcc9 100%)`;
+            }
+
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (isPlaying) {
+                    pauseBgm();
+                } else {
+                    playBgm();
+                }
+            });
+
+            muteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                audio.muted = !audio.muted;
+                if (!audio.muted) {
+                    audio.volume = lastVolume;
+                }
+                updateBgmUI();
+            });
+
+            // Slider input listener (for 1% incremental sliding)
+            volumeSlider.addEventListener('input', (e) => {
+                e.stopPropagation();
+                const vol = parseFloat(e.target.value);
+                audio.volume = vol;
+                audio.muted = vol === 0;
+                if (vol > 0) {
+                    lastVolume = vol;
+                }
+                updateBgmUI();
+            });
+        });
     </script>
 
 </body>
