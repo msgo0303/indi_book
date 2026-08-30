@@ -1115,13 +1115,15 @@
         </section>
 
         <!-- Memory Section (Polaroid Gallery) -->
-        <section class="memory bg-gradient-to-b from-[#f5f1ea] via-[#f1e6d6] to-[#ebdcc9]">
-            <div class="section-heading">
+        <section class="memory relative bg-gradient-to-b from-[#f5f1ea] via-[#f1e6d6] to-[#ebdcc9]">
+            <!-- Bottom transition fade overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#ebdcc9] pointer-events-none" aria-hidden="true"></div>
+            <div class="section-heading relative z-10">
                 <span class="eyebrow">little fragments</span>
                 <h2 class="reveal">당신의 하루에,<br><em>책 같은 순간</em>이 있나요?</h2>
                 <p class="font-sans mt-2 reveal" style="transition-delay: 100ms;">사진을 눌러 그날의 마음을 잠깐 꺼내보세요.</p>
             </div>
-            <div class="polaroids" id="polaroids-grid">
+            <div class="polaroids relative z-10" id="polaroids-grid">
                 <!-- Loaded dynamically by JavaScript -->
             </div>
         </section>
@@ -1137,22 +1139,24 @@
         </div>
 
         <!-- Find Section (Questionnaire & Curation Results) -->
-        <section class="find bg-gradient-to-b from-[#ebdcc9] via-[#e2cbb1] to-[#f5f1ea]" id="find">
-            <div class="section-heading centered">
+        <section class="find relative bg-gradient-to-b from-[#ebdcc9] via-[#e2cbb1] to-[#f5f1ea]" id="find">
+            <!-- Bottom transition fade overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f5f1ea] pointer-events-none" aria-hidden="true"></div>
+            <div class="section-heading centered relative z-10">
                 <span class="eyebrow">find your life book</span>
                 <h2 class="reveal">세 가지 시간 속에서<br><em>나의 마음</em>을 골라주세요</h2>
                 <p class="font-sans mt-2 reveal" style="transition-delay: 100ms;">정답은 없어요. 지금 떠오르는 단어를 편하게 선택해보세요.</p>
             </div>
-            <div class="keyword-groups reveal" style="transition-delay: 150ms;" id="keyword-groups-container">
+            <div class="keyword-groups reveal relative z-10" style="transition-delay: 150ms;" id="keyword-groups-container">
                 <!-- Loaded dynamically by JavaScript -->
             </div>
-            <div class="result-action font-sans reveal" style="transition-delay: 200ms;">
+            <div class="result-action font-sans reveal relative z-10" style="transition-delay: 200ms;">
                 <span id="selected-count-text">마음에 닿는 단어를 골라주세요</span>
                 <button class="primary-button" id="find-book-btn" disabled onclick="findBook()">결과 확인하기 <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
             </div>
             
             <!-- Curation Loading State -->
-            <div class="loading hidden" id="loading-spinner">
+            <div class="loading hidden relative z-10" id="loading-spinner">
                 <div class="flex justify-center mb-4">
                     <i data-lucide="book-open" class="breathe w-10 h-10 text-brown"></i>
                 </div>
@@ -1160,7 +1164,7 @@
             </div>
 
             <!-- Curation Recommendation Card -->
-            <div class="result-card hidden" id="result-card" style="opacity: 0; transform: translateY(20px); transition: all 0.6s ease;">
+            <div class="result-card hidden relative z-10" id="result-card" style="opacity: 0; transform: translateY(20px); transition: all 0.6s ease;">
                 <img id="result-cover" src="life-book-cover.png" alt="추천 인생책 표지">
                 <div>
                     <span class="eyebrow">your life book</span>
@@ -1184,13 +1188,15 @@
         </div>
 
         <!-- Apply Section (Registration Form) -->
-        <section class="apply bg-gradient-to-b from-[#f5f1ea] via-[#ebdcc9] to-[#ebdcc9]" id="apply">
-            <div class="section-heading">
+        <section class="apply relative bg-gradient-to-b from-[#f5f1ea] via-[#ebdcc9] to-[#ebdcc9]" id="apply">
+            <!-- Bottom transition fade overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#3e2f25] pointer-events-none" aria-hidden="true"></div>
+            <div class="section-heading relative z-10">
                 <span class="eyebrow">a warm delivery</span>
                 <h2 class="reveal">당신의 책을<br><em>준비할게요</em></h2>
                 <p class="font-sans mt-2 reveal" style="transition-delay: 100ms;">선택한 마음을 담아, 한 권의 책을 정성껏 보내드립니다.</p>
             </div>
-            <form id="apply-form" onsubmit="submitForm(event)" class="form-card font-sans reveal" style="transition-delay: 150ms;">
+            <form id="apply-form" onsubmit="submitForm(event)" class="form-card font-sans reveal relative z-10" style="transition-delay: 150ms;">
                 <!-- Vintage Leaf Postage Stamp Ornament -->
                 <div class="absolute top-4 right-4 w-12 h-14 p-1 shadow-sm border border-dashed border-[#ab6b35]/30 flex flex-col items-center justify-between pointer-events-none select-none rotate-6 transition-transform hover:rotate-12 z-10" style="background-image: radial-gradient(circle, transparent 3px, #fdfbf7 3px); background-size: 8px 8px; background-position: -4px -4px; background-color: #ebdcc9;">
                     <div class="w-full h-full border border-dashed border-[#ab6b35]/25 flex flex-col items-center justify-center p-0.5 bg-[#fdfbf7]/80 rounded-sm">
@@ -1272,17 +1278,19 @@
         </div>
 
         <!-- Reviews Section -->
-        <section class="reviews bg-gradient-to-b from-[#3e2f25] to-[#2b1f17]" id="reviews">
-            <div class="section-heading centered">
+        <section class="reviews relative bg-gradient-to-b from-[#3e2f25] to-[#2b1f17]" id="reviews">
+            <!-- Bottom transition fade overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#ebdcc9] pointer-events-none" aria-hidden="true"></div>
+            <div class="section-heading centered relative z-10">
                 <span class="eyebrow">from our readers</span>
                 <h2 class="reveal">개성 넘치는 후기들</h2>
             </div>
-            <div class="review-window reveal">
+            <div class="review-window reveal relative z-10">
                 <div class="review-track" id="review-track">
                     <!-- Loaded dynamically by JavaScript -->
                 </div>
             </div>
-            <div class="carousel-controls font-sans reveal" style="transition-delay: 150ms;">
+            <div class="carousel-controls font-sans reveal relative z-10" style="transition-delay: 150ms;">
                 <button onclick="prevReview()" aria-label="이전 후기"><i data-lucide="chevron-left"></i></button>
                 <span id="review-counter">01 / 03</span>
                 <button onclick="nextReview()" aria-label="다음 후기"><i data-lucide="chevron-right"></i></button>
@@ -1300,12 +1308,14 @@
         </div>
 
         <!-- FAQ Section -->
-        <section class="faq bg-gradient-to-b from-[#ebdcc9] to-[#f5f1ea]" id="faq">
-            <div class="section-heading">
+        <section class="faq relative bg-gradient-to-b from-[#ebdcc9] to-[#f5f1ea]" id="faq">
+            <!-- Bottom transition fade overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f5f1ea] pointer-events-none" aria-hidden="true"></div>
+            <div class="section-heading relative z-10">
                 <span class="eyebrow">questions & answers</span>
                 <h2 class="reveal">궁금한 마음도<br><em>편하게 물어보세요</em></h2>
             </div>
-            <div class="faq-list w-full flex flex-col gap-2 font-sans" id="faq-list-container">
+            <div class="faq-list w-full flex flex-col gap-2 font-sans relative z-10" id="faq-list-container">
                 <!-- Loaded dynamically by JavaScript -->
             </div>
         </section>
@@ -1321,12 +1331,14 @@
         </div>
 
         <!-- Community Links Section -->
-        <section class="community bg-gradient-to-b from-[#f5f1ea] to-[#ebdcc9]">
-            <div>
+        <section class="community relative bg-gradient-to-b from-[#f5f1ea] to-[#ebdcc9]">
+            <!-- Bottom transition fade overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#231a14] pointer-events-none" aria-hidden="true"></div>
+            <div class="relative z-10">
                 <span class="eyebrow">stay in touch</span>
                 <h2 class="reveal">마음책방의<br><em>새로운 소식</em></h2>
             </div>
-            <div class="community-links font-sans flex-wrap">
+            <div class="community-links font-sans flex-wrap relative z-10">
                 <a href="https://instagram.com" target="_blank" class="reveal">
                     <i data-lucide="camera" class="text-brown"></i>
                     <span>인스타그램<br><small class="text-[#8c6d53]">@maeum.books</small></span>
