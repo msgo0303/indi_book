@@ -427,7 +427,7 @@
             display: grid;
             grid-template-columns: 35% 1fr;
             gap: 60px;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: auto;
         }
 
@@ -621,7 +621,7 @@
             display: grid;
             grid-template-columns: 35% 1fr;
             gap: 70px;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: auto;
         }
 
@@ -632,6 +632,7 @@
             border-radius: 12px 8px 12px 10px;
             border: 1px solid #ebdcc9;
             box-shadow: 0 20px 40px rgba(90, 65, 44, 0.07), inset 0 0 30px rgba(235, 220, 201, 0.2);
+            max-width: 680px;
         }
 
         .selected-summary {
@@ -892,9 +893,7 @@
         }
 
         .community {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            /* 100% full width background container */
         }
 
         .community h2 {
@@ -1623,26 +1622,28 @@
             <!-- Bottom transition fade overlay -->
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#231a14] pointer-events-none"
                 aria-hidden="true"></div>
-            <div class="relative z-10">
-                <span class="eyebrow">stay in touch</span>
-                <h2 class="reveal">마음책방의<br><em>새로운 소식</em></h2>
-            </div>
-            <div class="community-links font-sans flex-wrap relative z-10">
-                <a href="index.html" class="reveal">
-                    <i data-lucide="home" class="text-brown"></i>
-                    <span>홈페이지 가기<br><small class="text-[#8c6d53]">돌고 돌아 책방 메인</small></span>
-                    <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
-                </a>
-                <a href="https://instagram.com" target="_blank" class="reveal" style="transition-delay: 100ms;">
-                    <i data-lucide="camera" class="text-brown"></i>
-                    <span>인스타그램<br><small class="text-[#8c6d53]">@maeum.books</small></span>
-                    <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
-                </a>
-                <a href="https://smartstore.naver.com" target="_blank" class="reveal" style="transition-delay: 200ms;">
-                    <i data-lucide="book-open" class="text-brown"></i>
-                    <span>네이버 스마트스토어<br><small class="text-[#8c6d53]">책과 마음을 만나는 곳</small></span>
-                    <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
-                </a>
+            <div class="max-w-[1200px] mx-auto w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-8 relative z-10">
+                <div>
+                    <span class="eyebrow">stay in touch</span>
+                    <h2 class="reveal">마음책방의<br><em>새로운 소식</em></h2>
+                </div>
+                <div class="community-links font-sans flex flex-wrap gap-[14px]">
+                    <a href="index.html" class="reveal">
+                        <i data-lucide="home" class="text-brown"></i>
+                        <span>홈페이지 가기<br><small class="text-[#8c6d53]">돌고 돌아 책방 메인</small></span>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" class="reveal" style="transition-delay: 100ms;">
+                        <i data-lucide="camera" class="text-brown"></i>
+                        <span>인스타그램<br><small class="text-[#8c6d53]">@maeum.books</small></span>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
+                    </a>
+                    <a href="https://smartstore.naver.com" target="_blank" class="reveal" style="transition-delay: 200ms;">
+                        <i data-lucide="book-open" class="text-brown"></i>
+                        <span>네이버 스마트스토어<br><small class="text-[#8c6d53]">책과 마음을 만나는 곳</small></span>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
+                    </a>
+                </div>
             </div>
         </section>
     </main>
