@@ -559,6 +559,7 @@
         .loading {
             text-align: center;
             margin: 40px;
+            margin-top: 90px;
         }
 
         .breathe {
@@ -572,21 +573,28 @@
         }
 
         .result-card {
-            max-width: 720px;
+            max-width: 600px;
             margin: 45px auto 0;
             padding: 28px;
             background: var(--card);
             border: 1px solid rgba(90, 65, 44, 0.05);
             display: flex;
-            gap: 30px;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 24px;
             box-shadow: 0 20px 40px rgba(90, 65, 44, 0.08);
             border-radius: 8px;
         }
 
         .result-card img {
-            width: 145px;
-            height: 205px;
-            object-fit: cover;
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+            object-fit: contain;
+            border-radius: 6px;
+            display: block;
+            margin: 0 auto;
         }
 
         .result-card h3 {
@@ -883,6 +891,17 @@
             align-items: center;
         }
 
+        .community h2 {
+            font: 400 clamp(32px, 4.5vw, 48px)/1.2 'Gowun Batang', serif;
+            letter-spacing: -.03em;
+            margin: 0;
+        }
+
+        .community h2 em {
+            font-style: normal;
+            color: var(--brown);
+        }
+
         .community-links {
             display: flex;
             gap: 14px;
@@ -1132,14 +1151,19 @@
             }
 
             .result-card {
-                display: block;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
                 padding: 22px;
             }
 
             .result-card img {
-                width: 105px;
-                height: 150px;
-                margin-bottom: 16px;
+                width: 100%;
+                max-width: 320px;
+                height: auto;
+                margin: 0 auto 16px;
+                display: block;
             }
 
             .result-card h3 {
@@ -1171,7 +1195,8 @@
             }
 
             .community h2 {
-                font-size: 39px;
+                font-size: clamp(28px, 8vw, 36px);
+                line-height: 1.25;
             }
 
             footer {
@@ -1204,12 +1229,12 @@
     <!-- Page Transition Effect -->
     <style>
         body {
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.3s ease-in-out !important;
         }
 
-        body.page-loaded {
-            opacity: 1;
+        body.page-transition-out {
+            opacity: 0;
         }
     </style>
     <script src="transition.js" defer></script>
@@ -1317,7 +1342,7 @@
                 aria-hidden="true"></div>
             <div class="section-heading relative z-10">
                 <span class="eyebrow">little fragments</span>
-                <h2 class="reveal">당신의 하루에,<br><em>책 같은 순간</em>이 있나요?</h2>
+                <h2 class="reveal">우리가 선물했던<br><em>소중한 인생책들</em></h2>
                 <p class="font-sans mt-2 reveal" style="transition-delay: 100ms;">사진을 눌러 그날의 마음을 잠깐 꺼내보세요.</p>
             </div>
             <div class="polaroids relative z-10" id="polaroids-grid">
@@ -1343,7 +1368,7 @@
                 aria-hidden="true"></div>
             <div class="section-heading centered relative z-10">
                 <span class="eyebrow">find your life book</span>
-                <h2 class="reveal">세 가지 시간 속에서<br><em>나의 마음</em>을 골라주세요</h2>
+                <h2 class="reveal">- 신청하기 -<br>세 가지 시간 속<br>나의 마음 고르기<br></h2>
                 <p class="font-sans mt-2 reveal" style="transition-delay: 100ms;">정답은 없어요. 지금 떠오르는 단어를 편하게 선택해보세요.</p>
             </div>
             <div class="keyword-groups reveal relative z-10" style="transition-delay: 150ms;"
@@ -1359,7 +1384,15 @@
             <!-- Curation Loading State -->
             <div class="loading hidden relative z-10" id="loading-spinner">
                 <div class="flex justify-center mb-4">
-                    <i data-lucide="book-open" class="breathe w-10 h-10 text-brown"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        data-lucide="book-open" aria-hidden="true"
+                        class="lucide lucide-book-open breathe w-10 h-10 text-brown">
+                        <path d="M12 5v16"></path>
+                        <path
+                            d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z">
+                        </path>
+                    </svg>
                 </div>
                 <p class="font-sans text-[#786856]">당신에게 맞는 문장을 찾고 있어요</p>
             </div>
@@ -1636,29 +1669,21 @@
 
     <!-- Application Script Logic -->
     <script>
-        // Data Definitions matching life-data.ts
+        const sharedWords = [
+            '#불안', '#외로움', '#무기력', '#부담감', '#지루함',
+            '#평온', '#다정함', '#활기', '#설렘', '#자신감'
+        ];
+
         const keywordGroups = [
-            { 
-                label: '과거의 나', 
-                question: '그때의 나는 주로 어떤 감정이었나요?', 
-                words: ['#막막함', '#외로움', '#피로', '#지루함', '#부담감', '#슬픔', '#불안', '#열등감', '#억울함', '#과열'] 
-            },
-            { 
-                label: '현재의 나', 
-                question: '지금 내 마음에 가장 크게 와닿는 상태는 무엇인가요?', 
-                words: ['#방황', '#고립감', '#무기력', '#권태', '#압박감', '#우울', '#걱정', '#자격지심', '#분노', '#탈진'] 
-            },
-            { 
-                label: '미래의 나', 
-                question: '앞으로 어떤 마음 상태를 가장 원하나요?', 
-                words: ['#확신', '#다정함', '#활기', '#설렘', '#가벼움', '#후련함', '#평온', '#당당함', '#차분함', '#휴식'] 
-            }
+            { label: '과거의 나', question: '그때의 나는 어떤 마음에 가까웠나요?', words: [...sharedWords] },
+            { label: '현재의 나', question: '지금의 나는 어떤 감정을 느끼고 있나요?', words: [...sharedWords] },
+            { label: '미래의 나', question: '앞으로의 나는 어떤 상태이고 싶나요?', words: [...sharedWords] },
         ];
 
         const cards = [
             {
                 id: 'lost_path',
-                title: '어디로 가야 할지 몰라 막막한 당신을 위해',
+                title: '\uc5b4\ub514\ub85c \uac00\uc57c \ud560\uc9c0 \ubab0\ub77c \ub9c9\ub9c9\ud55c \ub2f9\uc2e0\uc744 \uc704\ud574',
                 tagline: '안개 속에서도 당신의 걸음은 길을 만들고 있습니다.',
                 reason: '막막했던 지난날과 방황하는 마음에 또렷한 방향과 흔들리지 않는 확신을 전합니다.',
                 cover: 'https://sbkhqoiicpqihitcrwbb.supabase.co/storage/v1/object/public/images/card_10_2_11zon.webp'
@@ -1679,7 +1704,7 @@
             },
             {
                 id: 'boredom',
-                title: '매일이 어제처럼 느껴지는 일상이 지루한 당신을 위해',
+                title: '일상의 온도가 낮은 당신을 위해',
                 tagline: '무채색의 일상 틈새로 스며드는 작은 빛',
                 reason: '지루함과 반복되는 권태에 갇힌 일상을 깨우고, 잊고 지냈던 기분 좋은 설렘을 되찾아줍니다.',
                 cover: 'https://sbkhqoiicpqihitcrwbb.supabase.co/storage/v1/object/public/images/card_1_3_11zon.webp'
@@ -1728,6 +1753,19 @@
             }
         ];
 
+        const themeKeywords = {
+            lost_path: ['#불안', '#자신감'],
+            loneliness: ['#외로움', '#다정함'],
+            drained: ['#무기력', '#활기'],
+            boredom: ['#지루함', '#설렘'],
+            perfectionism: ['#부담감', '#평온'],
+            tears: ['#외로움', '#평온', '#무기력'],
+            anxiety: ['#불안', '#평온'],
+            comparison: ['#부담감', '#자신감'],
+            anger: ['#부담감', '#지루함', '#평온'],
+            burnout: ['#무기력', '#평온']
+        };
+
         const reviews = [
             { name: '김*서', role: '20대 후반, 직장인', tags: ['#압박감', '#무기력과번아웃', '#가벼운해방감'], quote: '과거의 압박과 번아웃을 그대로 선택했는데, 추천받은 책의 첫 문장을 읽자마자 억눌렸던 마음에 큰 위로를 받았습니다.' },
             { name: '이*현', role: '30대 초반, 프리랜서', tags: ['#의기소침', '#답답한정체기', '#주체적인확신'], quote: '정체된 기분 때문에 답답했는데, 내 감정의 흐름에 꼭 맞는 인생책을 찾게 되어 다시 나아갈 힘이 생겼어요.' },
@@ -1753,7 +1791,7 @@
         ];
 
         // State Management
-        let selectedKeywords = [];
+        let selectedKeywords = {};
         let recommendedBookObj = null;
         let currentReviewIndex = 0;
 
@@ -1900,7 +1938,7 @@
         // 4. Keyword Toggles & Chips
         function renderKeywords() {
             const container = document.getElementById('keyword-groups-container');
-            container.innerHTML = keywordGroups.map(group => `
+            container.innerHTML = keywordGroups.map((group, groupIndex) => `
                 <div class="keyword-group">
                     <div>
                         <span class="group-label">${group.label}</span>
@@ -1908,9 +1946,9 @@
                     </div>
                     <div class="chips">
                         ${group.words.map(word => {
-                const isSelected = selectedKeywords.includes(word);
+                const isSelected = (selectedKeywords[groupIndex] || []).includes(word);
                 return `
-                                <button class="chip ${isSelected ? 'selected' : ''}" onclick="toggleKeyword('${word}')">
+                                <button class="chip ${isSelected ? 'selected' : ''}" onclick="toggleKeyword(${groupIndex}, '${word}')">
                                     ${isSelected ? '<i data-lucide="check" class="w-3.5 h-3.5 mr-1"></i>' : ''}
                                     ${word}
                                 </button>
@@ -1922,24 +1960,32 @@
             lucide.createIcons();
         }
 
-        // Toggles a selected keyword chip
-        function toggleKeyword(word) {
-            const index = selectedKeywords.indexOf(word);
+        // Toggles a selected keyword chip (per group)
+        function toggleKeyword(groupIndex, word) {
+            if (!selectedKeywords[groupIndex]) selectedKeywords[groupIndex] = [];
+            const arr = selectedKeywords[groupIndex];
+            const index = arr.indexOf(word);
             if (index > -1) {
-                selectedKeywords.splice(index, 1);
+                arr.splice(index, 1);
             } else {
-                selectedKeywords.push(word);
+                arr.push(word);
             }
             renderKeywords();
             updateResultAction();
             updateFormSummary();
         }
 
+        // 전체 그룹의 선택 키워드를 하나의 배열로 합쳐 반환
+        function getAllSelectedKeywords() {
+            return Object.values(selectedKeywords).flat();
+        }
+
         function updateResultAction() {
             const countText = document.getElementById('selected-count-text');
             const btn = document.getElementById('find-book-btn');
-            if (selectedKeywords.length > 0) {
-                countText.innerText = `${selectedKeywords.length}개의 마음을 골랐어요`;
+            const allSelected = getAllSelectedKeywords();
+            if (allSelected.length > 0) {
+                countText.innerText = `${allSelected.length}개의 마음을 골랐어요`;
                 btn.removeAttribute('disabled');
             } else {
                 countText.innerText = '마음에 닿는 단어를 골라주세요';
@@ -1949,8 +1995,9 @@
 
         function updateFormSummary() {
             const container = document.getElementById('selected-summary-chips');
-            if (selectedKeywords.length > 0) {
-                container.innerHTML = selectedKeywords.map(word => `
+            const allSelected = getAllSelectedKeywords();
+            if (allSelected.length > 0) {
+                container.innerHTML = allSelected.map(word => `
                     <b class="bg-soft text-primary py-1 px-2.5 rounded-full font-normal">${word}</b>
                 `).join('');
             } else {
@@ -1958,31 +2005,18 @@
             }
         }
 
-        // 5. Curation Recommendation System (Scoring Match Algorithm)
-        const themeKeywords = {
-            lost_path: ['#막막함', '#방황', '#확신'],
-            loneliness: ['#외로움', '#고립감', '#다정함'],
-            drained: ['#피로', '#무기력', '#활기'],
-            boredom: ['#지루함', '#권태', '#설렘'],
-            perfectionism: ['#부담감', '#압박감', '#가벼움'],
-            tears: ['#슬픔', '#우울', '#후련함'],
-            anxiety: ['#불안', '#걱정', '#평온'],
-            comparison: ['#열등감', '#자격지심', '#당당함'],
-            anger: ['#억울함', '#분노', '#차분함'],
-            burnout: ['#과열', '#탈진', '#휴식']
-        };
 
         function getRecommendation(selected) {
             if (!selected || selected.length === 0) return cards[0];
-            
+
             let bestCard = cards[0];
             let maxScore = -1;
-            
+
             for (const card of cards) {
                 const keywords = themeKeywords[card.id] || [];
                 // Count overlap between chosen keywords and the theme's preset keywords
                 const score = keywords.filter(word => selected.includes(word)).length;
-                
+
                 if (score > maxScore) {
                     maxScore = score;
                     bestCard = card;
@@ -2002,7 +2036,7 @@
             resultCard.style.transform = 'translateY(20px)';
             spinner.classList.remove('hidden');
 
-            recommendedBookObj = getRecommendation(selectedKeywords);
+            recommendedBookObj = getRecommendation(getAllSelectedKeywords());
 
             setTimeout(() => {
                 spinner.classList.add('hidden');
@@ -2011,7 +2045,7 @@
                 // Populate result details
                 document.getElementById('result-cover').src = recommendedBookObj.cover;
                 document.getElementById('result-title').innerText = recommendedBookObj.title;
-                
+
                 const authorEl = document.getElementById('result-author');
                 if (recommendedBookObj.author) {
                     authorEl.innerText = recommendedBookObj.author;
@@ -2019,7 +2053,7 @@
                 } else {
                     authorEl.style.display = 'none';
                 }
-                
+
                 document.getElementById('result-tagline').innerText = `“${recommendedBookObj.tagline}”`;
                 document.getElementById('result-reason').innerText = recommendedBookObj.reason;
 
@@ -2149,9 +2183,9 @@
             submitBtn.innerHTML = '<span class="inline-block animate-spin mr-2 border-2 border-cream border-t-transparent rounded-full w-4 h-4"></span> 처리 중...';
             submitBtn.setAttribute('disabled', 'true');
 
-            const keywordsText = selectedKeywords.length > 0 ? selectedKeywords : [];
-            const recommendedBookText = recommendedBookObj 
-                ? (recommendedBookObj.author ? `${recommendedBookObj.title} (${recommendedBookObj.author})` : recommendedBookObj.title) 
+            const keywordsText = getAllSelectedKeywords().length > 0 ? getAllSelectedKeywords() : [];
+            const recommendedBookText = recommendedBookObj
+                ? (recommendedBookObj.author ? `${recommendedBookObj.title} (${recommendedBookObj.author})` : recommendedBookObj.title)
                 : '추천 없음';
 
             let success = false;
@@ -2232,7 +2266,7 @@
 
                 // Reset form values & selections
                 document.getElementById('apply-form').reset();
-                selectedKeywords = [];
+                selectedKeywords = {};
                 recommendedBookObj = null;
 
                 renderKeywords();
