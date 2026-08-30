@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -1020,6 +1020,19 @@
         }
 
         @media (max-width: 800px) {
+            /* 모바일 인트로 텍스트/윈도우 위치 조정 */
+            .intro-copy {
+                transform: translateY(-100px) !important;
+            }
+
+            .intro-window {
+                top: calc(55% + 75px) !important;
+            }
+
+            .intro button {
+                top: calc(55% + 175px) !important;
+            }
+
             header {
                 height: 64px;
                 padding: 0 18px;
