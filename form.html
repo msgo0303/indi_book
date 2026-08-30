@@ -869,16 +869,22 @@
             cursor: pointer;
         }
 
-        .faq-item p {
-            margin: 0 0 20px;
-            color: #786856;
-            font-size: 13px;
-            display: none;
-            line-height: 1.7;
+        .faq-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 300ms ease-in-out;
         }
 
-        .faq-item.active p {
-            display: block;
+        .faq-item.active .faq-content {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-content p {
+            margin: 0;
+            padding-bottom: 20px;
+            color: #786856;
+            font-size: 13px;
+            line-height: 1.7;
         }
 
         .rotate {
@@ -1590,12 +1596,17 @@
                 <h2 class="reveal">마음책방의<br><em>새로운 소식</em></h2>
             </div>
             <div class="community-links font-sans flex-wrap relative z-10">
-                <a href="https://instagram.com" target="_blank" class="reveal">
+                <a href="index.html" class="reveal">
+                    <i data-lucide="home" class="text-brown"></i>
+                    <span>홈페이지 가기<br><small class="text-[#8c6d53]">돌고 돌아 책방 메인</small></span>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
+                </a>
+                <a href="https://instagram.com" target="_blank" class="reveal" style="transition-delay: 100ms;">
                     <i data-lucide="camera" class="text-brown"></i>
                     <span>인스타그램<br><small class="text-[#8c6d53]">@maeum.books</small></span>
                     <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
                 </a>
-                <a href="https://smartstore.naver.com" target="_blank" class="reveal" style="transition-delay: 150ms;">
+                <a href="https://smartstore.naver.com" target="_blank" class="reveal" style="transition-delay: 200ms;">
                     <i data-lucide="book-open" class="text-brown"></i>
                     <span>네이버 스마트스토어<br><small class="text-[#8c6d53]">책과 마음을 만나는 곳</small></span>
                     <i data-lucide="arrow-up-right" class="w-4 h-4 ml-auto text-dark/40"></i>
@@ -2128,7 +2139,11 @@
                         <span class="font-medium text-dark font-sans">${q}</span>
                         <i data-lucide="chevron-down" class="w-5 h-5 text-dark/40 transition-transform duration-300"></i>
                     </button>
-                    <p class="font-sans text-[#786856] text-sm">${a}</p>
+                    <div class="faq-content">
+                        <div class="overflow-hidden">
+                            <p class="font-sans text-[#786856] text-sm">${a}</p>
+                        </div>
+                    </div>
                 </div>
             `).join('');
             lucide.createIcons();
@@ -2141,14 +2156,12 @@
 
             document.querySelectorAll('.faq-item').forEach(item => {
                 item.classList.remove('active');
-                item.querySelector('p').style.display = 'none';
                 const itemChevron = item.querySelector('[data-lucide="chevron-down"]');
                 if (itemChevron) itemChevron.classList.remove('rotate');
             });
 
             if (!isAlreadyActive) {
                 parent.classList.add('active');
-                parent.querySelector('p').style.display = 'block';
                 if (chevron) chevron.classList.add('rotate');
             }
         }
