@@ -44,7 +44,12 @@ window.addEventListener('pageshow', (event) => {
 
 // 페이지 로드 완료 시 body에 page-loaded 클래스를 추가하여 화면 표시 (fade-in)
 function initPageFadeIn() {
-    document.body.classList.add('page-loaded');
+    // 브라우저가 투명 상태(opacity: 0)를 먼저 렌더링한 후 트랜지션이 시작되도록 50ms 딜레이 부여
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            document.body.classList.add('page-loaded');
+        }, 50);
+    });
 }
 
 if (document.readyState === 'loading') {
