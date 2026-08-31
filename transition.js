@@ -41,3 +41,14 @@ window.addEventListener('pageshow', (event) => {
         document.body.classList.remove('page-transition-out');
     }
 });
+
+// 페이지 로드 완료 시 body에 page-loaded 클래스를 추가하여 화면 표시 (fade-in)
+function initPageFadeIn() {
+    document.body.classList.add('page-loaded');
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPageFadeIn);
+} else {
+    initPageFadeIn();
+}
