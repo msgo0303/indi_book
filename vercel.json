@@ -1,11 +1,3 @@
 {
-  "cleanUrls": true,
-  "redirects": [
-    { "source": "/About", "destination": "/about", "permanent": true },
-    { "source": "/Admin_1", "destination": "/admin", "permanent": true }
-  ],
-  "rewrites": [
-    { "source": "/about", "destination": "/About.html" },
-    { "source": "/admin", "destination": "/Admin_1.html" }
-  ]
+  "cleanUrls": true
 }
