@@ -1766,11 +1766,32 @@
             '#평온', '#다정함', '#활기', '#설렘', '#자신감'
         ];
 
-        const keywordGroups = [
+        let keywordGroups = [
             { label: '과거의 나', question: '그때의 나는 어떤 마음에 가까웠나요?', words: [...sharedWords] },
             { label: '현재의 나', question: '지금의 나는 어떤 감정을 느끼고 있나요?', words: [...sharedWords] },
             { label: '미래의 나', question: '앞으로의 나는 어떤 상태이고 싶나요?', words: [...sharedWords] },
         ];
+
+        async function loadQuestionsFromDB() {
+            if (window.supabaseClient) {
+                try {
+                    const { data, error } = await window.supabaseClient
+                        .from('curation_questions')
+                        .select('*')
+                        .order('sort_order', { ascending: true });
+                    if (error) throw error;
+                    if (data && data.length > 0) {
+                        keywordGroups = data.map(item => ({
+                            label: item.label,
+                            question: item.question,
+                            words: item.words
+                        }));
+                    }
+                } catch (err) {
+                    console.error("Failed to load curation questions from DB, using fallback:", err);
+                }
+            }
+        }
 
         const cards = [
             {
@@ -1930,10 +1951,11 @@
         }
 
         // Initialize App
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", async () => {
             // Render all sections
             renderFallingLeaves();
             renderPolaroids();
+            await loadQuestionsFromDB();
             renderKeywords();
             renderReviews();
             renderFAQs();
@@ -2040,7 +2062,7 @@
                         ${group.words.map(word => {
                 const isSelected = (selectedKeywords[groupIndex] || []).includes(word);
                 return `
-                                <button class="chip ${isSelected ? 'selected' : ''}" onclick="toggleKeyword(${groupIndex}, '${word}')">
+                                <button class="chip ${isSelected ? 'selected' : ''}" onclick="toggleKeyword(this, ${groupIndex}, '${word}')">
                                     ${word}
                                 </button>
                             `;
@@ -2052,16 +2074,17 @@
         }
 
         // Toggles a selected keyword chip (per group)
-        function toggleKeyword(groupIndex, word) {
+        function toggleKeyword(buttonEl, groupIndex, word) {
             if (!selectedKeywords[groupIndex]) selectedKeywords[groupIndex] = [];
             const arr = selectedKeywords[groupIndex];
             const index = arr.indexOf(word);
             if (index > -1) {
                 arr.splice(index, 1);
+                buttonEl.classList.remove('selected');
             } else {
                 arr.push(word);
+                buttonEl.classList.add('selected');
             }
-            renderKeywords();
             updateResultAction();
             updateFormSummary();
         }
@@ -2282,9 +2305,20 @@
                 : '추천 없음';
 
             let success = false;
+            let webhookUrl = '';
 
             if (window.supabaseClient) {
                 try {
+                    // Webhook URL 조회
+                    const { data: settingData } = await window.supabaseClient
+                        .from('system_settings')
+                        .select('value')
+                        .eq('key', 'curation_webhook_url')
+                        .single();
+                    if (settingData) {
+                        webhookUrl = settingData.value;
+                    }
+
                     let userId = null;
                     const { data: { session } } = await window.supabaseClient.auth.getSession();
                     if (session) {
@@ -2328,6 +2362,42 @@
             }
 
             if (success) {
+                // Google Sheets Webhook 전송
+                if (webhookUrl) {
+                    try {
+                        const getGroupKeywords = (groupIndex) => {
+                            const words = selectedKeywords[groupIndex] || [];
+                            return words.map(w => w.replace('#', '')).join(' ');
+                        };
+                        const formattedKeywordsForSheet = [
+                            getGroupKeywords(0),
+                            getGroupKeywords(1),
+                            getGroupKeywords(2)
+                        ].join(' | ');
+
+                        await fetch(webhookUrl, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                name: name,
+                                age: parseInt(age, 10) || null,
+                                gender: gender,
+                                city: city,
+                                phone: phone,
+                                keywords: formattedKeywordsForSheet,
+                                recommended_book: recommendedBookText,
+                                environment: environment || ''
+                            })
+                        });
+                        console.log("Sent to Google Sheets Webhook successfully.");
+                    } catch (sheetErr) {
+                        console.error("Failed to send data to Google Sheets Webhook:", sheetErr);
+                    }
+                }
+
                 submitBtn.innerHTML = originalContent;
                 submitBtn.removeAttribute('disabled');
 

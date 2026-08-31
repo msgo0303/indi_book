@@ -851,12 +851,12 @@
                     <div class="flex gap-2 w-full sm:w-auto" vid="317">
                         <button
                             class="flex-1 sm:flex-none px-4 py-2 border border-forest text-forest bg-transparent rounded-md text-sm font-bold hover:bg-forest/5 transition-colors"
-                            vid="318">
+                            vid="318" onclick="updateWebhookStatusAdmin(); loadCurations();">
                             지금 동기화하기
                         </button>
                         <button
                             class="flex-1 sm:flex-none p-2 border border-charcoal/20 text-charcoal rounded-md hover:bg-paper transition-colors"
-                            title="연동 주소(Webhook URL) 변경" vid="319">
+                            title="연동 주소(Webhook URL) 변경" vid="319" onclick="changeCurationWebhookUrl()">
                             <i class="ph ph-gear" vid="320"></i>
                         </button>
                     </div>
@@ -998,6 +998,29 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- 큐레이션 질문 및 키워드 에디터 -->
+            <div class="bg-white rounded-xl border border-forest/10 shadow-soft overflow-hidden mt-8 p-6">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-forest/10">
+                    <div>
+                        <h3 class="font-serif font-bold text-lg text-forest flex items-center gap-2">
+                            <i class="ph ph-sparkle text-xl text-terra"></i> 큐레이션 질문 및 감정 키워드 관리
+                        </h3>
+                        <p class="text-xs text-charcoal/50 mt-1">사용자 신청 폼(form.html)에 나타나는 질문과 감정 키워드들을 동적으로 관리합니다.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6" id="curation-questions-admin-container">
+                    <!-- JavaScript에서 질문 그룹 3세트를 동적으로 렌더링 -->
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                     <button onclick="saveCurationQuestionsAdmin()"
+                         class="px-8 py-3 rounded-md bg-forest text-cream font-bold hover:bg-forest/90 transition-colors shadow-md flex items-center gap-2">
+                         <i class="ph ph-floppy-disk text-lg"></i> 질문 및 키워드 저장
+                     </button>
                 </div>
             </div>
         </div>
@@ -2798,6 +2821,8 @@ ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;</div>
                         break;
                     case 'page-curation':
                         loadCurations();
+                        loadCurationQuestionsAdmin();
+                        updateWebhookStatusAdmin();
                         break;
                     case 'page-events':
                         loadEventsAdmin();
@@ -4534,60 +4559,226 @@ ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;</div>
 
                     // 프리뷰 세팅
                     const imgPrev = document.getElementById(`p-book-img-prev-${idx}`);
-                    const noImgSpan = document.getElementById(`p-book-no-img-${idx}`);
-                    if (imgVal) {
-                        imgPrev.src = imgVal;
-                        imgPrev.classList.remove('hidden');
-                        noImgSpan.classList.add('hidden');
-                    } else {
-                        imgPrev.src = "";
-                        imgPrev.classList.add('hidden');
-                        noImgSpan.classList.remove('hidden');
-                    }
-                }
-            }
-
-            function autoFillPersonaBook(idx, bookId) {
-                if (!bookId) return;
-                const book = libraryBooksList.find(b => b.id == bookId);
-                if (!book) return;
-
-                // 자동 채우기
-                document.getElementById(`p-book-title-${idx}`).value = book.title;
-                document.getElementById(`p-book-author-${idx}`).value = book.author || "";
-                
-                // 가격 포맷팅 (숫자인 경우 천단위 콤마 + 원)
-                const formattedPrice = book.price ? Number(book.price).toLocaleString() + '원' : '0원';
-                document.getElementById(`p-book-price-${idx}`).value = formattedPrice;
-                
-                const imgInput = document.getElementById(`p-book-img-${idx}`);
-                imgInput.value = book.cover_image || "";
-
-                // 프리뷰 업데이트
-                const imgPrev = document.getElementById(`p-book-img-prev-${idx}`);
-                const noImgSpan = document.getElementById(`p-book-no-img-${idx}`);
-                if (book.cover_image) {
-                    imgPrev.src = book.cover_image;
-                    imgPrev.classList.remove('hidden');
-                    noImgSpan.classList.add('hidden');
-                } else {
-                    imgPrev.src = "";
-                    imgPrev.classList.add('hidden');
-                    noImgSpan.classList.remove('hidden');
-                }
-            }
-
-            async function savePersonaConfiguration() {
+                    const noImgSpan = document.get            async function saveAboutConfiguration() {
                 if (!window.supabaseClient) return;
 
-                const pInfo = PERSONA_DEFAULTS[currentPersonaKey];
-                const key = currentPersonaKey;
+                const keys = [
+                    'hero_title', 'hero_subtitle', 'hero_desc', 'hero_image',
+                    'tab1_title', 'tab1_subtitle', 'tab1_desc',
+                    'tab1_slide1_image', 'tab1_slide1_caption',
+                    'tab1_slide2_image', 'tab1_slide2_caption',
+                    'tab1_slide3_image', 'tab1_slide3_caption',
+                    'tab2_biz1_title', 'tab2_biz1_desc', 'tab2_biz1_image',
+                    'tab2_biz2_title', 'tab2_biz2_desc', 'tab2_biz2_image',
+                    'tab2_biz3_title', 'tab2_biz3_desc', 'tab2_biz3_image',
+                    
+                    'tab3_title', 'tab3_desc',
+                    'tab3_pkg1_image', 'tab3_pkg1_caption',
+                    'tab3_pkg2_image', 'tab3_pkg2_caption',
+                    'tab3_pkg3_image', 'tab3_pkg3_caption',
+                    'tab3_cta_title', 'tab3_cta_subtitle', 'tab3_cta_desc', 'tab3_cta_btn_text',
+
+                    'tab4_title', 'tab4_desc',
+                    'tab4_feat1_title', 'tab4_feat1_sub', 'tab4_feat1_desc',
+                    'tab4_feat2_title', 'tab4_feat2_sub', 'tab4_feat2_desc',
+                    'tab4_feat3_title', 'tab4_feat3_sub', 'tab4_feat3_desc',
+                    'tab4_feat4_title', 'tab4_feat4_sub', 'tab4_feat4_desc'
+                ];
 
                 try {
-                    for (let idx of [1, 2]) {
-                        const title = document.getElementById(`p-book-title-${idx}`).value.trim();
-                        const author = document.getElementById(`p-book-author-${idx}`).value.trim();
-                        const price = document.getElementById(`p-book-price-${idx}`).value.trim();
+                    const payloads = [];
+                    for (let key of keys) {
+                        const inputId = `about-${key.replace(/_/g, '-')}`;
+                        const el = document.getElementById(inputId);
+                        if (el) {
+                            payloads.push({ key, value: el.value.trim() });
+                        }
+                    }
+
+                    for (let payload of payloads) {
+                        const { error } = await window.supabaseClient
+                            .from('about_settings')
+                            .upsert(payload, { onConflict: 'key' });
+
+                        if (error) throw error;
+                    }
+
+                    showToast("소개 페이지 설정이 성공적으로 저장되었습니다.");
+                    await loadAboutDataAdmin();
+                } catch (err) {
+                    console.error("Error saving about page configuration:", err);
+                    showToast("저장 실패: " + err.message, false);
+                }
+            }
+
+            // --- 큐레이션 질문지 및 Webhook 설정 관리 스크립트 ---
+            let curationQuestionsList = [];
+
+            // Webhook URL 상태 업데이트
+            async function updateWebhookStatusAdmin() {
+                if (!window.supabaseClient) return;
+                try {
+                    const { data, error } = await window.supabaseClient
+                        .from('system_settings')
+                        .select('value')
+                        .eq('key', 'curation_webhook_url')
+                        .single();
+
+                    const statusBadge = document.querySelector('#page-curation [vid="315"]');
+                    if (data && data.value) {
+                        if (statusBadge) {
+                            statusBadge.className = "px-4 py-2 bg-green-50 border border-green-200 text-green-700 rounded-md text-sm font-bold flex items-center gap-2";
+                            statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> 연동 완료 - 정상`;
+                        }
+                    } else {
+                        if (statusBadge) {
+                            statusBadge.className = "px-4 py-2 bg-amber-50 border border-amber-200 text-amber-700 rounded-md text-sm font-bold flex items-center gap-2";
+                            statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span> 미연동 (Webhook 없음)`;
+                        }
+                    }
+                } catch (err) {
+                    console.error("Failed to load webhook status:", err);
+                }
+            }
+
+            // Webhook URL 변경
+            async function changeCurationWebhookUrl() {
+                if (!window.supabaseClient) return;
+                
+                let currentUrl = '';
+                try {
+                    const { data } = await window.supabaseClient
+                        .from('system_settings')
+                        .select('value')
+                        .eq('key', 'curation_webhook_url')
+                        .single();
+                    if (data) currentUrl = data.value;
+                } catch (e) {}
+
+                const newUrl = prompt("Google Apps Script Webhook URL을 입력해주세요:", currentUrl);
+                if (newUrl === null) return; // 취소
+
+                try {
+                    const { error } = await window.supabaseClient
+                        .from('system_settings')
+                        .upsert({ key: 'curation_webhook_url', value: newUrl.trim() });
+
+                    if (error) throw error;
+                    showToast("스프레드시트 Webhook URL이 업데이트되었습니다.");
+                    updateWebhookStatusAdmin();
+                } catch (err) {
+                    showToast("Webhook 저장 실패: " + err.message, false);
+                }
+            }
+
+            // 질문지 에디터 데이터 로드 및 렌더링
+            async function loadCurationQuestionsAdmin() {
+                if (!window.supabaseClient) return;
+                const container = document.getElementById('curation-questions-admin-container');
+                if (!container) return;
+                container.innerHTML = '<p class="text-center text-charcoal/50 text-sm py-4">질문 데이터를 로드하고 있습니다...</p>';
+
+                try {
+                    const { data, error } = await window.supabaseClient
+                        .from('curation_questions')
+                        .select('*')
+                        .order('sort_order', { ascending: true });
+
+                    if (error) throw error;
+                    curationQuestionsList = data || [];
+
+                    if (curationQuestionsList.length === 0) {
+                        container.innerHTML = '<p class="text-center text-charcoal/40 text-sm py-4">DB에 설정된 질문이 없습니다. 초기화가 필요합니다.</p>';
+                        return;
+                    }
+
+                    container.innerHTML = '';
+                    curationQuestionsList.forEach((q, idx) => {
+                        const div = document.createElement('div');
+                        div.className = 'p-5 bg-paper/40 rounded-xl border border-forest/10 space-y-4';
+                        div.innerHTML = `
+                            <div class="flex items-center justify-between border-b border-forest/5 pb-2">
+                                <span class="text-xs font-bold text-forest bg-forest/10 px-2 py-0.5 rounded">질문 세트 ${idx + 1}</span>
+                                <input type="number" value="${q.sort_order}" data-sort-id="${q.id}" class="w-16 p-1 text-xs border border-forest/20 rounded bg-white text-center" title="정렬 순서">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="space-y-1">
+                                    <label class="block text-xs font-bold text-charcoal/70">라벨 (Label)</label>
+                                    <input type="text" value="${q.label}" data-label-id="${q.id}" placeholder="예: 과거의 나" class="w-full text-xs p-2 bg-white border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none">
+                                </div>
+                                <div class="space-y-1 md:col-span-2">
+                                    <label class="block text-xs font-bold text-charcoal/70">질문 문구 (Question)</label>
+                                    <input type="text" value="${q.question}" data-question-id="${q.id}" placeholder="질문 내용을 작성하세요" class="w-full text-xs p-2 bg-white border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none">
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-xs font-bold text-charcoal/70">선택 키워드 목록 (쉼표로 구분하여 입력)</label>
+                                <textarea rows="2" data-words-id="${q.id}" placeholder="#불안, #외로움, #무기력..." class="w-full text-xs p-2 bg-white border border-forest/20 rounded focus:ring-1 focus:ring-forest focus:outline-none">${q.words.join(', ')}</textarea>
+                            </div>
+                        `;
+                        container.appendChild(div);
+                    });
+
+                } catch (err) {
+                    container.innerHTML = `<p class="text-center text-[#A33A3A] text-sm py-4">질문 로드 실패: ${err.message}</p>`;
+                }
+            }
+
+            // 질문지 변경 저장
+            async function saveCurationQuestionsAdmin() {
+                if (!window.supabaseClient) return;
+
+                try {
+                    const updates = [];
+                    for (let q of curationQuestionsList) {
+                        const id = q.id;
+                        const labelInput = document.querySelector(`input[data-label-id="${id}"]`);
+                        const questionInput = document.querySelector(`input[data-question-id="${id}"]`);
+                        const wordsTextarea = document.querySelector(`textarea[data-words-id="${id}"]`);
+                        const sortInput = document.querySelector(`input[data-sort-id="${id}"]`);
+
+                        if (!labelInput || !questionInput || !wordsTextarea) continue;
+
+                        const label = labelInput.value.trim();
+                        const question = questionInput.value.trim();
+                        const wordsStr = wordsTextarea.value.trim();
+                        const sort_order = parseInt(sortInput.value) || 0;
+
+                        if (!label || !question || !wordsStr) {
+                            showToast("질문 세트의 라벨, 질문 문구, 키워드는 비워둘 수 없습니다.", false);
+                            return;
+                        }
+
+                        // 쉼표로 분할하여 배열로 만들기
+                        const words = wordsStr.split(',')
+                            .map(w => w.trim())
+                            .filter(w => w.length > 0);
+
+                        updates.push({
+                            id,
+                            label,
+                            question,
+                            words,
+                            sort_order
+                        });
+                    }
+
+                    // DB Upsert
+                    for (let update of updates) {
+                        const { error } = await window.supabaseClient
+                            .from('curation_questions')
+                            .upsert(update);
+                        if (error) throw error;
+                    }
+
+                    showToast("큐레이션 질문 및 키워드 설정이 저장되었습니다.");
+                    loadCurationQuestionsAdmin();
+                } catch (err) {
+                    console.error("Error saving curation questions:", err);
+                    showToast("저장 실패: " + err.message, false);
+                }
+            }
+        } const price = document.getElementById(`p-book-price-${idx}`).value.trim();
                         const imageUrl = document.getElementById(`p-book-img-${idx}`).value.trim();
 
                         if (!title) {
