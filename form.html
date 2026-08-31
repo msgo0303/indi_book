@@ -2325,6 +2325,24 @@
                         userId = session.user.id;
                     }
 
+                    // 나이를 나이대(age_info) 정보로 변환
+                    const ageNum = parseInt(age, 10);
+                    let ageInfo = age + '세';
+                    if (!isNaN(ageNum)) {
+                        if (ageNum >= 40) {
+                            ageInfo = '40대 이상';
+                        } else if (ageNum >= 30) {
+                            ageInfo = '30대';
+                        } else if (ageNum >= 20) {
+                            ageInfo = '20대';
+                        } else {
+                            ageInfo = '10대 이하';
+                        }
+                    }
+
+                    // 선택 키워드, 추천 도서, 성별을 preference에 취합하여 저장
+                    const preferenceText = `키워드: [${keywordsText.join(', ')}] / 추천 도서: [${recommendedBookText}] (성별: ${gender})`;
+
                     const { error } = await window.supabaseClient
                         .from('curations')
                         .insert({
@@ -2332,10 +2350,8 @@
                             name: name,
                             contact: phone,
                             address: city,
-                            age: parseInt(age, 10) || null,
-                            gender: gender,
-                            selected_keywords: keywordsText,
-                            recommended_book: recommendedBookText,
+                            age_info: ageInfo,
+                            preference: preferenceText,
                             environment: environment || null,
                             status: 'PENDING'
                         });
