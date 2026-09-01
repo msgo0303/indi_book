@@ -12,6 +12,9 @@
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Phosphor Icons CDN -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <!-- Supabase JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -41,6 +44,9 @@
                         highlight: '#e7c96a',
                         ivory: 'var(--card)',
                         charcoal: 'var(--accent)',
+                        forest: '#1B4332',
+                        terra: '#A36A00',
+                        paper: '#F5F2EB',
                         // Tailwind equivalents of Next.js theme values
                         primary: {
                             DEFAULT: 'var(--primary)',
@@ -1451,6 +1457,193 @@
             </div>
         </section>
 
+        <!-- Curation Process Roadmap Section -->
+        <section
+            class="curation-roadmap relative bg-gradient-to-b from-[#ebdcc9] via-[#f5f1ea] to-[#ebdcc9] py-16 px-6 sm:px-10 overflow-hidden"
+            id="roadmap">
+            <!-- Section Heading -->
+            <div class="section-heading centered relative z-10 text-center mb-10">
+                <span class="eyebrow">curation roadmap</span>
+                <h2 class="reveal font-serif text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground">
+                    당신의 인생책이<br><em>찾아가는 5단계 여정</em>
+                </h2>
+                <p class="font-sans mt-3 text-sm text-[#786856] reveal" style="transition-delay: 100ms;">
+                    단순한 추천을 넘어, 세심한 성향 분석과 정성 어린 마음을 담아 건네드립니다.
+                </p>
+            </div>
+
+            <!-- Desktop Horizontal Roadmap View -->
+            <div class="hidden md:block w-full max-w-4xl mx-auto py-8 mb-6 relative z-10 reveal"
+                style="transition-delay: 150ms;">
+                <div class="relative flex justify-between items-center">
+                    <!-- Horizontal Dotted Line -->
+                    <div
+                        class="absolute left-6 right-6 top-[25px] h-[2px] border-t-2 border-dashed border-forest/20 -z-0">
+                    </div>
+
+                    <!-- Step 1 -->
+                    <button onclick="openRoadmapNode(1)"
+                        class="group relative z-10 flex flex-col items-center max-w-[130px] text-center focus:outline-none cursor-pointer">
+                        <div
+                            class="w-[50px] h-[50px] rounded-full bg-cream border-2 border-terra flex items-center justify-center text-terra shadow-md group-hover:bg-terra group-hover:text-cream transition-all transform group-hover:scale-110 mb-3">
+                            <i class="ph ph-magnifying-glass text-xl"></i>
+                        </div>
+                        <span class="text-[11px] font-bold text-terra/70 tracking-wider mb-1">Step 1</span>
+                        <h4
+                            class="text-sm font-semibold text-forest group-hover:text-terra transition-colors break-keep">
+                            선호 독서 추적</h4>
+                    </button>
+
+                    <!-- Step 2 -->
+                    <button onclick="openRoadmapNode(2)"
+                        class="group relative z-10 flex flex-col items-center max-w-[130px] text-center focus:outline-none cursor-pointer">
+                        <div
+                            class="w-[50px] h-[50px] rounded-full bg-cream border-2 border-forest flex items-center justify-center text-forest shadow-md group-hover:bg-forest group-hover:text-cream transition-all transform group-hover:scale-110 mb-3">
+                            <i class="ph ph-brain text-xl"></i>
+                        </div>
+                        <span class="text-[11px] font-bold text-forest/50 tracking-wider mb-1">Step 2</span>
+                        <h4
+                            class="text-sm font-semibold text-forest group-hover:text-forest/70 transition-colors break-keep">
+                            독서 성향 분석</h4>
+                    </button>
+
+                    <!-- Step 3 -->
+                    <button onclick="openRoadmapNode(3)"
+                        class="group relative z-10 flex flex-col items-center max-w-[130px] text-center focus:outline-none cursor-pointer">
+                        <div
+                            class="w-[50px] h-[50px] rounded-full bg-cream border-2 border-forest flex items-center justify-center text-forest shadow-md group-hover:bg-forest group-hover:text-cream transition-all transform group-hover:scale-110 mb-3">
+                            <i class="ph ph-heartbeat text-xl"></i>
+                        </div>
+                        <span class="text-[11px] font-bold text-forest/50 tracking-wider mb-1">Step 3</span>
+                        <h4
+                            class="text-sm font-semibold text-forest group-hover:text-forest/70 transition-colors break-keep">
+                            큐레이션</h4>
+                    </button>
+
+                    <!-- Step 4 -->
+                    <button onclick="openRoadmapNode(4)"
+                        class="group relative z-10 flex flex-col items-center max-w-[130px] text-center focus:outline-none cursor-pointer">
+                        <div
+                            class="w-[50px] h-[50px] rounded-full bg-cream border-2 border-forest flex items-center justify-center text-forest shadow-md group-hover:bg-forest group-hover:text-cream transition-all transform group-hover:scale-110 mb-3">
+                            <i class="ph ph-book-open text-xl"></i>
+                        </div>
+                        <span class="text-[11px] font-bold text-forest/50 tracking-wider mb-1">Step 4</span>
+                        <h4
+                            class="text-sm font-semibold text-forest group-hover:text-forest/70 transition-colors break-keep">
+                            도서 선정 및 패키징</h4>
+                    </button>
+
+                    <!-- Step 5 -->
+                    <button onclick="openRoadmapNode(5)"
+                        class="group relative z-10 flex flex-col items-center max-w-[130px] text-center focus:outline-none cursor-pointer">
+                        <div
+                            class="w-[50px] h-[50px] rounded-full bg-cream border-2 border-terra flex items-center justify-center text-terra shadow-md group-hover:bg-terra group-hover:text-cream transition-all transform group-hover:scale-110 mb-3">
+                            <i class="ph ph-package text-xl"></i>
+                        </div>
+                        <span class="text-[11px] font-bold text-terra/70 tracking-wider mb-1">Step 5</span>
+                        <h4
+                            class="text-sm font-semibold text-forest group-hover:text-terra transition-colors break-keep">
+                            도서 전달</h4>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile View (Vertical Roadmap) -->
+            <div id="mobile-roadmap-container"
+                class="md:hidden relative px-6 py-6 mb-6 w-full max-w-md mx-auto flex flex-col gap-8 active reveal"
+                style="transition-delay: 150ms;">
+                <!-- Vertical Dotted Line -->
+                <div id="mobile-pipeline"
+                    class="absolute left-1/2 top-[50px] bottom-[50px] w-px border-l-2 border-dashed border-forest/20 -translate-x-1/2 z-0">
+                </div>
+
+                <!-- Step 1 -->
+                <button onclick="openRoadmapNode(1)"
+                    class="roadmap-step flex items-center w-full group cursor-pointer focus:outline-none">
+                    <div class="flex-1 text-right pr-6 flex flex-col items-end">
+                        <span class="text-[11px] font-bold text-terra/60 tracking-wider mb-1">Step 1</span>
+                        <h4
+                            class="text-sm font-semibold text-forest group-hover:text-terra transition-colors break-keep">
+                            선호 독서 추적</h4>
+                    </div>
+                    <div
+                        class="w-[50px] h-[50px] rounded-full bg-cream border-2 border-terra flex items-center justify-center text-terra shadow-md shrink-0 z-10 group-hover:bg-terra group-hover:text-cream transition-colors">
+                        <i class="ph ph-magnifying-glass text-xl"></i>
+                    </div>
+                    <div class="flex-1 pl-6"></div>
+                </button>
+
+                <!-- Step 2 -->
+                <button onclick="openRoadmapNode(2)"
+                    class="roadmap-step flex items-center w-full group cursor-pointer focus:outline-none">
+                    <div class="flex-1 pr-6"></div>
+                    <div
+                        class="w-[50px] h-[50px] rounded-full bg-cream border-2 border-forest flex items-center justify-center text-forest shadow-md shrink-0 z-10 group-hover:bg-forest group-hover:text-cream transition-colors">
+                        <i class="ph ph-brain text-xl"></i>
+                    </div>
+                    <div class="flex-1 text-left pl-6 flex flex-col items-start">
+                        <span class="text-[11px] font-bold text-forest/40 tracking-wider mb-1">Step 2</span>
+                        <h4
+                            class="text-sm font-semibold text-forest group-hover:text-forest/70 transition-colors break-keep">
+                            성향 분석</h4>
+                    </div>
+                </button>
+
+                <!-- Step 3 -->
+                <button onclick="openRoadmapNode(3)"
+                    class="roadmap-step flex items-center w-full group cursor-pointer focus:outline-none">
+                    <div class="flex-1 text-right pr-6 flex flex-col items-end">
+                        <span class="text-[11px] font-bold text-forest/40 tracking-wider mb-1">Step 3</span>
+                        <h4
+                            class="text-sm font-semibold text-forest group-hover:text-forest/70 transition-colors break-keep">
+                            니즈 분석</h4>
+                    </div>
+                    <div
+                        class="w-[50px] h-[50px] rounded-full bg-cream border-2 border-forest flex items-center justify-center text-forest shadow-md shrink-0 z-10 group-hover:bg-forest group-hover:text-cream transition-colors">
+                        <i class="ph ph-heartbeat text-xl"></i>
+                    </div>
+                    <div class="flex-1 pl-6"></div>
+                </button>
+
+                <!-- Step 4 -->
+                <button onclick="openRoadmapNode(4)"
+                    class="roadmap-step flex items-center w-full group cursor-pointer focus:outline-none">
+                    <div class="flex-1 pr-6"></div>
+                    <div
+                        class="w-[50px] h-[50px] rounded-full bg-cream border-2 border-forest flex items-center justify-center text-forest shadow-md shrink-0 z-10 group-hover:bg-forest group-hover:text-cream transition-colors">
+                        <i class="ph ph-book-open text-xl"></i>
+                    </div>
+                    <div class="flex-1 text-left pl-6 flex flex-col items-start">
+                        <span class="text-[11px] font-bold text-forest/40 tracking-wider mb-1">Step 4</span>
+                        <h4
+                            class="text-sm font-semibold text-forest group-hover:text-forest/70 transition-colors break-keep">
+                            도서 선정</h4>
+                    </div>
+                </button>
+
+                <!-- Step 5 -->
+                <button onclick="openRoadmapNode(5)"
+                    class="roadmap-step flex items-center w-full group cursor-pointer focus:outline-none">
+                    <div class="flex-1 text-right pr-6 flex flex-col items-end">
+                        <span class="text-[11px] font-bold text-terra/60 tracking-wider mb-1">Step 5</span>
+                        <h4
+                            class="text-sm font-semibold text-forest group-hover:text-terra transition-colors break-keep">
+                            도서 전달</h4>
+                    </div>
+                    <div
+                        class="w-[50px] h-[50px] rounded-full bg-cream border-2 border-terra flex items-center justify-center text-terra shadow-md shrink-0 z-10 group-hover:bg-terra group-hover:text-cream transition-colors">
+                        <i class="ph ph-package text-xl"></i>
+                    </div>
+                    <div class="flex-1 pl-6"></div>
+                </button>
+            </div>
+
+            <!-- Subtext Note -->
+            <p class="text-center text-xs text-[#786856]/70 mt-2 font-sans relative z-10">
+                <i class="ph ph-info inline-block mr-1"></i> 각 단계를 터치하면 세부 큐레이션 설명을 확인할 수 있습니다.
+            </p>
+        </section>
+
 
 
         <!-- Find Section (Questionnaire & Curation Results) -->
@@ -1752,8 +1945,75 @@
         </div>
     </div>
 
+    <!-- Roadmap Detail Modal Backdrop -->
+    <div id="modal-roadmap" class="modal-backdrop hidden" onclick="closeRoadmapModal()">
+        <div class="modal-content bg-[#faf8f5] rounded-2xl w-[90%] max-w-sm p-6 text-center relative z-10 shadow-2xl border-t-4 border-terra"
+            onclick="event.stopPropagation()" style="opacity: 0; transform: scale(0.9); transition: all 0.3s ease;">
+            <button onclick="closeRoadmapModal()"
+                class="close text-charcoal/50 hover:text-terra absolute top-3 right-3 p-1 cursor-pointer"
+                aria-label="닫기">
+                <i class="ph ph-x text-lg"></i>
+            </button>
+            <div id="roadmap-modal-icon"
+                class="w-16 h-16 rounded-full bg-paper flex items-center justify-center text-terra text-2xl mx-auto mb-4 border border-terra/20">
+                <i class="ph ph-magnifying-glass"></i>
+            </div>
+            <h3 id="roadmap-modal-title" class="text-xl font-serif font-bold text-forest mb-2">단계 제목</h3>
+            <p id="roadmap-modal-desc" class="text-sm font-sans text-charcoal/70 leading-relaxed font-light break-keep">
+                단계 설명</p>
+        </div>
+    </div>
+
     <!-- Application Script Logic -->
     <script>
+        const roadmapData = [
+            { title: "선호 독서 추적", desc: "평소 즐겨 읽는 장르, 인상 깊었던 문장, 피하고 싶은 소재 등을 꼼꼼하게 수집합니다.", icon: "ph-magnifying-glass" },
+            { title: "성향 분석", desc: "수집된 데이터를 바탕으로 독자의 무의식적인 취향과 현재의 심리 상태를 면밀히 분석합니다.", icon: "ph-brain" },
+            { title: "니즈 분석", desc: "지금 당장 위로가 필요한지, 새로운 지적 자극이 필요한지 현재의 삶에 가장 필요한 가치를 파악합니다.", icon: "ph-heartbeat" },
+            { title: "도서 선정", desc: "수많은 독립출판물과 기성 출판물 중에서 단 한 권의 인생책을 엄선합니다.", icon: "ph-book-open" },
+            { title: "도서 전달", desc: "책방지기의 정성스러운 추천 메모와 함께 따뜻한 온기를 담아 배송해 드립니다.", icon: "ph-package" }
+        ];
+
+        function openRoadmapNode(index) {
+            const data = roadmapData[index - 1];
+            if (!data) return;
+            const iconEl = document.getElementById('roadmap-modal-icon');
+            const titleEl = document.getElementById('roadmap-modal-title');
+            const descEl = document.getElementById('roadmap-modal-desc');
+            if (iconEl && titleEl && descEl) {
+                iconEl.innerHTML = `<i class="ph ${data.icon}"></i>`;
+                titleEl.innerText = data.title;
+                descEl.innerText = data.desc;
+                openRoadmapModal();
+            }
+        }
+
+        function openRoadmapModal() {
+            const modal = document.getElementById('modal-roadmap');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            const content = modal.querySelector('.modal-content');
+            setTimeout(() => {
+                if (content) {
+                    content.style.opacity = '1';
+                    content.style.transform = 'scale(1)';
+                }
+            }, 10);
+        }
+
+        function closeRoadmapModal() {
+            const modal = document.getElementById('modal-roadmap');
+            if (!modal) return;
+            const content = modal.querySelector('.modal-content');
+            if (content) {
+                content.style.opacity = '0';
+                content.style.transform = 'scale(0.9)';
+            }
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
         const sharedWords = [
             '#불안', '#외로움', '#무기력', '#부담감', '#지루함',
             '#평온', '#다정함', '#활기', '#설렘', '#자신감'
@@ -1873,9 +2133,9 @@
         };
 
         const reviews = [
-            { name: '김*서', role: '20대 후반, 직장인', tags: ['#압박감', '#무기력과번아웃', '#가벼운해방감'], quote: '과거의 압박과 번아웃을 그대로 선택했는데, 추천받은 책의 첫 문장을 읽자마자 억눌렸던 마음에 큰 위로를 받았습니다.' },
-            { name: '이*현', role: '30대 초반, 프리랜서', tags: ['#의기소침', '#답답한정체기', '#주체적인확신'], quote: '정체된 기분 때문에 답답했는데, 내 감정의 흐름에 꼭 맞는 인생책을 찾게 되어 다시 나아갈 힘이 생겼어요.' },
-            { name: '박*민', role: '40대, 작은 가게 운영', tags: ['#버거운책임감', '#따뜻한자기수용'], quote: '누군가 내 마음을 조용히 알아준 것 같았어요. 책을 펼치는 일이 다시 기대됩니다.' }
+            { name: '김*서', role: '20대 후반, 직장인', tags: ['#압박감', '#무기력과번아웃', '#가벼운해방감'], quote: '압박과 번아웃을 느끼던 시점에 신청했습니다. 마음의 여유가 없었는데, 매일 조금씩 읽으니 점차 여유를 찾았어요.' },
+            { name: '이*현', role: '30대 초반, 프리랜서', tags: ['#의기소침', '#답답한정체기', '#주체적인확신'], quote: '경쟁에 지쳐 매일 살얼음판을 걷는 기분이었습니다. 필요한 책이라는 말이 생소했는데 변화를 느끼고 이해했습니다.' },
+            { name: '박*민', role: '20대 초반, 대학생', tags: ['#버거운책임감', '#따뜻한자기수용'], quote: '누군가 내 마음을 조용히 알아준 것 같아 좋았어요. 여러번 완독한 경험은 처음입니다!.' }
         ];
 
         const photos = [
