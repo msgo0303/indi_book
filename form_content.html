@@ -1783,6 +1783,14 @@
                         class="text-brown underline text-xs">내용 보기</a>
                 </label>
 
+                <label class="agree mt-3 cursor-pointer">
+                    <input type="checkbox" id="form-agree-review" required class="accent-brown">
+                    <span class="ml-2">후기 작성에 동의합니다</span>
+                    <a href="#review-agree"
+                        onclick="alert('후기 작성 동의:\n무료 이벤트 참여를 위해 후기 작성에 동의해주세요. 후기는 제품 수령 후 보내드리는 폼으로 작성해주시면 됩니다. 간단하고 솔직한 후기를 꼭 부탁드려요. 개인정보는 포함되지 않습니다.')"
+                        class="text-brown underline text-xs">내용 보기</a>
+                </label>
+
                 <button class="primary-button wide mt-6" type="submit" id="submit-form-btn">신청하기 <i
                         data-lucide="arrow-right" class="w-4 h-4"></i></button>
             </form>
@@ -2536,8 +2544,9 @@
 
             const environment = document.getElementById('form-environment').value.trim();
             const agree = document.getElementById('form-agree').checked;
+            const agreeReview = document.getElementById('form-agree-review') ? document.getElementById('form-agree-review').checked : true;
 
-            if (!name || !age || !city || !phone || !gender || !agree) {
+            if (!name || !age || !city || !phone || !gender || !agree || !agreeReview) {
                 alert('필수 항목을 모두 기입하고 동의해주세요.');
                 return;
             }
