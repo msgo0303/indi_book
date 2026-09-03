@@ -1646,9 +1646,9 @@
 
 
 
-        <!-- Find Section (Questionnaire & Curation Results) -->
+        <!-- 과거 현재 미래의 마음 고르는 색션 (Find Section)
         <section class="find relative bg-gradient-to-b from-[#ebdcc9] via-[#e2cbb1] to-[#f5f1ea]" id="find">
-            <!-- Bottom transition fade overlay -->
+            <!- - Bottom transition fade overlay - ->
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f5f1ea] pointer-events-none"
                 aria-hidden="true"></div>
             <div class="section-heading centered relative z-10">
@@ -1658,7 +1658,7 @@
             </div>
             <div class="keyword-groups reveal relative z-10" style="transition-delay: 150ms;"
                 id="keyword-groups-container">
-                <!-- Loaded dynamically by JavaScript -->
+                <!- - Loaded dynamically by JavaScript - ->
             </div>
             <div class="result-action font-sans reveal relative z-10" style="transition-delay: 200ms;">
                 <span id="selected-count-text">마음에 닿는 단어를 골라주세요</span>
@@ -1666,7 +1666,7 @@
                         data-lucide="arrow-right" class="w-4 h-4"></i></button>
             </div>
 
-            <!-- Curation Loading State -->
+            <!- - Curation Loading State - ->
             <div class="loading hidden relative z-10" id="loading-spinner">
                 <div class="flex justify-center mb-4">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -1682,7 +1682,7 @@
                 <p class="font-sans text-[#786856]">당신에게 맞는 문장을 찾고 있어요</p>
             </div>
 
-            <!-- Curation Recommendation Card -->
+            <!- - Curation Recommendation Card - ->
             <div class="result-card hidden relative z-10" id="result-card"
                 style="opacity: 0; transform: translateY(20px); transition: all 0.6s ease;">
                 <img id="result-cover" src="life-book-cover.png" alt="추천 인생책 표지">
@@ -1697,6 +1697,7 @@
                 </div>
             </div>
         </section>
+        -->
 
 
 
@@ -2313,6 +2314,7 @@
         // 4. Keyword Toggles & Chips
         function renderKeywords() {
             const container = document.getElementById('keyword-groups-container');
+            if (!container) return;
             container.innerHTML = keywordGroups.map((group, groupIndex) => `
                 <div class="keyword-group">
                     <div>
@@ -2358,6 +2360,7 @@
         function updateResultAction() {
             const countText = document.getElementById('selected-count-text');
             const btn = document.getElementById('find-book-btn');
+            if (!countText || !btn) return;
             const allSelected = getAllSelectedKeywords();
             if (allSelected.length > 0) {
                 countText.innerText = `${allSelected.length}개의 마음을 골랐어요`;
@@ -2404,6 +2407,7 @@
             const spinner = document.getElementById('loading-spinner');
             const resultCard = document.getElementById('result-card');
             const findBtn = document.getElementById('find-book-btn');
+            if (!spinner || !resultCard || !findBtn) return;
 
             findBtn.setAttribute('disabled', 'true');
             resultCard.classList.add('hidden');
@@ -2715,9 +2719,11 @@
                 updateFormSummary();
 
                 const resultCard = document.getElementById('result-card');
-                resultCard.classList.add('hidden');
-                resultCard.style.opacity = '0';
-                resultCard.style.transform = 'translateY(20px)';
+                if (resultCard) {
+                    resultCard.classList.add('hidden');
+                    resultCard.style.opacity = '0';
+                    resultCard.style.transform = 'translateY(20px)';
+                }
             }, 300);
         }
 
